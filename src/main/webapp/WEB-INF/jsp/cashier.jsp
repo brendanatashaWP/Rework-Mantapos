@@ -32,35 +32,38 @@
             <div class="tab-content">
                 <div id="makanan" class="tab-pane fade in active">
                     <div class="scroll menu">
-                        <%--<th:block th:each="menu : ${menuList}">--%>
-                            <%--<!--tanda \ adalah escape character-->--%>
-                            <%--<a class="menuCard" href="#" th:onclick="'javascript:addToCart(\' '+ ${menu.id} +' \',\' '+ ${menu.name} +' \',\' '+ ${menu.price} +' \');'">--%>
-                                <%--<div class="panel panel-default panel-menu">--%>
-                                    <%--<div class="panel-body">--%>
-                                        <%--<img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"--%>
-                                             <%--width="80" height="80" style="margin-right: 10px"/>--%>
-                                        <%--<h3 th:text="${menu.name}"/>--%>
-                                        <%--<h4 th:text="'Rp ' + ${menu.price}"/>--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-                            <%--</a>--%>
-                        <%--</th:block>--%>
+                        <c:forEach items="${menuList}" var="menu">
+                            <c:if test="${menu.getCategory_menu() == 'food'}">
+                                <a class="menuCard" href="#">
+                                    <div class="panel panel-default panel-menu">
+                                        <div class="panel-body">
+                                            <img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"
+                                            width="80" height="80" style="margin-right: 10px"/>
+                                            <h3>${menu.getName_menu()}</h3>
+                                            <h4>Rp ${menu.getPrice_total_menu()}</h4>
+                                        </div>
+                                    </div>
+                                </a>
+                            </c:if>
+                        </c:forEach>
                     </div>
                 </div>
                 <div id="minuman" class="tab-pane fade">
                     <div class="scroll menu">
-                        <%--<th:block th:each="menu : ${menuList}">--%>
-                            <%--<a class="menuCard">--%>
-                                <%--<div class="panel panel-default panel-menu">--%>
-                                    <%--<div class="panel-body">--%>
-                                        <%--<img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"--%>
-                                             <%--width="80" height="80" style="margin-right: 10px"/>--%>
-                                        <%--<h3 th:text="${menu.name}"/>--%>
-                                        <%--<h4 th:text="'Rp ' + ${menu.price}"/>--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-                            <%--</a>--%>
-                        <%--</th:block>--%>
+                        <c:forEach items="${menuList}" var="menu">
+                            <c:if test="${menu.getCategory_menu() == 'drink'}">
+                                <a class="menuCard" href="#">
+                                    <div class="panel panel-default panel-menu">
+                                        <div class="panel-body">
+                                            <img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"
+                                                 width="80" height="80" style="margin-right: 10px"/>
+                                            <h3>${menu.getName_menu()}</h3>
+                                            <h4>Rp ${menu.getPrice_total_menu()}</h4>
+                                        </div>
+                                    </div>
+                                </a>
+                            </c:if>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
@@ -125,7 +128,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="topModal">Notes</h4>
-
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -201,27 +203,10 @@
                                 <th>Total Price</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>Ayam Goreng</td>
-                                <td>2</td>
-                                <td>Rp 20.000</td>
-                            </tr>
-                            <tr>
-                                <td>Taichan</td>
-                                <td>1</td>
-                                <td>Rp 15.000</td>
-                            </tr>
-                            <tr>
-                                <td>Nasi Goreng</td>
-                                <td>3</td>
-                                <td>Rp 30.000</td>
-                            </tr>
-                            </tbody>
                         </table>
                     </div>
                     <h4>Total :  </h4>
-                    <h4>Cash &nbsp;:</h4>
+                    <h4>Cash :</h4>
                     <h4>Change due: </h4>
                     <div>
                     </div>
