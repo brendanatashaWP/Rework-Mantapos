@@ -156,12 +156,11 @@
 
                         <label for="tableNo">Table No: </label>
                         <input type="text" class="form-control" id="tableNo"></input>
-
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="cancel" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="submit" data-toggle="modal" data-target="#changeModal">OK</button>
+                    <button type="button" class="submit" data-dismiss="#paymentModal" data-toggle="modal" data-target="#changeModal" onclick="paymentModal()">OK</button>
                 </div>
             </div>
         </div>
@@ -175,7 +174,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Kembalian: </label>
-                        <h4>Rp 10.000</h4>
+                        <h5 id="kembalian">Rp 0</h5>
                     </div>
                 </div>
                 <div class="modal-footer">

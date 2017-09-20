@@ -10,6 +10,7 @@ $(document).ready(function() {
 //Deklarasi variabel ini gak perlu menunggu document ready
 var priceTotal = 0;
 var counterOrder = 0;
+var kembalian = 0;
 
 function addToCart(id, name, price){
     //variabel2 untuk cell dari table order nya..
@@ -44,7 +45,7 @@ function addToCart(id, name, price){
 
     //set nilai totalBayar
     totalBayar.innerHTML = "Rp " + priceTotal;
-    inputPriceTotal.value = priceTotal;
+    // inputPriceTotal.value = priceTotal;
 }
 
 function updatePrice(x){
@@ -69,7 +70,7 @@ function updatePrice(x){
 
     //Update text totalBayar
     totalBayar.innerHTML = "Rp " + priceTotal;
-    inputPriceTotal.value = priceTotal;
+    // inputPriceTotal.value = priceTotal;
 }
 
 function deleteItem(x) {
@@ -81,4 +82,13 @@ function deleteItem(x) {
     counterOrder--;
     baris.parentNode.removeChild(baris);
     totalBayar.innerHTML = "Rp " + priceTotal;
+}
+
+function paymentModal() {
+    var inputCash = document.getElementById("cash");
+    kembalian = inputCash.value - priceTotal;
+    var inputCustName = document.getElementById("custName");
+    var inputTableNo = document.getElementById("tableNo");
+    var txtKembalian = document.getElementById("kembalian");
+    txtKembalian.innerHTML = "Rp " + kembalian;
 }
