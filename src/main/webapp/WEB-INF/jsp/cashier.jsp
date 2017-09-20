@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <%--link ke css local--%>
     <link rel="stylesheet" href="../../resources/css/main.css"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav class="navbar">
@@ -34,7 +32,7 @@
                     <div class="scroll menu">
                         <c:forEach items="${menuList}" var="menu">
                             <c:if test="${menu.getCategory_menu() == 'food'}">
-                                <a class="menuCard" href="#">
+                                <a class="menuCard" href="#" onclick="addToCart(${menu.getId_menu()}, '${menu.getName_menu()}', ${menu.getPrice_total_menu()})">
                                     <div class="panel panel-default panel-menu">
                                         <div class="panel-body">
                                             <img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"
@@ -52,7 +50,7 @@
                     <div class="scroll menu">
                         <c:forEach items="${menuList}" var="menu">
                             <c:if test="${menu.getCategory_menu() == 'drink'}">
-                                <a class="menuCard" href="#">
+                                <a class="menuCard" href="#" onclick="addToCart(${menu.getId_menu()}, '${menu.getName_menu()}', ${menu.getPrice_total_menu()})">
                                     <div class="panel panel-default panel-menu">
                                         <div class="panel-body">
                                             <img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"
@@ -218,6 +216,8 @@
         </div>
     </div>
 </div>
-<script src="../../resources/js/order.js"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../../resources/js/order.js"></script>
 </body>
 </html>
