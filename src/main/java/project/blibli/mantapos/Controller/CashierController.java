@@ -2,10 +2,7 @@ package project.blibli.mantapos.Controller;
 
 import com.sun.tools.corba.se.idl.constExpr.Or;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Beans_Model.Menu;
 import project.blibli.mantapos.Beans_Model.Order;
@@ -60,14 +57,14 @@ public class CashierController {
     }
 
     @PostMapping(value = "/add-order", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView addOrderHtml(@ModelAttribute("order") Order order){
+    public ModelAndView addOrderHtml(@ModelAttribute("order") Order order,
+                                     @RequestParam(value = "array_id_order", required = false) String[] array_id_order){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("redirect://cashier");
         int status = OrderDao.Insert(order);
         if(status==1)
-            mav.setViewName("redirect://cashier");
+            mav.setViewName("redirect:/cashier");
         else
-            mav.setViewName("redirect://cashier"); //show error disini, redirect ke page 404 kek.
+            mav.setViewName("redirect:/cashier"); //show error disini, redirect ke page 404 kek.
         return mav;
     }
 }

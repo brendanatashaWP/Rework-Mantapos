@@ -45,7 +45,7 @@ function addToCart(id, name, price){
 
     //set nilai totalBayar
     totalBayar.innerHTML = "Rp " + priceTotal;
-    // inputPriceTotal.value = priceTotal;
+    inputPriceTotal.value = priceTotal;
 }
 
 function updatePrice(x){
@@ -70,7 +70,7 @@ function updatePrice(x){
 
     //Update text totalBayar
     totalBayar.innerHTML = "Rp " + priceTotal;
-    // inputPriceTotal.value = priceTotal;
+    inputPriceTotal.value = priceTotal;
 }
 
 function deleteItem(x) {
@@ -84,11 +84,28 @@ function deleteItem(x) {
     totalBayar.innerHTML = "Rp " + priceTotal;
 }
 
-function paymentModal() {
-    var inputCash = document.getElementById("cash");
-    kembalian = inputCash.value - priceTotal;
-    var inputCustName = document.getElementById("custName");
-    var inputTableNo = document.getElementById("tableNo");
+function addOrder() {
+    var CashModal = document.getElementById("cash");
+    kembalian = CashModal.value - priceTotal;
+    var CustNameModal = document.getElementById("custName");
+    var inputCustName = document.getElementById("inputCustName");
+    inputCustName.value = CustNameModal.value;
+    var TableNoModal = document.getElementById("tableNo");
+    var inputTableNo = document.getElementById("inputTableNo");
+    inputTableNo.value = TableNoModal.value;
     var txtKembalian = document.getElementById("kembalian");
     txtKembalian.innerHTML = "Rp " + kembalian;
+    var inputArrayIdOrder = document.getElementById("array_id_order");
+
+    var array_id_order = [];
+    for (i=0; i<counterOrder; i++){
+        array_id_order.push(tableCart.rows[i+1].cells[5].innerHTML);
+    }
+    inputArrayIdOrder.value = array_id_order;
+}
+
+function setNotes() {
+    var notesModal = document.getElementById("notes");
+    var inputNotes = document.getElementById("inputNotes");
+    inputNotes.value = notesModal.value;
 }

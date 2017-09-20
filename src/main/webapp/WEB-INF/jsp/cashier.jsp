@@ -135,7 +135,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="cancel" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="submit" data-dismiss="modal">OK</button>
+                    <button type="button" class="submit" data-dismiss="modal" onclick="setNotes()">OK</button>
                 </div>
             </div>
         </div>
@@ -160,7 +160,16 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="cancel" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="submit" data-dismiss="#paymentModal" data-toggle="modal" data-target="#changeModal" onclick="paymentModal()">OK</button>
+
+                    <form action="/add-order" method="post">
+                        <input type="hidden" name="customerName" id="inputCustName">
+                        <input type="hidden" name="tableNo" id="inputTableNo">
+                        <input type="hidden" name="notes" id="inputNotes">
+                        <input type="hidden" name="priceTotal" id="inputPriceTotal">
+                        <input type="hidden" name="array_id_order" id="array_id_order">
+                        <button type="submit" class="submit" data-toggle="modal" data-target="#changeModal" onclick="addOrder()">OK</button>
+                    </form>
+                    <%--<button type="button" class="submit" data-toggle="modal" data-target="#changeModal">OK</button>--%>
                 </div>
             </div>
         </div>
@@ -178,7 +187,16 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="submit" data-dismiss="modal">OK</button>
+                    <%--DISINI SUBMIT VALUE CUSTOMER NAME, TABLE NO, PRICE TOTAL, DAN NOTES--%>
+                    <%--KE CONTROLLER--%>
+                    <%--<form action="/add-order" method="post">--%>
+                        <%--<input type="hidden" name="customerName" id="inputCustName">--%>
+                        <%--<input type="hidden" name="tableNo" id="inputTableNo">--%>
+                        <%--<input type="hidden" name="notes" id="inputNotes">--%>
+                        <%--<input type="hidden" name="priceTotal" id="inputPriceTotal">--%>
+                        <%--<input type="hidden" name="array_id_order" id="array_id_order">--%>
+                        <%--<button type="submit" class="submit" data-dismiss="modal" onclick="addOrder()">OK</button>--%>
+                    <%--</form>--%>
                 </div>
             </div>
         </div>
