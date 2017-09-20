@@ -1,0 +1,113 @@
+body{
+    background: whitesmoke;
+}
+
+div.scroll {
+    width: auto;
+    height: 400px;
+    overflow: scroll;
+}
+
+a.menuCard{
+    color: #000000;
+    text-decoration: none;
+}
+
+a.menuCard:hover{
+    color: #000000;
+    text-decoration: none;
+}
+
+div.scroll.menu{
+    height: 100%;
+}
+
+#listMenu{
+    height: 530px;
+}
+
+.navbar-brand{
+    color: whitesmoke !important;
+    font-family: 'Cookie', cursive !important;
+    font-size: 32px;
+    float: left;
+}
+
+
+#btnLogOut{
+    color: whitesmoke;
+    float: right !important;
+    /*position: right !important;*/
+}
+
+div.container.col-md-8 {
+    padding: 10px;
+    background: white;
+    border-radius: 4px;
+    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+    box-shadow: 2px 2px 5px 0px rgba(199,199,199,1);
+}
+
+.navbar{
+    background-color: #ce0a48;
+    border-radius: 0px;
+}
+/* #a{
+    color: whitesmoke;
+    font-family: 'Cookie', cursive;
+    font-size: 20pt;
+    float: left;
+} */
+
+#food{
+
+}
+
+.img-thumbnail{
+    float: left;
+}
+
+#totalBayar{
+    /*background-color: #ce0a48;*/
+    color: white;
+    margin: 0px;
+    vertical-align: middle;
+    line-height: 40px;
+    vertical-align: middle;
+}
+
+div.col-md-12.totalBayar {
+    background: #ce0a48;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    height: 40px;
+}
+div.panel.panel-default.panel-menu{
+    box-shadow: 2px 2px 5px 0px rgba(199,199,199,1);
+}
+
+div.panel.panel-default.panel-menu:hover{
+    box-shadow: 4px 4px 7px 0px rgba(199,199,199,1);
+}
+
+.table-striped{
+    /*height: 300pt;*/
+}
+
+#btnPay{
+    background-color: #ce0a48;
+    color: whitesmoke;
+    float: right;
+    width: 100%;
+}
+
+.modal-header{
+    background-color: #ce0a48;
+    color: whitesmoke !important;
+    font-family: 'Cookie', cursive !important;
+    font-size: 20pt;
+}
+
+.topModal{
+    font-size: 30pt;
+}
