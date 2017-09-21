@@ -116,6 +116,15 @@ div.panel.panel-default.panel-menu:hover{
     font-size: 20pt;
 }
 
+.receipt-header{
+    margin-top: 10px;
+    background-color: #ce0a48;
+    color: whitesmoke !important;
+    font-family: 'Rouge Script', cursive !important;
+    font-size: 20pt;
+    padding: 10px;
+}
+
 .topModal{
     font-size: 30pt;
 }

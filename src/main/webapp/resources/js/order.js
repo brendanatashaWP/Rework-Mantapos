@@ -1,16 +1,25 @@
-//tableCart dideklarasikan di dalam function document ready karena supaya deklarasi element-nya saat document sudah ready,
-//jadi gak null
-$(document).ready(function() {
-    // put your page initialization code here
-    var tableCart = document.getElementById("tableCart");
-    var textTotalBayar = document.getElementById("totalBayar");
-    var inputPriceTotal = document.getElementById("inputPriceTotal");
-});
-
-//Deklarasi variabel ini gak perlu menunggu document ready
 var priceTotal = 0;
 var counterOrder = 0;
 var kembalian = 0;
+var tableCart = document.getElementById("tableCart");
+var totalBayar = document.getElementById("totalBayar");
+var CustNameModal = document.getElementById("custName"); //customer name
+var inputCustNameChange = document.getElementById("inputCustNameChange");
+var TableNoModal = document.getElementById("tableNo");
+var inputTableNoChange = document.getElementById("inputTableNoChange"); //table no
+var CashModal = document.getElementById("cash"); //calculate kembalian
+var txtKembalian = document.getElementById("kembalian");
+var inputArrayIdOrder = document.getElementById("array_id_orderChange");
+var inputPriceTotal = document.getElementById("inputPriceTotal");
+var inputPriceTotalChange = document.getElementById("inputPriceTotalChange");
+var array_qtyChange = document.getElementById("array_qtyChange");
+var restaurantName = document.getElementById("restaurantNameReceipt");
+var restaurantAddress = document.getElementById("restaurantAddressReceipt");
+var custNameReceipt = document.getElementById("custNameReceipt");
+var tableReceipt = document.getElementById("tableReceipt");
+var priceTotalReceipt = document.getElementById("priceTotalReceipt");
+var CashReceipt = document.getElementById("CashReceipt");
+var ChangeReceipt = document.getElementById("ChangeReceipt");
 
 function addToCart(id, name, price){
     //variabel2 untuk cell dari table order nya..
@@ -110,25 +119,17 @@ function setNotes() {
     inputNotes.value = notesModal.value;
 }
 
-function passToChange() {
+function passToChangeModal() {
     //Passing inputan dari input di modal paymentModal ke input di changeModal (untuk nantinya di
     //insert ke database
-    var CustNameModal = document.getElementById("custName"); //customer name
-    var inputCustNameChange = document.getElementById("inputCustNameChange");
     inputCustNameChange.value = CustNameModal.value;
-    var TableNoModal = document.getElementById("tableNo");
-    var inputTableNoChange = document.getElementById("inputTableNoChange"); //table no
-    inputTableNoChange.value = TableNoModal.value;
-    var CashModal = document.getElementById("cash"); //calculate kembalian
-    kembalian = CashModal.value - priceTotal;
-    var txtKembalian = document.getElementById("kembalian");
-    txtKembalian.innerHTML = "Rp " + kembalian; //set text kembalian
-    var inputArrayIdOrder = document.getElementById("array_id_orderChange");
-    var inputPriceTotal = document.getElementById("inputPriceTotal");
-    var inputPriceTotalChange = document.getElementById("inputPriceTotalChange");
-    inputPriceTotalChange.value = inputPriceTotal.value;
 
-    var array_qtyChange = document.getElementById("array_qtyChange");
+    inputTableNoChange.value = TableNoModal.value;
+
+    kembalian = CashModal.value - priceTotal;
+    txtKembalian.innerHTML = "Rp " + kembalian; //set text kembalian
+
+    inputPriceTotalChange.value = inputPriceTotal.value;
 
     var array_id_order = [];
     for (i=0; i<counterOrder; i++){
@@ -142,4 +143,11 @@ function passToChange() {
     }
 
     array_qtyChange.value = array_qty;
+}
+
+function setReceiptData() {
+    custNameReceipt.innerHTML = inputCustNameChange.value;
+    priceTotalReceipt.innerHTML = "Total Price : Rp " + inputPriceTotalChange.value;
+    CashReceipt.innerHTML = "Cash : Rp " + CashModal.value;
+    ChangeReceipt.innerHTML = "Change : Rp " + txtKembalian.innerHTML;
 }

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Beans_Model.Menu;
 import project.blibli.mantapos.Beans_Model.Order;
+import project.blibli.mantapos.Beans_Model.Receipt;
+import project.blibli.mantapos.Beans_Model.Restaurant;
 import project.blibli.mantapos.Dao.MenuDao;
 import project.blibli.mantapos.Dao.OrderDao;
 import project.blibli.mantapos.Dao.OrderedMenuDao;
@@ -74,6 +76,42 @@ public class CashierController {
             mav.setViewName("redirect:/cashier");
         else
             mav.setViewName("redirect:/cashier"); //show error disini, redirect ke page 404 kek.
+        return mav;
+    }
+
+    @PostMapping(value = "/receipt", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, String> receiptPostJson(@ModelAttribute("restaurant")Restaurant restaurant,
+                                           @ModelAttribute("receipt") Receipt receipt,
+                                           @ModelAttribute("order")Order order){
+        Map<String, String> param = new HashMap<>();
+        param.put("restaurant_name", restaurant.getRestaurantName());
+        param.put("restaurant_address", restaurant.getRestaurantAddress());
+        param.put("customer_name", order.getCustomerName());
+        param.put("price_total", String.valueOf(order.getPriceTotal()));
+        param.put("cash_paid", String.valueOf(receipt.getCashPaid()));
+        param.put("cash_change", String.valueOf(receipt.getCashChange()));
+        return param;
+    }
+
+    @PostMapping(value = "/receipt", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView receiptPostHtml(@ModelAttribute("restaurant") Restaurant restaurant,
+                                        @ModelAttribute("receipt") Receipt receipt,
+                                        @ModelAttribute("order") Order order){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("restaurant_name", restaurant.getRestaurantName());
+        mav.addObject("restaurant_address", restaurant.getRestaurantAddress());
+        mav.addObject("customer_name", order.getCustomerName());
+        mav.addObject("price_total", String.valueOf(order.getPriceTotal()));
+        mav.addObject("cash_paid", String.valueOf(receipt.getCashPaid()));
+        mav.addObject("cash_change", String.valueOf(receipt.getCashChange()));
+        mav.setViewName("receipt");
+        return mav;
+    }
+
+    @GetMapping(value = "/receipt", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView receiptGetHtml(){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("receipt");
         return mav;
     }
 }

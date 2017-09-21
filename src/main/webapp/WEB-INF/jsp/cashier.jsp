@@ -111,7 +111,18 @@
                 <div class="col-md-1">
                 </div>
                 <div class="col-md-3">
-                    <button type="button" class="btn" id="btnPrint" data-toggle="modal" data-target="#receiptModal">PRINT RECEIPT</button>
+                    <%--OPEN NEW TAB RECEIPT--%>
+                    <%--<form action="/receipt" method="post">--%>
+                        <%--&lt;%&ndash;DISINI KASIH INPUT-INPUT YANG ISINYA ADALAH PARAMETER SEPERTI :&ndash;%&gt;--%>
+                        <%--&lt;%&ndash;RESTO NAME, RESTO ADDRESS, CUST NAME, PRICE TOTAL, CASH PAID, CASH CHANGE&ndash;%&gt;--%>
+                        <%--<input id="restaurant_name" name="restaurantName" type="hidden">--%>
+                        <%--<input id="restaurant_address" name="restaurantAddress" type="hidden">--%>
+                        <%--<input id="customer_name" name="customerName" type="hidden">--%>
+                        <%--<input id="price_total" name="priceTotal" type="hidden">--%>
+                        <%--<input id="cash_paid" name="cashPaid" type="hidden">--%>
+                        <%--<input id="cash_change" name="cashChange" type="hidden">--%>
+                        <%--<button formtarget="_blank" type="submit" class="btn" id="btnPrint">PRINT RECEIPT</button>--%>
+                    <%--</form>--%>
                 </div>
                 <div class="col-md-1">
                 </div>
@@ -167,7 +178,7 @@
                     <input type="hidden" name="priceTotal" id="inputPriceTotal">
                     <%--<input type="hidden" name="array_id_order" id="array_id_order">--%>
                     <%--<input type="hidden" name="array_qty" id="array_qty">--%>
-                    <button type="button" class="submit" data-toggle="modal" data-target="#changeModal" onclick="passToChange()">OK</button>
+                    <button type="button" class="submit" data-toggle="modal" data-target="#changeModal" onclick="passToChangeModal()">OK</button>
                 </div>
             </div>
         </div>
@@ -185,13 +196,19 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <%--<a target="_blank" href="/receipt">PRINT RECEIPT</a>--%>
                     <%--DISINI SUBMIT VALUE CUSTOMER NAME, TABLE NO, PRICE TOTAL, DAN NOTES--%>
                     <%--KE CONTROLLER--%>
+                    <button id="btnReceipt" type="submit" class="btn" data-toggle="modal" data-target="#receiptModal" onclick="setReceiptData()">RECEIPT</button>
                     <form action="/add-order" method="post">
+                        <input type="hidden" name="restaurantName" id="inputRestaurantName">
+                        <input type="hidden" name="restaurantAddress" id="inputRestaurantAddress">
                         <input type="hidden" name="customerName" id="inputCustNameChange">
                         <input type="hidden" name="tableNo" id="inputTableNoChange">
                         <input type="hidden" name="notes" id="inputNotesChange">
                         <input type="hidden" name="priceTotal" id="inputPriceTotalChange">
+                        <input type="hidden" name="cashPaid" id="inputCashPaid">
+                        <input type="hidden" name="cashChange" id="inputCashChange">
                         <input type="hidden" name="array_id_order" id="array_id_orderChange">
                         <input type="hidden" name="array_qty" id="array_qtyChange">
                         <button type="submit" class="submit">OK</button>
@@ -212,19 +229,17 @@
                     <div class="form-group">
                         <table id="tableReceipt" class="table table-striped">
                             <thead>
-                            <tr>
-                                <th>Menu</th>
-                                <th>Qty</th>
-                                <th>Total Price</th>
-                            </tr>
+                                <tr>
+                                    <th>Menu</th>
+                                    <th>Qty</th>
+                                    <th>Total Price</th>
+                                </tr>
                             </thead>
                         </table>
                     </div>
                     <h4 id="priceTotalReceipt">Total :  </h4>
                     <h4 id="CashReceipt">Cash :</h4>
                     <h4 id="ChangeReceipt">Change due: </h4>
-                    <div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="submit" data-dismiss="modal">OK</button>
