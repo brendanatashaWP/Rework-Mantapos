@@ -35,7 +35,7 @@ public class OrderDao {
                             customer_name + "  TEXT NOT NULL, " +
                             table_no + " INT NOT NULL, " +
                             price_total + " INT NOT NULL, " +
-                            notes + " TEXT NOT NULL, " +
+                            notes + " TEXT, " +
                             ordered_time + " TEXT NOT NULL, " +
                             week + " INT NOT NULL, " +
                             month + " INT NOT NULL, " +
@@ -137,5 +137,28 @@ public class OrderDao {
             DbConnection.CloseConnection(connection);
         }
         return orderList;
+    }
+
+    public static int GetLastOrderId(){
+        int lastId=0;
+        Connection connection = DbConnection.startConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT MAX(" + id + ") FROM " + table_name
+            );
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                lastId = resultSet.getInt(1);
+            }
+        } catch (Exception ex){
+            System.out.println("Error getting last id from order table : " + ex.toString());
+        } finally {
+            DbConnection.CloseResultSet(resultSet);
+            DbConnection.ClosePreparedStatement(preparedStatement);
+            DbConnection.CloseConnection(connection);
+        }
+        return lastId;
     }
 }

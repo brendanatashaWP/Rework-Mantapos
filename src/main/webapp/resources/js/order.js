@@ -128,9 +128,18 @@ function passToChange() {
     var inputPriceTotalChange = document.getElementById("inputPriceTotalChange");
     inputPriceTotalChange.value = inputPriceTotal.value;
 
+    var array_qtyChange = document.getElementById("array_qtyChange");
+
     var array_id_order = [];
     for (i=0; i<counterOrder; i++){
         array_id_order.push(tableCart.rows[i+1].cells[5].innerHTML);
     }
     inputArrayIdOrder.value = array_id_order;
+
+    var array_qty = [];
+    for(i=0;i<counterOrder; i++){
+        array_qty.push(tableCart.rows[i+1].cells[1].children[0].value);
+    }
+
+    array_qtyChange.value = array_qty;
 }

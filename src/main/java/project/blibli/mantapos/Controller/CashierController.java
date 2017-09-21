@@ -8,6 +8,7 @@ import project.blibli.mantapos.Beans_Model.Menu;
 import project.blibli.mantapos.Beans_Model.Order;
 import project.blibli.mantapos.Dao.MenuDao;
 import project.blibli.mantapos.Dao.OrderDao;
+import project.blibli.mantapos.Dao.OrderedMenuDao;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +47,7 @@ public class CashierController {
             //order time, week, month, dan year return NULL
             //karena kan di model order itu kosong value mereka, value mereka di assign
             //di OrderDao tanpa harus ke model
+            //atau mending assign waktu order nya disini aja daripada di DAO?
             param.put("order time", order.getOrdered_time());
             param.put("week", String.valueOf(order.getWeek()));
             param.put("month", String.valueOf(order.getMonth()));
@@ -58,10 +60,17 @@ public class CashierController {
 
     @PostMapping(value = "/add-order", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addOrderHtml(@ModelAttribute("order") Order order,
-                                     @RequestParam(value = "array_id_order", required = false) String[] array_id_order){
+                                     @RequestParam(value = "array_id_order", required = false) String[] array_id_order,
+                                     @RequestParam(value = "array_qty", required = false) String[] array_qty){
         ModelAndView mav = new ModelAndView();
-        int status = OrderDao.Insert(order);
-        if(status==1)
+        int statusOrder = OrderDao.Insert(order);
+        int lastOrderId = OrderDao.GetLastOrderId();
+        int statusOrderedMenu = 0;
+        for(int i=0; i<array_id_order.length; i++){
+            statusOrderedMenu = OrderedMenuDao.Insert(lastOrderId, Integer.parseInt(array_id_order[i]),
+                    Integer.parseInt(array_qty[i]));
+        }
+        if(statusOrder==1 && statusOrderedMenu==1)
             mav.setViewName("redirect:/cashier");
         else
             mav.setViewName("redirect:/cashier"); //show error disini, redirect ke page 404 kek.

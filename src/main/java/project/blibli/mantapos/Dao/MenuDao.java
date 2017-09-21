@@ -91,10 +91,34 @@ public class MenuDao {
         } catch (Exception ex){
             System.out.println("Failed get all data from menu : " + ex.toString());
         } finally {
-            DbConnection.ClosePreparedStatement(preparedStatement);
             DbConnection.CloseResultSet(resultSet);
+            DbConnection.ClosePreparedStatement(preparedStatement);
             DbConnection.CloseConnection(connection);
         }
         return menuList;
+    }
+
+    public static String getMenuNameById(int id_target){
+        String menu_name = null;
+        Connection connection = DbConnection.startConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT " + name + " FROM " + table_name + " WHERE " + id + "=?"
+            );
+            preparedStatement.setInt(1, id_target);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                menu_name = resultSet.getString(name);
+            }
+        } catch (Exception ex){
+            System.out.println("Error get nemu name by Id : " + ex.toString());
+        } finally {
+            DbConnection.CloseResultSet(resultSet);
+            DbConnection.ClosePreparedStatement(preparedStatement);
+            DbConnection.CloseConnection(connection);
+        }
+        return menu_name;
     }
 }
