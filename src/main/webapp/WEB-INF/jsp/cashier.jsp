@@ -123,6 +123,7 @@
                         <%--<input id="cash_change" name="cashChange" type="hidden">--%>
                         <%--<button formtarget="_blank" type="submit" class="btn" id="btnPrint">PRINT RECEIPT</button>--%>
                     <%--</form>--%>
+                        <button id="btnReceipt" type="submit" class="btn" data-toggle="modal" data-target="#receiptModal">RECEIPT</button>
                 </div>
                 <div class="col-md-1">
                 </div>
@@ -201,8 +202,9 @@
                     <%--KE CONTROLLER--%>
                     <button id="btnReceipt" type="submit" class="btn" data-toggle="modal" data-target="#receiptModal" onclick="setReceiptData()">RECEIPT</button>
                     <form action="/add-order" method="post">
-                        <input type="hidden" name="restaurantName" id="inputRestaurantName">
-                        <input type="hidden" name="restaurantAddress" id="inputRestaurantAddress">
+                        <%--dummy data restaurant--%>
+                        <input type="hidden" name="restaurantName" id="inputRestaurantName" value="${restaurant.getRestaurantName()}">
+                        <input type="hidden" name="restaurantAddress" id="inputRestaurantAddress" value="${restaurant.getRestaurantAddress()}">
                         <input type="hidden" name="customerName" id="inputCustNameChange">
                         <input type="hidden" name="tableNo" id="inputTableNoChange">
                         <input type="hidden" name="notes" id="inputNotesChange">
@@ -221,9 +223,9 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 id="restaurantNameReceipt" class="topModal" style="text-align:center">RM. Mantap</h4>
-                    <h4 id="restaurantAddressReceipt" style="text-align: center">Jl. Duren 100, Yogyakarta</h4>
-                    <h5 id="custNameReceipt">CUSTOMER NAME</h5>
+                    <h4 id="restaurantNameReceipt" class="topModal" style="text-align:center">${restaurant.getRestaurantName()}</h4>
+                    <h4 id="restaurantAddressReceipt" style="text-align: center">${restaurant.getRestaurantAddress()}</h4>
+                    <h5 id="custNameReceipt">Dedy</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -237,9 +239,9 @@
                             </thead>
                         </table>
                     </div>
-                    <h4 id="priceTotalReceipt">Total :  </h4>
-                    <h4 id="CashReceipt">Cash :</h4>
-                    <h4 id="ChangeReceipt">Change due: </h4>
+                    <h5 id="priceTotalReceipt">Total :  </h5>
+                    <h5 id="CashReceipt">Cash :</h5>
+                    <h5 id="ChangeReceipt">Change due: </h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="submit" data-dismiss="modal">OK</button>

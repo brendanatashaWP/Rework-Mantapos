@@ -2,14 +2,6 @@ body{
     background: whitesmoke;
 }
 
-h5#custNameReceipt{
-    font-family: 'Helvetica Neue';
-}
-
-h4#restaurantNameReceipt, h4#restaurantAddressReceipt{
-    font-family: "Helvetica Neue";
-}
-
 div.scroll {
     width: auto;
     height: 400px;
@@ -112,8 +104,12 @@ div.panel.panel-default.panel-menu:hover{
 .modal-header{
     background-color: #ce0a48;
     color: whitesmoke !important;
-    font-family: 'Rouge Script', cursive !important;
+    font-family: 'Helvetica Neue';
     font-size: 20pt;
+}
+
+h5#custNameReceipt, h5#priceTotalReceipt, h5#CashReceipt, h5#ChangeReceipt{
+    font-weight:400;
 }
 
 .receipt-header{

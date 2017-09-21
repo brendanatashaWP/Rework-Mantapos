@@ -33,7 +33,7 @@ public class OrderDao {
                             "(" +
                             id + " SERIAL PRIMARY KEY, " +
                             customer_name + "  TEXT NOT NULL, " +
-                            table_no + " INT NOT NULL, " +
+                            table_no + " TEXT NOT NULL, " +
                             price_total + " INT NOT NULL, " +
                             notes + " TEXT, " +
                             ordered_time + " TEXT NOT NULL, " +
@@ -70,7 +70,7 @@ public class OrderDao {
                             "VALUES (?,?,?,?,?,?,?,?)"
             );
             preparedStatement.setString(1, order.getCustomerName());
-            preparedStatement.setInt(2, order.getTableNo());
+            preparedStatement.setString(2, order.getTableNo());
             preparedStatement.setInt(3, order.getPriceTotal());
             preparedStatement.setString(4, order.getNotes());
 
@@ -120,7 +120,7 @@ public class OrderDao {
                 Order order = new Order();
                 order.setId(resultSet.getInt(id));
                 order.setCustomerName(resultSet.getString(customer_name));
-                order.setTableNo(resultSet.getInt(table_no));
+                order.setTableNo(resultSet.getString(table_no));
                 order.setPriceTotal(resultSet.getInt(price_total));
                 order.setNotes(resultSet.getString(notes));
                 order.setOrdered_time(resultSet.getString(ordered_time));

@@ -1,10 +1,11 @@
 package project.blibli.mantapos.Beans_Model;
 
 public class Order {
-    private int id, tableNo, week, month, year, priceTotal;
+    private int id, week, month, year, priceTotal;
     private String customerName;
     private String ordered_time;
     private String notes;
+    private String tableNo;
 
     public String getNotes() {
         return notes;
@@ -22,11 +23,11 @@ public class Order {
         this.id = id;
     }
 
-    public int getTableNo() {
+    public String getTableNo() {
         return tableNo;
     }
 
-    public void setTableNo(int tableNo) {
+    public void setTableNo(String tableNo) {
         this.tableNo = tableNo;
     }
 

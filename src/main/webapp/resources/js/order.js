@@ -149,5 +149,15 @@ function setReceiptData() {
     custNameReceipt.innerHTML = inputCustNameChange.value;
     priceTotalReceipt.innerHTML = "Total Price : Rp " + inputPriceTotalChange.value;
     CashReceipt.innerHTML = "Cash : Rp " + CashModal.value;
-    ChangeReceipt.innerHTML = "Change : Rp " + txtKembalian.innerHTML;
+    ChangeReceipt.innerHTML = "Change : " + txtKembalian.innerHTML;
+
+    for(i=0; i<counterOrder; i++){
+        var row = tableReceipt.insertRow(-1);
+        var cellMenu = row.insertCell(0);
+        var cellQty = row.insertCell(1);
+        var cellTotalPrice = row.insertCell(2);
+        cellMenu.innerHTML = tableCart.rows[i+1].cells[0].innerHTML;
+        cellQty.innerHTML = tableCart.rows[i+1].cells[1].children[0].value;
+        cellTotalPrice.innerHTML = tableCart.rows[i+1].cells[3].innerHTML;
+    }
 }

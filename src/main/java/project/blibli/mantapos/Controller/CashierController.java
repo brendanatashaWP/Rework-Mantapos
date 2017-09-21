@@ -25,6 +25,11 @@ public class CashierController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("cashier");
         mav.addObject("menuList", menuList);
+        //Dummy data restaurant
+        Restaurant restaurant = new Restaurant();
+        restaurant.setRestaurantName("Afui Mie Ayam Ter-YAHUT!");
+        restaurant.setRestaurantAddress("Jalan Kaliurang Yogyakarta");
+        mav.addObject("restaurant", restaurant);
         return mav;
     }
 
