@@ -106,6 +106,31 @@ function addOrder() {
 
 function setNotes() {
     var notesModal = document.getElementById("notes");
-    var inputNotes = document.getElementById("inputNotes");
+    var inputNotes = document.getElementById("inputNotesChange");
     inputNotes.value = notesModal.value;
+}
+
+function passToChange() {
+    //Passing inputan dari input di modal paymentModal ke input di changeModal (untuk nantinya di
+    //insert ke database
+    var CustNameModal = document.getElementById("custName"); //customer name
+    var inputCustNameChange = document.getElementById("inputCustNameChange");
+    inputCustNameChange.value = CustNameModal.value;
+    var TableNoModal = document.getElementById("tableNo");
+    var inputTableNoChange = document.getElementById("inputTableNoChange"); //table no
+    inputTableNoChange.value = TableNoModal.value;
+    var CashModal = document.getElementById("cash"); //calculate kembalian
+    kembalian = CashModal.value - priceTotal;
+    var txtKembalian = document.getElementById("kembalian");
+    txtKembalian.innerHTML = "Rp " + kembalian; //set text kembalian
+    var inputArrayIdOrder = document.getElementById("array_id_orderChange");
+    var inputPriceTotal = document.getElementById("inputPriceTotal");
+    var inputPriceTotalChange = document.getElementById("inputPriceTotalChange");
+    inputPriceTotalChange.value = inputPriceTotal.value;
+
+    var array_id_order = [];
+    for (i=0; i<counterOrder; i++){
+        array_id_order.push(tableCart.rows[i+1].cells[5].innerHTML);
+    }
+    inputArrayIdOrder.value = array_id_order;
 }
