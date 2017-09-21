@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <%--link ke css local--%>
     <link rel="stylesheet" href="../../resources/css/main.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Rouge+Script" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar">
@@ -110,7 +111,7 @@
                 <div class="col-md-1">
                 </div>
                 <div class="col-md-3">
-                    <button type="button" class="btn" id="btnPrint" data-toggle="modal" data-target="#reciptModal">PRINT RECIPT</button>
+                    <button type="button" class="btn" id="btnPrint" data-toggle="modal" data-target="#receiptModal">PRINT RECEIPT</button>
                 </div>
                 <div class="col-md-1">
                 </div>
@@ -199,16 +200,17 @@
             </div>
         </div>
     </div>
-    <div id="reciptModal" class="modal fade" role="dialog">
+    <div id="receiptModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="topModal" style="text-align:center">RM. Mantap</h4>
-                    <h4 style="text-align: center">Jl. Duren 100, Yogyakarta</h4>
+                    <h4 id="restaurantNameReceipt" class="topModal" style="text-align:center">RM. Mantap</h4>
+                    <h4 id="restaurantAddressReceipt" style="text-align: center">Jl. Duren 100, Yogyakarta</h4>
+                    <h5 id="custNameReceipt">CUSTOMER NAME</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <table class="table table-striped">
+                        <table id="tableReceipt" class="table table-striped">
                             <thead>
                             <tr>
                                 <th>Menu</th>
@@ -218,9 +220,9 @@
                             </thead>
                         </table>
                     </div>
-                    <h4>Total :  </h4>
-                    <h4>Cash :</h4>
-                    <h4>Change due: </h4>
+                    <h4 id="priceTotalReceipt">Total :  </h4>
+                    <h4 id="CashReceipt">Cash :</h4>
+                    <h4 id="ChangeReceipt">Change due: </h4>
                     <div>
                     </div>
                 </div>

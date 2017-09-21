@@ -2,6 +2,14 @@ body{
     background: whitesmoke;
 }
 
+h5#custNameReceipt{
+    font-family: 'Helvetica Neue';
+}
+
+h4#restaurantNameReceipt, h4#restaurantAddressReceipt{
+    font-family: "Helvetica Neue";
+}
+
 div.scroll {
     width: auto;
     height: 400px;
@@ -28,7 +36,7 @@ div.scroll.menu{
 
 .navbar-brand{
     color: whitesmoke !important;
-    font-family: 'Cookie', cursive !important;
+    font-family: 'Rouge Script', cursive !important;
     font-size: 32px;
     float: left;
 }
@@ -54,7 +62,7 @@ div.container.col-md-8 {
 }
 /* #a{
     color: whitesmoke;
-    font-family: 'Cookie', cursive;
+    font-family: 'Dancing Script', cursive;
     font-size: 20pt;
     float: left;
 } */
@@ -104,7 +112,7 @@ div.panel.panel-default.panel-menu:hover{
 .modal-header{
     background-color: #ce0a48;
     color: whitesmoke !important;
-    font-family: 'Cookie', cursive !important;
+    font-family: 'Rouge Script', cursive !important;
     font-size: 20pt;
 }
 
