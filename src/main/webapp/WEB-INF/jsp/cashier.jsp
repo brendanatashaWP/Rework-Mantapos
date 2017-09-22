@@ -123,7 +123,6 @@
                         <%--<input id="cash_change" name="cashChange" type="hidden">--%>
                         <%--<button formtarget="_blank" type="submit" class="btn" id="btnPrint">PRINT RECEIPT</button>--%>
                     <%--</form>--%>
-                        <button id="btnReceipt" type="submit" class="btn" data-toggle="modal" data-target="#receiptModal">RECEIPT</button>
                 </div>
                 <div class="col-md-1">
                 </div>
