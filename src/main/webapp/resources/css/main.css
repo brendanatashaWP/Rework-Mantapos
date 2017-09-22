@@ -2,6 +2,45 @@ body{
     background: whitesmoke;
 }
 
+.loginForm{
+    padding: 100px;
+}
+.inputLogin{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid grey;
+    box-sizing: border-box;
+}
+.containerLogin{
+    padding: 16px;
+    width: 50%;
+    margin: auto;
+}
+.titleMantapos{
+    text-align: center;
+    font-family: 'Rouge Script', cursive;
+    color: #ce0a48;
+    font-size: 40pt;
+}
+
+.buttonSubmit{
+    background-color: #ce0a48;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    /*Belum berfungsi
+     font-family: 'MyWebFont', Arial, sans-serif; */
+}
+
+.buttonSubmit:hover {
+    opacity: 0.8;
+}
+
 div.scroll {
     width: auto;
     height: 400px;
