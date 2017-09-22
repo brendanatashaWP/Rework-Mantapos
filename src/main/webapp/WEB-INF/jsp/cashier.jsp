@@ -106,7 +106,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <button id="btnNotes" type="button" class="btn" data-toggle="modal" data-target="#modalNotes">NOTES</button>
-                    <button id="btnClear" type="button" class="btn">CLEAR</button>
+                    <button id="btnClear" type="button" class="btn" onclick="window.location.reload()">CLEAR</button>
                 </div>
                 <div class="col-md-1">
                 </div>
