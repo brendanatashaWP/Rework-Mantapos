@@ -21,6 +21,27 @@ var priceTotalReceipt = document.getElementById("priceTotalReceipt");
 var CashReceipt = document.getElementById("CashReceipt");
 var ChangeReceipt = document.getElementById("ChangeReceipt");
 
+function startTime() {
+    var today = new Date();
+    var date = today.getDate();
+    var month = today.getMonth();
+    var year = today.getFullYear();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('txtJam').innerHTML =
+        h + ":" + m + ":" + s;
+    document.getElementById("txtDate").innerHTML = date + "-" + month + "-" + year;
+    var t = setTimeout(startTime, 500);
+}
+
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+
 function addToCart(id, name, price){
     //variabel2 untuk cell dari table order nya..
     var row = tableCart.insertRow(-1);

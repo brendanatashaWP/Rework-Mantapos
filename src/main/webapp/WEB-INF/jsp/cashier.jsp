@@ -10,14 +10,32 @@
     <link rel="stylesheet" href="../../resources/css/main.css"/>
     <link href="https://fonts.googleapis.com/css?family=Rouge+Script" rel="stylesheet">
 </head>
-<body>
+<body onload="startTime()">
 <nav class="navbar">
     <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">mantapos</a>
+        <div class="navbar-header" style="margin-right: 10px;">
+            <div class="panel panel-default panel-navbar">
+                <div class="panel-body panel-navbar-body">
+                    <h6>DEDY KURNIAWAN SANTOSO</h6>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-header" style="margin-right: 10px;">
+            <div class="panel panel-default panel-navbar">
+                <div class="panel-body panel-navbar-body">
+                    <h6 id="txtDate"></h6>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-header" style="margin-right: 10px;">
+            <div class="panel panel-default panel-navbar">
+                <div class="panel-body panel-navbar-body">
+                    <h6 id="txtJam"></h6>
+                </div>
+            </div>
         </div>
         <div class="navbar-header navbar-right">
-            <a class="navbar-brand" href="#" id="#btnLogOut">logout</a>
+            <a href="#" class="navbar-brand" id="#btnLogOut">logout</a>
         </div>
     </div>
 </nav>
