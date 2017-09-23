@@ -1,7 +1,13 @@
 package project.blibli.mantapos.Beans_Model;
 
+import javax.validation.constraints.NotNull;
+
 public class Restaurant {
-    private String restaurantName, restaurantAddress;
+    @NotNull(message = "restaurant name cannot be empty!")
+    private String restaurantName;
+
+    @NotNull(message = "restaurant address cannot be empty!")
+    private String restaurantAddress;
 
     public String getRestaurantName() {
         return restaurantName;
