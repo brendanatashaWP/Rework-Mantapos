@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import project.blibli.mantapos.Dao.MenuDao;
 import project.blibli.mantapos.Dao.OrderDao;
 import project.blibli.mantapos.Dao.OrderedMenuDao;
+import project.blibli.mantapos.Dao.RestaurantDao;
 
 @SpringBootApplication
 public class MantaposApplication {
@@ -14,5 +15,6 @@ public class MantaposApplication {
 		MenuDao.CreateTable();
 		OrderDao.CreateTable();
 		OrderedMenuDao.CreateTable();
+		RestaurantDao.CreateTable();
 	}
 }

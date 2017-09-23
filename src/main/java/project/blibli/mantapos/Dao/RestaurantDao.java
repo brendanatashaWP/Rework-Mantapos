@@ -1,5 +1,7 @@
 package project.blibli.mantapos.Dao;
 
+import project.blibli.mantapos.Beans_Model.Restaurant;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -28,5 +30,32 @@ public class RestaurantDao {
             DbConnection.ClosePreparedStatement(preparedStatement);
             DbConnection.CloseConnection(connection);
         }
+    }
+
+    public static int Insert(Restaurant restaurant){
+        int status = 0;
+        Connection connection = DbConnection.startConnection();
+        PreparedStatement preparedStatement = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO " + table_name +
+                            "(" +
+                            restaurant_name + "," +
+                            restaurant_address +
+                            ")" +
+                            " VALUES (?,?)"
+            );
+            preparedStatement.setString(1, restaurant.getRestaurantName());
+            preparedStatement.setString(2, restaurant.getRestaurantAddress());
+            status = preparedStatement.executeUpdate();
+            if (status==1)
+                System.out.println("Insert into table restaurant success!");
+        } catch (Exception ex){
+            System.out.println("Insert into table restaurant failed : " + ex.toString());
+        } finally {
+            DbConnection.ClosePreparedStatement(preparedStatement);
+            DbConnection.CloseConnection(connection);
+        }
+        return status;
     }
 }
