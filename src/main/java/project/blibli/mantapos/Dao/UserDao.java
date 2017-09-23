@@ -1,5 +1,7 @@
 package project.blibli.mantapos.Dao;
 
+import project.blibli.mantapos.Beans_Model.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -9,7 +11,7 @@ public class UserDao {
     private static final String username = "username";
     private static final String password = "password";
     private static final String role = "role";
-    private static final String status = "status";
+    private static final String status_user = "status";
     private static final String nama_lengkap = "nama_lengkap";
     private static final String nomor_ktp = "nomor_ktp";
     private static final String nomor_telepon = "nomor_telepon";
@@ -55,7 +57,7 @@ public class UserDao {
                             username + " TEXT NOT NULL, " +
                             password + " TEXT NOT NULL, " +
                             role + " " + role_type + " NOT NULL, " +
-                            status + " " + status_type + " NOT NULL, " +
+                            status_user + " " + status_type + " NOT NULL, " +
                             nama_lengkap + " TEXT NOT NULL, " +
                             nomor_ktp + " TEXT NOT NULL, " +
                             nomor_telepon + " TEXT NOT NULL, " +
@@ -75,5 +77,45 @@ public class UserDao {
             DbConnection.ClosePreparedStatement(preparedStatementStatus);
             DbConnection.CloseConnection(connection);
         }
+    }
+
+    public static int Insert(User user){
+        int status=0;
+        Connection connection = DbConnection.startConnection();
+        PreparedStatement preparedStatement = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO " + table_name +
+                            "(" +
+                            username + "," +
+                            password + "," +
+                            role + "," +
+                            status_user + "," +
+                            nama_lengkap + "," +
+                            nomor_ktp + "," +
+                            nomor_telepon + "," +
+                            alamat + "," +
+                            id_restaurant +
+                            ")" + " VALUES (?,?,?::" + role_type + ",?::" + status_type +",?,?,?,?,?)"
+            );
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getRole());
+            preparedStatement.setString(4, user.getStatus());
+            preparedStatement.setString(5, user.getNama_lengkap());
+            preparedStatement.setString(6, user.getNomor_ktp());
+            preparedStatement.setString(7, user.getNomor_telepon());
+            preparedStatement.setString(8, user.getAlamat());
+            preparedStatement.setInt(9, user.getId_restaurant());
+            status = preparedStatement.executeUpdate();
+            if (status==1)
+                System.out.println("Insert into table users success!");
+        } catch (Exception ex){
+            System.out.println("Insert into users failed : " + ex.toString());
+        } finally {
+            DbConnection.ClosePreparedStatement(preparedStatement);
+            DbConnection.CloseConnection(connection);
+        }
+        return status;
     }
 }
