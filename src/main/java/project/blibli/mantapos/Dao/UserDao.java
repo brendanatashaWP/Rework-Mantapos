@@ -33,7 +33,7 @@ public class UserDao {
 
     public static void CreateTable(){
         Connection connection = DbConnection.startConnection();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatementTableUsers = null;
         PreparedStatement preparedStatementRole = null;
         PreparedStatement preparedStatementStatus = null;
         PreparedStatement preparedStatementTableRole = null;
@@ -54,7 +54,7 @@ public class UserDao {
                             ")"
             );
             //Create TABLE user
-            preparedStatement = connection.prepareStatement(
+            preparedStatementTableUsers = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS " + table_name +
                             "(" +
                             id + " SERIAL PRIMARY KEY, " +
@@ -79,12 +79,12 @@ public class UserDao {
             preparedStatementRole.executeUpdate();
             preparedStatementStatus.executeUpdate();
             preparedStatementTableRole.executeUpdate();
-            preparedStatement.executeUpdate();
+            preparedStatementTableUsers.executeUpdate();
             System.out.println("Create table user success!");
         } catch (Exception ex){
             System.out.println("Create table user failed : " + ex.toString());
         } finally {
-            DbConnection.ClosePreparedStatement(preparedStatement);
+            DbConnection.ClosePreparedStatement(preparedStatementTableUsers);
             DbConnection.ClosePreparedStatement(preparedStatementRole);
             DbConnection.ClosePreparedStatement(preparedStatementStatus);
             DbConnection.ClosePreparedStatement(preparedStatementTableRole);
@@ -95,9 +95,10 @@ public class UserDao {
     public static int Insert(User user){
         int status=0;
         Connection connection = DbConnection.startConnection();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatementTableUsers = null;
+        PreparedStatement preparedStatementTableRole = null;
         try{
-            preparedStatement = connection.prepareStatement(
+            preparedStatementTableUsers = connection.prepareStatement(
                     "INSERT INTO " + table_name +
                             "(" +
                             username + "," +
@@ -112,23 +113,36 @@ public class UserDao {
                             id_restaurant +
                             ")" + " VALUES (?,?,?::" + role_type + ",?::" + status_type +",?,?,?,?,?,?)"
             );
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getRole());
-            preparedStatement.setString(4, user.getStatus());
-            preparedStatement.setBoolean(5, true);
-            preparedStatement.setString(6, user.getNama_lengkap());
-            preparedStatement.setString(7, user.getNomor_ktp());
-            preparedStatement.setString(8, user.getNomor_telepon());
-            preparedStatement.setString(9, user.getAlamat());
-            preparedStatement.setInt(10, user.getId_restaurant());
-            status = preparedStatement.executeUpdate();
+            preparedStatementTableUsers.setString(1, user.getUsername());
+            preparedStatementTableUsers.setString(2, user.getPassword());
+            preparedStatementTableUsers.setString(3, user.getRole());
+            preparedStatementTableUsers.setString(4, user.getStatus());
+            preparedStatementTableUsers.setBoolean(5, true);
+            preparedStatementTableUsers.setString(6, user.getNama_lengkap());
+            preparedStatementTableUsers.setString(7, user.getNomor_ktp());
+            preparedStatementTableUsers.setString(8, user.getNomor_telepon());
+            preparedStatementTableUsers.setString(9, user.getAlamat());
+            preparedStatementTableUsers.setInt(10, user.getId_restaurant());
+            status = preparedStatementTableUsers.executeUpdate();
             if (status==1)
                 System.out.println("Insert into table users success!");
+            preparedStatementTableRole = connection.prepareStatement(
+                    "INSERT INTO " + table_role +
+                            "(" +
+                            username + "," +
+                            role +
+                            ")" + " VALUES (?,?::" +role_type + ")"
+            );
+            preparedStatementTableRole.setString(1, user.getUsername());
+            preparedStatementTableRole.setString(2, user.getRole());
+            int status2 = preparedStatementTableRole.executeUpdate();
+            if(status2==1)
+                System.out.println("Insert into table roles success!");
         } catch (Exception ex){
             System.out.println("Insert into users failed : " + ex.toString());
         } finally {
-            DbConnection.ClosePreparedStatement(preparedStatement);
+            DbConnection.ClosePreparedStatement(preparedStatementTableUsers);
+            DbConnection.ClosePreparedStatement(preparedStatementTableRole);
             DbConnection.CloseConnection(connection);
         }
         return status;
