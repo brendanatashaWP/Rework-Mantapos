@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 public class UserDao {
-    private static final String table_name = "user";
+    private static final String table_name = "users";
     private static final String id = "id";
     private static final String username = "username";
     private static final String password = "password";
@@ -35,16 +35,16 @@ public class UserDao {
             //Create ENUM FOR ROLE TYPE : OWNER, MANAGER, CASHIER
             preparedStatementRole = connection.prepareStatement(
                     "CREATE TYPE " + role_type + " AS ENUM " + "(" +
-                            role_owner + "," +
-                            role_manager + "," +
-                            role_cashier +
+                            "'" + role_owner + "'," +
+                            "'" + role_manager + "'," +
+                            "'" + role_cashier + "'" +
                             ")"
             );
             //Create ENUM FOR STATUS TYPE : ACTIVE (Still hired) or INACTIVE (Not hired anymore)
             preparedStatementStatus = connection.prepareStatement(
                     "CREATE TYPE " + status_type + " AS ENUM " + "(" +
-                            status_aktif + "," +
-                            status_tidak_aktif +
+                            "'" + status_aktif + "'," +
+                            "'" + status_tidak_aktif + "'" +
                             ")"
             );
             //Create TABLE user
@@ -61,11 +61,11 @@ public class UserDao {
                             nomor_telepon + " TEXT NOT NULL, " +
                             alamat + " TEXT NOT NULL, " +
                             id_restaurant + " INT NOT NULL, " +
-                            "CONSTRAINT id_restaurant_FK FOREIGN KEY (" + id_restaurant + ") REFERENCES " +ref_table_restaurant + "(" + id + ")"
+                            "CONSTRAINT id_restaurant_FK FOREIGN KEY (" + id_restaurant + ") REFERENCES " + ref_table_restaurant + "(" + id + "))"
             );
-            preparedStatement.executeUpdate();
             preparedStatementRole.executeUpdate();
             preparedStatementStatus.executeUpdate();
+            preparedStatement.executeUpdate();
             System.out.println("Create table user success!");
         } catch (Exception ex){
             System.out.println("Create table user failed : " + ex.toString());
