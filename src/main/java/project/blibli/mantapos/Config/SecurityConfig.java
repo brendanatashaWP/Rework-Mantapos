@@ -21,12 +21,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery(
-                        "select username, password, status_user from users where username=?")
-                .authoritiesByUsernameQuery(
-                        "select username, role from users where username=?");
+        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("cashier");
+//        auth.jdbcAuthentication()
+//                .dataSource(dataSource)
+//                .usersByUsernameQuery(
+//                        "select username, password, status from users where username=?")
+//                .authoritiesByUsernameQuery(
+//                        "select username, role from users where username=?");
     }
 
     @Override
