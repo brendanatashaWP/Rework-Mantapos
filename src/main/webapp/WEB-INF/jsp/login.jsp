@@ -14,7 +14,8 @@
 <div id="login-box">
 
     <div class="container containerLogin">
-        <form class="loginForm" name='loginForm' method='POST'>
+        <form class="loginForm"
+              action="<c:url value='${pageContext.request.contextPath}/login'/>" name='loginForm' method='POST'>
 
             <div>
                 <h1 class="titleMantapos">mantapos</h1>
@@ -30,6 +31,9 @@
             <label><b>Password</b></label>
             <input class="inputLogin" type="password" placeholder="Enter Password" name="password" required>
             <button class="buttonSubmit" type="submit" name="submit">LOGIN</button>
+
+            <input type="hidden" name="${_csrf.parameterName}"
+                   value="${_csrf.token}" />
 
         </form>
     </div>

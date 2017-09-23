@@ -15,4 +15,11 @@ public class LoginController {
         return mav;
     }
 
+    @GetMapping(value = "/index", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView index(){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
+        return mav;
+    }
+
 }
