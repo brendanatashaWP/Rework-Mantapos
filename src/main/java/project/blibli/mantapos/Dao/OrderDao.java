@@ -1,8 +1,6 @@
 package project.blibli.mantapos.Dao;
 
-import com.sun.tools.corba.se.idl.constExpr.Or;
 import project.blibli.mantapos.Beans_Model.Order;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
