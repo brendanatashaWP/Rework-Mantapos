@@ -94,7 +94,7 @@
 					<assembleDirectory>target</assembleDirectory>
 					<programs>
 						<program>
-							<mainClass>project.blibli.mantapos.MantaposApplication</mainClass>
+							<mainClass>MantaposApplication</mainClass>
 							<name>webapp</name>
 						</program>
 					</programs>
