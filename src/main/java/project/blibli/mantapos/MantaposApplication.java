@@ -35,7 +35,7 @@ public class MantaposApplication {
 		// Servlet 3.0 annotation will work
 		File additionWebInfClasses = new File("target/classes");
 		WebResourceRoot resources = new StandardRoot(ctx);
-		resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/jsp/classes",
+		resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/jsp/",
 				additionWebInfClasses.getAbsolutePath(), "/"));
 		ctx.setResources(resources);
 
