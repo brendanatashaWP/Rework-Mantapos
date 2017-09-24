@@ -25,7 +25,7 @@ public class LoginController {
     }
 
     //DEFAULT PAGE FOR OWNER, MANAGER, CASHIER
-    @GetMapping(value = "/index", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView index(){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
