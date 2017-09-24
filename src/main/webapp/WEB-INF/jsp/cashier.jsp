@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Rouge+Script" rel="stylesheet">
 </head>
 <body onload="startTime()">
-<sec:authorize access="hasRole('cashier')">
+<sec:authorize access="hasAuthority('cashier')">
 <nav class="navbar">
     <div class="container-fluid">
         <div class="navbar-header" style="margin-right: 10px;">
@@ -37,11 +37,11 @@
             </div>
         </div>
         <div class="navbar-header navbar-right">
-            <%--<form action="/logout" method="post" id="logoutForm">--%>
-                <%--<input type="hidden" name="${_csrf.parameterName}"--%>
-                       <%--value="${_csrf.token}" />--%>
-                <%--<a onclick="document.getElementById('logoutForm').submit()" href="#" class="navbar-brand" id="#btnLogOut">logout</a>--%>
-            <%--</form>--%>
+            <form action="/logout" method="post" id="logoutForm">
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}" />
+                <a onclick="document.getElementById('logoutForm').submit()" href="#" class="navbar-brand" id="#btnLogOut">logout</a>
+            </form>
         </div>
     </div>
 </nav>

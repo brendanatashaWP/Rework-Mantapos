@@ -47,12 +47,12 @@ public class UserDao {
                             ")"
             );
             //Create ENUM FOR STATUS TYPE : ACTIVE (Still hired) or INACTIVE (Not hired anymore)
-            preparedStatementStatus = connection.prepareStatement(
-                    "CREATE TYPE " + status_type + " AS ENUM " + "(" +
-                            "'" + status_aktif + "'," +
-                            "'" + status_tidak_aktif + "'" +
-                            ")"
-            );
+//            preparedStatementStatus = connection.prepareStatement(
+//                    "CREATE TYPE " + status_type + " AS ENUM " + "(" +
+//                            "'" + status_aktif + "'," +
+//                            "'" + status_tidak_aktif + "'" +
+//                            ")"
+//            );
             //Create TABLE user
             preparedStatementTableUsers = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS " + table_name +
@@ -60,8 +60,6 @@ public class UserDao {
                             id + " SERIAL PRIMARY KEY, " +
                             username + " TEXT NOT NULL, " +
                             password + " TEXT NOT NULL, " +
-                            role + " " + role_type + " NOT NULL, " +
-                            status_user + " " + status_type + " NOT NULL, " +
                             enabled + " boolean NOT NULL DEFAULT FALSE, " +
                             nama_lengkap + " TEXT NOT NULL, " +
                             nomor_ktp + " TEXT NOT NULL, " +
@@ -77,7 +75,7 @@ public class UserDao {
                             role + " " + role_type + " NOT NULL)"
             );
             preparedStatementRole.executeUpdate();
-            preparedStatementStatus.executeUpdate();
+//            preparedStatementStatus.executeUpdate();
             preparedStatementTableRole.executeUpdate();
             preparedStatementTableUsers.executeUpdate();
             System.out.println("Create table user success!");
@@ -86,7 +84,7 @@ public class UserDao {
         } finally {
             DbConnection.ClosePreparedStatement(preparedStatementTableUsers);
             DbConnection.ClosePreparedStatement(preparedStatementRole);
-            DbConnection.ClosePreparedStatement(preparedStatementStatus);
+//            DbConnection.ClosePreparedStatement(preparedStatementStatus);
             DbConnection.ClosePreparedStatement(preparedStatementTableRole);
             DbConnection.CloseConnection(connection);
         }
@@ -103,26 +101,22 @@ public class UserDao {
                             "(" +
                             username + "," +
                             password + "," +
-                            role + "," +
-                            status_user + "," +
                             enabled + "," +
                             nama_lengkap + "," +
                             nomor_ktp + "," +
                             nomor_telepon + "," +
                             alamat + "," +
                             id_restaurant +
-                            ")" + " VALUES (?,?,?::" + role_type + ",?::" + status_type +",?,?,?,?,?,?)"
+                            ")" + " VALUES (?,?,?,?,?,?,?,?)"
             );
             preparedStatementTableUsers.setString(1, user.getUsername());
             preparedStatementTableUsers.setString(2, user.getPassword());
-            preparedStatementTableUsers.setString(3, user.getRole());
-            preparedStatementTableUsers.setString(4, user.getStatus());
-            preparedStatementTableUsers.setBoolean(5, true);
-            preparedStatementTableUsers.setString(6, user.getNama_lengkap());
-            preparedStatementTableUsers.setString(7, user.getNomor_ktp());
-            preparedStatementTableUsers.setString(8, user.getNomor_telepon());
-            preparedStatementTableUsers.setString(9, user.getAlamat());
-            preparedStatementTableUsers.setInt(10, user.getId_restaurant());
+            preparedStatementTableUsers.setBoolean(3, true);
+            preparedStatementTableUsers.setString(4, user.getNama_lengkap());
+            preparedStatementTableUsers.setString(5, user.getNomor_ktp());
+            preparedStatementTableUsers.setString(6, user.getNomor_telepon());
+            preparedStatementTableUsers.setString(7, user.getAlamat());
+            preparedStatementTableUsers.setInt(8, user.getId_restaurant());
             status = preparedStatementTableUsers.executeUpdate();
             if (status==1)
                 System.out.println("Insert into table users success!");
