@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Rouge+Script" rel="stylesheet">
 </head>
 <body onload="startTime()">
+<sec:authorize access="hasRole('cashier')">
 <nav class="navbar">
     <div class="container-fluid">
         <div class="navbar-header" style="margin-right: 10px;">
@@ -35,7 +37,11 @@
             </div>
         </div>
         <div class="navbar-header navbar-right">
-            <a href="#" class="navbar-brand" id="#btnLogOut">logout</a>
+            <%--<form action="/logout" method="post" id="logoutForm">--%>
+                <%--<input type="hidden" name="${_csrf.parameterName}"--%>
+                       <%--value="${_csrf.token}" />--%>
+                <%--<a onclick="document.getElementById('logoutForm').submit()" href="#" class="navbar-brand" id="#btnLogOut">logout</a>--%>
+            <%--</form>--%>
         </div>
     </div>
 </nav>
@@ -270,5 +276,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="../../resources/js/order.js"></script>
+</sec:authorize>
 </body>
 </html>

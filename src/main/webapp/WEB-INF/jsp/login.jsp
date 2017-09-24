@@ -14,8 +14,7 @@
 <div id="login-box">
 
     <div class="container containerLogin">
-        <form class="loginForm"
-              action="<c:url value='${pageContext.request.contextPath}/login'/>" name='loginForm' method='POST'>
+        <form class="loginForm" action="/login" name='loginForm' method='POST'>
 
             <div>
                 <h1 class="titleMantapos">mantapos</h1>
