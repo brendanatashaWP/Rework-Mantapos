@@ -1,0 +1,64 @@
+.navbar-brand{
+    color: whitesmoke !important;
+    font-family: 'Cookie', cursive !important;
+    font-size: 20pt;
+    float: left;
+}
+
+
+#btnLogOut{
+    color: whitesmoke;
+    float: right !important;
+    position: right !important;
+}
+
+.navbar{
+    background-color: #ce0a48;
+   
+}
+/* #a{
+    color: whitesmoke;
+    font-family: 'Cookie', cursive;
+    font-size: 20pt;
+    float: left;
+} */
+
+#food{
+
+}
+
+.img-thumbnail{
+    float: left;
+}
+
+#totalBayar{
+    background-color: #ce0a48;
+    color: whitesmoke;
+}
+
+.table-striped{
+    height: 300pt;
+}
+
+#btnPay{
+    background-color: #ce0a48;
+    color: whitesmoke;
+    float: right;
+}
+
+.modal-header{
+    background-color: #ce0a48;
+    color: whitesmoke !important;
+    font-family: 'Cookie', cursive !important;
+    font-size: 20pt;
+}
+
+.topModal{
+    font-size: 30pt;
+}
+
+.sidebar{
+        position: absolute;
+        top:60px; bottom: 0;
+        width: 178px;
+}
