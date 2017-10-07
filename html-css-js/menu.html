@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link href="bootstrap-4.0.0-alpha.6-dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="https://fonts.googleapis.com/css?family=Cookie|Dancing+Script|Great+Vibes" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="style.css" rel="stylesheet">
+    <script src="D:\Projek Future Batch 2 Phase 1\bootstrap-4.0.0-alpha.6-dist/js/metisMenu.min.js"></script>
+    <script src="D:\Projek Future Batch 2 Phase 1\bootstrap-4.0.0-alpha.6-dist/js/custom.js"></script>
+    
+    <title>Dashboard mantaPOS</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">mantaPOS</a>
+                </div>
+
+                <div class="navbar-header navbar-right">
+                    <div class="dropdown"></div>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"></a>
+                    <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="cute.png"><span class="badge">9</span></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-menu-header text-center">
+                            <strong>Account</strong>
+                        </li>
+                        <li class="m_2"><a href="#"><i class="fa fa-bell-o"></i> Updates <span class="label label-info">42</span></a></li>
+                        <li class="m_2"><a href="#"><i class="fa fa-envelope-o"></i> Messages <span class="label label-success">42</span></a></li>
+                        <li class="m_2"><a href="#"><i class="fa fa-tasks"></i> Tasks <span class="label label-danger">42</span></a></li>
+                        <li><a href="#"><i class="fa fa-comments"></i> Comments <span class="label label-warning">42</span></a></li>
+                        <li class="dropdown-menu-header text-center">
+                            <strong>Settings</strong>
+                        </li>
+                        <li class="m_2"><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                        <li class="m_2"><a href="#"><i class="fa fa-wrench"></i> Settings</a></li>
+                        <li class="m_2"><a href="#"><i class="fa fa-usd"></i> Payments <span class="label label-default">42</span></a></li>
+                        <li class="m_2"><a href="#"><i class="fa fa-file"></i> Projects <span class="label label-primary">42</span></a></li>
+                        <li class="divider"></li>
+                        <li class="m_2"><a href="#"><i class="fa fa-shield"></i> Lock Profile</a></li>
+                        <li class="m_2"><a href="#"><i class="fa fa-lock"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="col-md-2">
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="nav" id="side-menu">
+                    <li>
+                        <a href="dashboard.html">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="menu.html"><i class=""></i>Menu</a>
+                    </li>
+                    <li>
+                        <a href="discount.html"><i class=""></i>Discount</a>
+                    </li>
+                    <li>
+                        <a href="cashier.html"><i class=""></i>Cashier</a>
+                    </li>
+                    <li>
+                        <a href="#">Keuangan<span class="glyphicon glyphicon-chevron-left"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="income.html">Income</a>
+                            </li>
+                            <li>
+                                <a href="outcome.html">Outcome</a>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="col-md-6">
+                <h3>Menu</h3>
+                <hr>
+            </div>
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-6 tablemenu">
+                <h4>Menu List</h4>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Price Menu</th>
+                            <th>Photo</th>
+                            <th>Delete Menu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Ayam Goreng</td>
+                            <td>10000</td>
+                            <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
+                            <td class="link"><a href="delete.html">Delete</a></td>
+
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Ayam Bakar</td>
+                            <td>15000</td>
+                            <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
+                            <td class="link"><a href="delete.html">Delete</a></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+            </div>
+            
+            <div class="col-md-2 tablemenu">
+                <h4>Entry Menu</h4>
+                <form>
+                    Menu Name:<br>
+                    <input type="text" name="menuname"><br>
+                    Menu Price:<br>
+                    <input type="text" name="menuprice"><br>
+                    Category:<br>
+                    <select name="categoryselector" id="categoryselector" class="form-control">
+                        <option value="Food">Food</option>
+                        <option value="Drink">Drink</option>
+                    </select>
+                    Upload Photo:<br>
+                    <button>Browse</button>
+                    <input type="text" name="photopath" cols="10" rows="1"><br><br>
+                    <button type="submit">OK</button>
+                </form>
+            </div>
+        </div>
+        <div id="chart_container">
+            <div id="chart"></div>
+        </div>
+    </div>
+</body>
+
+
+</html>
