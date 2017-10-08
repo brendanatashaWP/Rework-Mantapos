@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <title>CASHIER</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
+</head>
+<body onload="startTime()">
+<sec:authorize access="hasAuthority('cashier')">
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header" style="margin-right: 10px;">
+                <div class="panel panel-default panel-navbar">
+                    <div class="panel-body panel-navbar-body">
+                        <h6>DEDY KURNIAWAN SANTOSO</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-header" style="margin-right: 10px;">
+                <div class="panel panel-default panel-navbar">
+                    <div class="panel-body panel-navbar-body">
+                        <h6 id="txtDate"></h6>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-header" style="margin-right: 10px;">
+                <div class="panel panel-default panel-navbar">
+                    <div class="panel-body panel-navbar-body">
+                        <h6 id="txtJam"></h6>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-header navbar-right">
+                <form action="/logout" method="post" id="logoutForm">
+                    <input type="hidden" name="${_csrf.parameterName}"
+                           value="${_csrf.token}" />
+                    <a onclick="document.getElementById('logoutForm').submit()" href="#" class="navbar-brand" id="#btnLogOut">logout</a>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="container col-md-4" id="listMenu">
+                <ul class="row nav nav-tabs">
+                    <li class="col-md-6 active"><a data-toggle="tab" href="#makanan">FOOD</a></li>
+                    <li class="col-md-6"><a data-toggle="tab" href="#minuman">DRINK</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="makanan" class="tab-pane fade in active">
+                        <div class="scroll menu">
+                            <th:block th:each="menu : ${menuList}"
+                                      th:if="${menu.category_menu == 'food'}">
+                                    <!--tanda \ adalah escape character-->
+                                    <a class="menuCard" href="#" th:onclick="'javascript:addToCart(\' '+ ${menu.id_menu} +' \',\' '+ ${menu.name_menu} +' \',\' '+ ${menu.price_total_menu} +' \');'">
+                                        <div class="panel panel-default panel-menu">
+                                            <div class="panel-body">
+                                                <img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"
+                                                     width="80" height="80" style="margin-right: 10px"/>
+                                                <h3 th:text="${menu.name_menu}"/>
+                                                <h4 th:text="'Rp ' + ${menu.price_total_menu}"/>
+                                            </div>
+                                        </div>
+                                    </a>
+                            </th:block>
+                        </div>
+                    </div>
+                    <div id="minuman" class="tab-pane fade">
+                        <div class="scroll menu">
+                            <th:block th:each="menu : ${menuList}"
+                                      th:if="${menu.category_menu == 'drink'}">
+                                <!--tanda \ adalah escape character-->
+                                <a class="menuCard" href="#" th:onclick="'javascript:addToCart(\' '+ ${menu.id_menu} +' \',\' '+ ${menu.name_menu} +' \',\' '+ ${menu.price_total_menu} +' \');'">
+                                    <div class="panel panel-default panel-menu">
+                                        <div class="panel-body">
+                                            <img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"
+                                                 width="80" height="80" style="margin-right: 10px"/>
+                                            <h3 th:text="${menu.name_menu}"/>
+                                            <h4 th:text="'Rp ' + ${menu.price_total_menu}"/>
+                                        </div>
+                                    </div>
+                                </a>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>New Order</h3>
+                    </div>
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="input-group">-->
+                    <!--<div class="input-group-btn">-->
+                    <!--<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>-->
+                    <!--</div>-->
+                    <!--<input type="text" class="form-control" placeholder="Search" name="search">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="scroll">
+                            <table class="table table-striped" id="tableCart">
+                                <thead>
+                                <tr>
+                                    <th>Menu</th>
+                                    <th>Qty</th>
+                                    <th>Item Price</th>
+                                    <th>Total Price</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-md-12 totalBayar">
+                            <div>
+                                <h3 id="totalBayar" style="text-align:center">Rp 0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <button id="btnNotes" type="button" class="btn" data-toggle="modal" data-target="#modalNotes">NOTES</button>
+                        <button id="btnClear" type="button" class="btn" onclick="window.location.reload()">CLEAR</button>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <!--<%&#45;&#45;OPEN NEW TAB RECEIPT&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<form action="/receipt" method="post">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;&lt;%&ndash;DISINI KASIH INPUT-INPUT YANG ISINYA ADALAH PARAMETER SEPERTI :&ndash;%&gt;&#45;&#45;%>-->
+                        <!--<%&#45;&#45;&lt;%&ndash;RESTO NAME, RESTO ADDRESS, CUST NAME, PRICE TOTAL, CASH PAID, CASH CHANGE&ndash;%&gt;&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="restaurant_name" name="restaurantName" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="restaurant_address" name="restaurantAddress" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="customer_name" name="customerName" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="price_total" name="priceTotal" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="cash_paid" name="cashPaid" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="cash_change" name="cashChange" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<button formtarget="_blank" type="submit" class="btn" id="btnPrint">PRINT RECEIPT</button>&#45;&#45;%>-->
+                        <!--<%&#45;&#45;</form>&#45;&#45;%>-->
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-4">
+                        <button id="btnPay" type="submit" class="btn" data-toggle="modal" data-target="#paymentModal">PAY</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalNotes" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="topModal">Notes</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="notes">Notes: </label>
+                            <textarea name="notes" class="form-control" id="notes"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="cancel" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="submit" data-dismiss="modal" onclick="setNotes()">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="paymentModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="topModal">Payment</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="custName">Name: </label>
+                            <input type="text" class="form-control" id="custName"/>
+
+                            <label for="cash">Cash: </label>
+                            <input type="currency" class="form-control" id="cash"/>
+
+                            <label for="tableNo">Table No: </label>
+                            <input type="text" class="form-control" id="tableNo"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="cancel" data-dismiss="modal">Cancel</button>
+                        <input type="hidden" name="customerName" id="inputCustName"/>
+                        <input type="hidden" name="tableNo" id="inputTableNo"/>
+                        <input type="hidden" name="notes" id="inputNotes"/>
+                        <input type="hidden" name="priceTotal" id="inputPriceTotal"/>
+                        <!--<%&#45;&#45;<input type="hidden" name="array_id_order" id="array_id_order">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input type="hidden" name="array_qty" id="array_qty">&#45;&#45;%>-->
+                        <button type="button" class="submit" data-toggle="modal" data-target="#changeModal" onclick="passToChangeModal()">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="changeModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="topModal">Change</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Kembalian: </label>
+                            <h5 id="kembalian">Rp 0</h5>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!--<%&#45;&#45;<a target="_blank" href="/receipt">PRINT RECEIPT</a>&#45;&#45;%>-->
+                        <!--<%&#45;&#45;DISINI SUBMIT VALUE CUSTOMER NAME, TABLE NO, PRICE TOTAL, DAN NOTES&#45;&#45;%>-->
+                        <!--<%&#45;&#45;KE CONTROLLER&#45;&#45;%>-->
+                        <button id="btnReceipt" type="submit" class="btn" data-toggle="modal" data-target="#receiptModal" onclick="setReceiptData()">RECEIPT</button>
+                        <form action="/add-order" method="post">
+                            <!--<%&#45;&#45;dummy data restaurant&#45;&#45;%>-->
+                            <input type="hidden" name="restaurantName" id="inputRestaurantName" th:value="${restaurant.restaurantName}"/>
+                            <input type="hidden" name="restaurantAddress" id="inputRestaurantAddress" th:value="${restaurant.restaurantAddress}"/>
+                            <input type="hidden" name="customerName" id="inputCustNameChange"/>
+                            <input type="hidden" name="tableNo" id="inputTableNoChange"/>
+                            <input type="hidden" name="notes" id="inputNotesChange"/>
+                            <input type="hidden" name="priceTotal" id="inputPriceTotalChange"/>
+                            <input type="hidden" name="cashPaid" id="inputCashPaid"/>
+                            <input type="hidden" name="cashChange" id="inputCashChange"/>
+                            <input type="hidden" name="array_id_order" id="array_id_orderChange"/>
+                            <input type="hidden" name="array_qty" id="array_qtyChange"/>
+                            <button type="submit" class="submit">OK</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="receiptModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 th:text="${restaurant.restaurantName}" id="restaurantNameReceipt" class="topModal" style="text-align:center"></h4>
+                        <h4 th:text="${restaurant.restaurantAddress}" id="restaurantAddressReceipt" style="text-align: center"></h4>
+                        <h5 id="custNameReceipt">Dedy</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <table id="tableReceipt" class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Menu</th>
+                                    <th>Qty</th>
+                                    <th>Total Price</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <h5 id="priceTotalReceipt">Total :  </h5>
+                        <h5 id="CashReceipt">Cash :</h5>
+                        <h5 id="ChangeReceipt">Change due: </h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="submit" data-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/order.js}"></script>
+</sec:authorize>
+</body>
+</html>
