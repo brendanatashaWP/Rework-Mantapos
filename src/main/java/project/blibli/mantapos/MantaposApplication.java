@@ -8,6 +8,7 @@ import org.apache.catalina.webresources.StandardRoot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import project.blibli.mantapos.Dao.*;
+import project.blibli.mantapos.ImplementationDao.MenuDaoImpl;
 
 import java.io.File;
 
@@ -16,7 +17,8 @@ public class MantaposApplication {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(MantaposApplication.class, args);
-		MenuDao.CreateTable();
+		MenuDaoImpl menuDao = new MenuDaoImpl();
+		menuDao.CreateTable();
 		OrderDao.CreateTable();
 		OrderedMenuDao.CreateTable();
 		RestaurantDao.CreateTable();

@@ -9,6 +9,7 @@ import project.blibli.mantapos.Beans_Model.Restaurant;
 import project.blibli.mantapos.Dao.MenuDao;
 import project.blibli.mantapos.Dao.OrderDao;
 import project.blibli.mantapos.Dao.OrderedMenuDao;
+import project.blibli.mantapos.ImplementationDao.MenuDaoImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +18,11 @@ import java.util.Map;
 @RestController
 public class CashierController {
 
+    MenuDaoImpl MenuDao = new MenuDaoImpl();
+
     @GetMapping(value = "/cashier", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView cashierHtml(){
-        List<Menu> menuList = MenuDao.getAll();
+        List<Menu> menuList = MenuDao.getAllMenu();
         ModelAndView mav = new ModelAndView();
         mav.setViewName("cashier");
         mav.addObject("menuList", menuList);
@@ -34,7 +37,7 @@ public class CashierController {
     @GetMapping(value = "/cashier", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Menu>> cashierJson(){
         Map<String, List<Menu>> param = new HashMap<>();
-        List<Menu> menuList = MenuDao.getAll();
+        List<Menu> menuList = MenuDao.getAllMenu();
         param.put("menu", menuList);
         return param;
     }
