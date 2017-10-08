@@ -1,0 +1,87 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap-4.0.0-alpha.6-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cookie|Dancing+Script|Great+Vibes" rel="stylesheet">
+    <title>Login Page POS Resto</title>
+    <style>
+        form {
+            width: 50%;
+            margin: auto;
+            padding: 100px;
+        }
+
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid grey;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Cookie', cursive;
+            color: #ce0a48;
+            font-size: 40pt;
+        }
+
+        /*@font-face {
+            font-family: 'MyWebFont';
+            src: url('WebFont.eot');
+            src: url('WebFont.eot?iefix') format('eot'),
+            url('WebFont.woff') format('woff'),
+            url('WebFont.ttf') format('truetype'),
+            url('WebFont.svg#webfont') format('svg');
+        }*/
+
+        label {
+            font-family: 'Cookie', cursive;
+            font-size: 20pt;
+        }
+
+        button {
+            background-color: #ce0a48;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            /*Belum berfungsi
+             font-family: 'MyWebFont', Arial, sans-serif; */
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            padding: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form>
+            <div class="container">
+                <h1>mantaPOS</h1>
+            </div>
+                <label><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+                <label><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="pass" required>
+                <button type="submit">LOGIN</button>
+        </form>
+
+    </div>
+</body>
+
+</html>
