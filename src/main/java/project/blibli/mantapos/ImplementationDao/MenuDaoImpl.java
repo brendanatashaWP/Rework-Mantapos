@@ -37,7 +37,7 @@ public class MenuDaoImpl implements MenuDao {
 
     @Override
     public int Insert(Menu menu) {
-        int status=0;
+        int status;
         String query = "INSERT INTO " + table_name +
                 "(" +
                 name + "," +
@@ -62,8 +62,13 @@ public class MenuDaoImpl implements MenuDao {
         return menuList;
     }
 
+    //TODO : Benerin queryforobject supaya return nama menu, yang ini errornya Incorrect result size: expected 1, actual 3
     @Override
     public String getMenuById(int id) {
-        return null;
+        System.out.println("ID : " + id);
+        String name_menu = null;
+        String query = "SELECT " + name + " FROM " + table_name + " WHERE " + id + "=?";
+        name_menu = jdbcTemplate.queryForObject(query, new Object[] {id}, String.class);
+        return name_menu;
     }
 }
