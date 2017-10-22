@@ -62,7 +62,6 @@ public class MenuDaoImpl implements MenuDao {
         return menuList;
     }
 
-    //TODO : Benerin queryforobject supaya return nama menu, yang ini errornya Incorrect result size: expected 1, actual 3
     @Override
     public String getMenuById(int idd) {
         String name_menu;

@@ -1,21 +1,21 @@
 package project.blibli.mantapos.Beans_Model;
 
 public class Receipt {
-    private int cashPaid, cashChange;
+    private int cash_paid, cash_change;
 
-    public int getCashPaid() {
-        return cashPaid;
+    public int getCash_paid() {
+        return cash_paid;
     }
 
-    public void setCashPaid(int cashPaid) {
-        this.cashPaid = cashPaid;
+    public void setCash_paid(int cash_paid) {
+        this.cash_paid = cash_paid;
     }
 
-    public int getCashChange() {
-        return cashChange;
+    public int getCash_change() {
+        return cash_change;
     }
 
-    public void setCashChange(int cashChange) {
-        this.cashChange = cashChange;
+    public void setCash_change(int cash_change) {
+        this.cash_change = cash_change;
     }
 }

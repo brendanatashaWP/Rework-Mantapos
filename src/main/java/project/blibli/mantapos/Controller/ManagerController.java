@@ -16,31 +16,11 @@ public class ManagerController {
 
     private IncomeDaoImpl incomeDao = new IncomeDaoImpl();
 
-    @GetMapping(value = "/income/{scale}")
-    public Map<String, List<Integer>> incomeJson(@PathVariable("scale") String scale){
+    @GetMapping(value = "/ledger/daily/{month}")
+    public Map<String, List<Integer>> incomeJson(@PathVariable("month") String month){
         Map<String, List<Integer>> param = new HashMap<>();
         List<Integer> incomeList = new ArrayList<>();
-        if(scale.toUpperCase().equals("WEEKLY")){
-            incomeList = getWeeklyIncome();
-        } else if(scale.toUpperCase().equals("MONTHLY")){
-            incomeList = getMonthlyIncome();
-        } else if(scale.toUpperCase().equals("YEARLY")){
-            incomeList = getYearlyIncome();
-        }
         param.put("RESULT", incomeList);
         return param;
-    }
-
-    private List<Integer> getWeeklyIncome(){
-        List<Integer> incomeList = incomeDao.GetWeekly();
-        return incomeList;
-    }
-    private List<Integer> getMonthlyIncome(){
-        List<Integer> incomeList = incomeDao.GetMonthly();
-        return incomeList;
-    }
-    private List<Integer> getYearlyIncome(){
-        List<Integer> incomeList = incomeDao.GetYearly();
-        return incomeList;
     }
 }

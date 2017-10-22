@@ -1,24 +1,24 @@
 package project.blibli.mantapos.Beans_Model;
 
 public class Income {
-    private int incomeAmount;
+    private int income_amount;
     private int week, month, year;
     private int scale;
 
     public Income(){ }
-    public Income(int incomeAmount, int week, int month, int year) {
-        this.incomeAmount = incomeAmount;
+    public Income(int income_amount, int week, int month, int year) {
+        this.income_amount = income_amount;
         this.week = week;
         this.month = month;
         this.year = year;
     }
 
-    public int getIncomeAmount() {
-        return incomeAmount;
+    public int getIncome_amount() {
+        return income_amount;
     }
 
-    public void setIncomeAmount(int incomeAmount) {
-        this.incomeAmount = incomeAmount;
+    public void setIncome_amount(int income_amount) {
+        this.income_amount = income_amount;
     }
 
     public int getWeek() {

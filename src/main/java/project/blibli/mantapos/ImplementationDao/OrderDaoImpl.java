@@ -76,7 +76,7 @@ public class OrderDaoImpl implements OrderDao {
         else
             week=4;
         status = jdbcTemplate.update(query, new Object[]{
-                order.getCustomerName(), order.getTableNo(), order.getPriceTotal(),
+                order.getCustomer_name(), order.getTable_no(), order.getPrice_total(),
                 "'" + order.getNotes() + "'", LocalDate.now().toString() + "," + jam, week, LocalDate.now().getMonthValue(), LocalDateTime.now().getYear()
         });
         return status;
