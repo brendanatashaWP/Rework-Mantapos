@@ -5,7 +5,7 @@ var tableCart = document.getElementById("tableCart");
 var totalBayar = document.getElementById("totalBayar");
 var CustNameModal = document.getElementById("custName"); //customer name
 var inputCustNameChange = document.getElementById("inputCustNameChange");
-var TableNoModal = document.getElementById("tableNo");
+var TableNoModal = document.getElementById("table_no");
 var inputTableNoChange = document.getElementById("inputTableNoChange"); //table no
 var CashModal = document.getElementById("cash"); //calculate kembalian
 var txtKembalian = document.getElementById("kembalian");
@@ -120,7 +120,7 @@ function addOrder() {
     var CustNameModal = document.getElementById("custName");
     var inputCustName = document.getElementById("inputCustName");
     inputCustName.value = CustNameModal.value;
-    var TableNoModal = document.getElementById("tableNo");
+    var TableNoModal = document.getElementById("table_no");
     var inputTableNo = document.getElementById("inputTableNo");
     inputTableNo.value = TableNoModal.value;
     var txtKembalian = document.getElementById("kembalian");
