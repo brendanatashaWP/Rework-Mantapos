@@ -24,8 +24,8 @@ public class RestaurantController {
         int status = restaurantDao.Insert(restaurant);
         if (status==1){
             param.put("status", "success!");
-            param.put("resto_name", restaurant.getRestaurantName());
-            param.put("resto_address", restaurant.getRestaurantAddress());
+            param.put("resto_name", restaurant.getRestaurant_name());
+            param.put("resto_address", restaurant.getRestaurant_address());
         } else if(bindingResult.hasErrors()){
             param.put("status", "failed");
         }

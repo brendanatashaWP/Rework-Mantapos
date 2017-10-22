@@ -1,25 +1,25 @@
 package project.blibli.mantapos.Beans_Model;
 
 public class Outcome {
-    private int outcomeAmount;
-    private String itemName;
+    private int outcome_amount;
+    private String item_name;
     private int qty;
-    private String suppName, suppLocation, suppContact;
+    private String supp_name, supp_location, supp_contact;
 
-    public int getOutcomeAmount() {
-        return outcomeAmount;
+    public int getOutcome_amount() {
+        return outcome_amount;
     }
 
-    public void setOutcomeAmount(int outcomeAmount) {
-        this.outcomeAmount = outcomeAmount;
+    public void setOutcome_amount(int outcome_amount) {
+        this.outcome_amount = outcome_amount;
     }
 
-    public String getItemName() {
-        return itemName;
+    public String getItem_name() {
+        return item_name;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setItem_name(String item_name) {
+        this.item_name = item_name;
     }
 
     public int getQty() {
@@ -30,27 +30,27 @@ public class Outcome {
         this.qty = qty;
     }
 
-    public String getSuppName() {
-        return suppName;
+    public String getSupp_name() {
+        return supp_name;
     }
 
-    public void setSuppName(String suppName) {
-        this.suppName = suppName;
+    public void setSupp_name(String supp_name) {
+        this.supp_name = supp_name;
     }
 
-    public String getSuppLocation() {
-        return suppLocation;
+    public String getSupp_location() {
+        return supp_location;
     }
 
-    public void setSuppLocation(String suppLocation) {
-        this.suppLocation = suppLocation;
+    public void setSupp_location(String supp_location) {
+        this.supp_location = supp_location;
     }
 
-    public String getSuppContact() {
-        return suppContact;
+    public String getSupp_contact() {
+        return supp_contact;
     }
 
-    public void setSuppContact(String suppContact) {
-        this.suppContact = suppContact;
+    public void setSupp_contact(String supp_contact) {
+        this.supp_contact = supp_contact;
     }
 }

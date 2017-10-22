@@ -10,8 +10,8 @@ public class RestaurantMapper implements RowMapper<Restaurant> {
     @Override
     public Restaurant mapRow(ResultSet resultSet, int i) throws SQLException {
         Restaurant restaurant = new Restaurant();
-        restaurant.setRestaurantName(resultSet.getString("restaurant_name"));
-        restaurant.setRestaurantAddress(resultSet.getString("restaurant_address"));
+        restaurant.setRestaurant_name(resultSet.getString("restaurant_name"));
+        restaurant.setRestaurant_address(resultSet.getString("restaurant_address"));
         return restaurant;
     }
 }

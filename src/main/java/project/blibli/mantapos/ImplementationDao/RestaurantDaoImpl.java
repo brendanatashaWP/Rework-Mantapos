@@ -38,7 +38,7 @@ public class RestaurantDaoImpl implements RestaurantDao{
                 ")" +
                 " VALUES (?,?)";
         status = jdbcTemplate.update(query, new Object[]{
-                restaurant.getRestaurantName(), restaurant.getRestaurantAddress()
+                restaurant.getRestaurant_name(), restaurant.getRestaurant_address()
         });
         return status;
     }

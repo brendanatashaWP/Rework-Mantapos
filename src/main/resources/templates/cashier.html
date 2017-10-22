@@ -136,12 +136,12 @@
                         <!--<%&#45;&#45;<form action="/receipt" method="post">&#45;&#45;%>-->
                         <!--<%&#45;&#45;&lt;%&ndash;DISINI KASIH INPUT-INPUT YANG ISINYA ADALAH PARAMETER SEPERTI :&ndash;%&gt;&#45;&#45;%>-->
                         <!--<%&#45;&#45;&lt;%&ndash;RESTO NAME, RESTO ADDRESS, CUST NAME, PRICE TOTAL, CASH PAID, CASH CHANGE&ndash;%&gt;&#45;&#45;%>-->
-                        <!--<%&#45;&#45;<input id="restaurant_name" name="restaurantName" type="hidden">&#45;&#45;%>-->
-                        <!--<%&#45;&#45;<input id="restaurant_address" name="restaurantAddress" type="hidden">&#45;&#45;%>-->
-                        <!--<%&#45;&#45;<input id="customer_name" name="customerName" type="hidden">&#45;&#45;%>-->
-                        <!--<%&#45;&#45;<input id="price_total" name="priceTotal" type="hidden">&#45;&#45;%>-->
-                        <!--<%&#45;&#45;<input id="cash_paid" name="cashPaid" type="hidden">&#45;&#45;%>-->
-                        <!--<%&#45;&#45;<input id="cash_change" name="cashChange" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="restaurant_name" name="restaurant_name" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="restaurant_address" name="restaurant_address" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="customer_name" name="customer_name" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="price_total" name="price_total" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="cash_paid" name="cash_paid" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="cash_change" name="cash_change" type="hidden">&#45;&#45;%>-->
                         <!--<%&#45;&#45;<button formtarget="_blank" type="submit" class="btn" id="btnPrint">PRINT RECEIPT</button>&#45;&#45;%>-->
                         <!--<%&#45;&#45;</form>&#45;&#45;%>-->
                     </div>
@@ -187,16 +187,16 @@
                             <label for="cash">Cash: </label>
                             <input type="currency" class="form-control" id="cash"/>
 
-                            <label for="tableNo">Table No: </label>
-                            <input type="text" class="form-control" id="tableNo"/>
+                            <label for="table_no">Table No: </label>
+                            <input type="text" class="form-control" id="table_no"/>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="cancel" data-dismiss="modal">Cancel</button>
-                        <input type="hidden" name="customerName" id="inputCustName"/>
-                        <input type="hidden" name="tableNo" id="inputTableNo"/>
+                        <input type="hidden" name="customer_name" id="inputCustName"/>
+                        <input type="hidden" name="table_no" id="inputTableNo"/>
                         <input type="hidden" name="notes" id="inputNotes"/>
-                        <input type="hidden" name="priceTotal" id="inputPriceTotal"/>
+                        <input type="hidden" name="price_total" id="inputPriceTotal"/>
                         <!--<%&#45;&#45;<input type="hidden" name="array_id_order" id="array_id_order">&#45;&#45;%>-->
                         <!--<%&#45;&#45;<input type="hidden" name="array_qty" id="array_qty">&#45;&#45;%>-->
                         <button type="button" class="submit" data-toggle="modal" data-target="#changeModal" onclick="passToChangeModal()">OK</button>
@@ -223,14 +223,14 @@
                         <button id="btnReceipt" type="submit" class="btn" data-toggle="modal" data-target="#receiptModal" onclick="setReceiptData()">RECEIPT</button>
                         <form action="/add-order" method="post">
                             <!--<%&#45;&#45;dummy data restaurant&#45;&#45;%>-->
-                            <input type="hidden" name="restaurantName" id="inputRestaurantName" th:value="${restaurant.restaurantName}"/>
-                            <input type="hidden" name="restaurantAddress" id="inputRestaurantAddress" th:value="${restaurant.restaurantAddress}"/>
-                            <input type="hidden" name="customerName" id="inputCustNameChange"/>
-                            <input type="hidden" name="tableNo" id="inputTableNoChange"/>
+                            <input type="hidden" name="restaurant_name" id="inputRestaurantName" th:value="${restaurant.restaurant_name}"/>
+                            <input type="hidden" name="restaurant_address" id="inputRestaurantAddress" th:value="${restaurant.restaurant_address}"/>
+                            <input type="hidden" name="customer_name" id="inputCustNameChange"/>
+                            <input type="hidden" name="table_no" id="inputTableNoChange"/>
                             <input type="hidden" name="notes" id="inputNotesChange"/>
-                            <input type="hidden" name="priceTotal" id="inputPriceTotalChange"/>
-                            <input type="hidden" name="cashPaid" id="inputCashPaid"/>
-                            <input type="hidden" name="cashChange" id="inputCashChange"/>
+                            <input type="hidden" name="price_total" id="inputPriceTotalChange"/>
+                            <input type="hidden" name="cash_paid" id="inputCashPaid"/>
+                            <input type="hidden" name="cash_change" id="inputCashChange"/>
                             <input type="hidden" name="array_id_order" id="array_id_orderChange"/>
                             <input type="hidden" name="array_qty" id="array_qtyChange"/>
                             <button type="submit" class="submit">OK</button>
@@ -243,8 +243,8 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 th:text="${restaurant.restaurantName}" id="restaurantNameReceipt" class="topModal" style="text-align:center"></h4>
-                        <h4 th:text="${restaurant.restaurantAddress}" id="restaurantAddressReceipt" style="text-align: center"></h4>
+                        <h4 th:text="${restaurant.restaurant_name}" id="restaurantNameReceipt" class="topModal" style="text-align:center"></h4>
+                        <h4 th:text="${restaurant.restaurant_address}" id="restaurantAddressReceipt" style="text-align: center"></h4>
                         <h5 id="custNameReceipt">Dedy</h5>
                     </div>
                     <div class="modal-body">
