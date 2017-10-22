@@ -1,10 +1,5 @@
 package project.blibli.mantapos;
 
-import org.apache.catalina.WebResourceRoot;
-import org.apache.catalina.core.StandardContext;
-import org.apache.catalina.startup.Tomcat;
-import org.apache.catalina.webresources.DirResourceSet;
-import org.apache.catalina.webresources.StandardRoot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import project.blibli.mantapos.ImplementationDao.*;
@@ -23,6 +18,9 @@ public class MantaposApplication {
 		OrderDaoImpl orderDao = new OrderDaoImpl();
 		orderDao.CreateTable();
 
+		IncomeDaoImpl incomeDao = new IncomeDaoImpl();
+		incomeDao.CreateTable();
+
 		OrderedMenuDaoImpl orderedMenuDao = new OrderedMenuDaoImpl();
 		orderedMenuDao.CreateTable();
 
@@ -30,7 +28,11 @@ public class MantaposApplication {
 		restaurantDao.CreateTable();
 
 		UserDaoImpl userDao = new UserDaoImpl();
-		userDao.CreateRole();
+		try{
+			userDao.CreateRole();
+		} catch (Exception ex){
+			System.out.println("Create role exception : " + ex.toString());
+		}
 		userDao.CreateTableUser();
 		userDao.CreateTableRole();
 	}

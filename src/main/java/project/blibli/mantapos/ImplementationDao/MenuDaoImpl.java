@@ -64,11 +64,10 @@ public class MenuDaoImpl implements MenuDao {
 
     //TODO : Benerin queryforobject supaya return nama menu, yang ini errornya Incorrect result size: expected 1, actual 3
     @Override
-    public String getMenuById(int id) {
-        System.out.println("ID : " + id);
-        String name_menu = null;
+    public String getMenuById(int idd) {
+        String name_menu;
         String query = "SELECT " + name + " FROM " + table_name + " WHERE " + id + "=?";
-        name_menu = jdbcTemplate.queryForObject(query, new Object[] {id}, String.class);
+        name_menu = jdbcTemplate.queryForObject(query, new Object[] {idd}, String.class);
         return name_menu;
     }
 }

@@ -3,6 +3,7 @@ package project.blibli.mantapos.Controller;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import project.blibli.mantapos.Beans_Model.Income;
 import project.blibli.mantapos.Beans_Model.Menu;
 import project.blibli.mantapos.Beans_Model.Order;
 import project.blibli.mantapos.Beans_Model.Restaurant;
@@ -50,6 +51,7 @@ public class CashierController {
         String errorMsg = null;
         try{
             status = orderDao.Insert(order);
+            Income income = new Income();
         } catch (Exception ex){
             errorMsg = ex.toString();
         }
