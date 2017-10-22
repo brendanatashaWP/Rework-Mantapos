@@ -12,7 +12,7 @@
     <link href="style.css" rel="stylesheet">
     <script src="D:\Projek Future Batch 2 Phase 1\bootstrap-4.0.0-alpha.6-dist/js/metisMenu.min.js"></script>
     <script src="D:\Projek Future Batch 2 Phase 1\bootstrap-4.0.0-alpha.6-dist/js/custom.js"></script>
-    
+
     <title>Dashboard mantaPOS</title>
 </head>
 
@@ -71,8 +71,8 @@
                             <li>
                                 <a href="outcome.html">Outcome</a>
                             </li>
-                            <li>
-                                    <a href="optionforgeneralledger.html">General Ledger</a>
+                            <li id="reportmenu">
+                                <a href="optionforgeneralledger.html">General Ledger</a>
                             </li>
                         </ul>
                     </li>
@@ -80,68 +80,46 @@
             </div>
         </div>
         <div class="container">
-            <div class="col-md-6">
-                <h3>Menu</h3>
+            <div class="col-md-10">
+                <h3>Welcome to General Ledger Menu!</h3>
+                <h4>Please choose your range criteria</h4>
                 <hr>
             </div>
-            <div class="col-md-3">
-
-            </div>
-            <div class="col-md-6 tablemenu">
-                <h4>Menu List</h4>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Price Menu</th>
-                            <th>Photo</th>
-                            <th>Delete Menu</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Ayam Goreng</td>
-                            <td>10000</td>
-                            <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
-                            <td class="link"><a href="delete.html">Delete</a></td>
-
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Ayam Bakar</td>
-                            <td>15000</td>
-                            <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
-                            <td class="link"><a href="delete.html">Delete</a></td>
-
-                        </tr>
-                    </tbody>
-                </table>
-                <hr>
-            </div>
-            
-            <div class="col-md-2 tablemenu">
-                <h4>Entry Menu</h4>
-                <form>
-                    Menu Name:<br>
-                    <input type="text" name="menuname"><br>
-                    Menu Price:<br>
-                    <input type="text" name="menuprice"><br>
-                    Category:<br>
-                    <select name="categoryselector" id="categoryselector" class="form-control">
-                        <option value="Food">Food</option>
-                        <option value="Drink">Drink</option>
-                    </select>
-                    Upload Photo:<br>
-                    <button>Browse</button>
-                    <input type="text" name="photopath" cols="10" rows="1"><br><br>
+            <div class="col-md-5 radio">
+                <label><input type="radio" name="optradio">Weekly</label>
+                <h5>Choose the month:</h5>
+                <select name="monthselector" id="monthselector">
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select>
+                <div>
                     <button type="submit">OK</button>
-                </form>
+                    <!--TARGET NYA KE GENERALLEDGER.HTML-->
+                </div>
             </div>
-        </div>
-        <div id="chart_container">
-            <div id="chart"></div>
+            <div class="col-md-5 radio">
+                <label><input type="radio" name="optradio">Monthly</label>
+                <h5>Choose the year:</h5>
+                <select name="yearselector" id="yearselector">
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                        <option value="2015">2015</option>
+                     </select>
+            </div>
+            <div>
+                <button type="submit">OK</button>
+                <!--TARGET NYA KE GENERALLEDGER.HTML-->
+            </div>
         </div>
     </div>
 </body>

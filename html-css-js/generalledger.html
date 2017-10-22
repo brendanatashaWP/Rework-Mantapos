@@ -12,7 +12,7 @@
     <link href="style.css" rel="stylesheet">
     <script src="D:\Projek Future Batch 2 Phase 1\bootstrap-4.0.0-alpha.6-dist/js/metisMenu.min.js"></script>
     <script src="D:\Projek Future Batch 2 Phase 1\bootstrap-4.0.0-alpha.6-dist/js/custom.js"></script>
-    
+
     <title>Dashboard mantaPOS</title>
 </head>
 
@@ -71,8 +71,8 @@
                             <li>
                                 <a href="outcome.html">Outcome</a>
                             </li>
-                            <li>
-                                    <a href="optionforgeneralledger.html">General Ledger</a>
+                            <li id="reportmenu">
+                                <a href="optionforgeneralledger.html">General Ledger</a>
                             </li>
                         </ul>
                     </li>
@@ -80,68 +80,78 @@
             </div>
         </div>
         <div class="container">
-            <div class="col-md-6">
-                <h3>Menu</h3>
+            <div class="col-md-10">
+                <h3 class="judul">General Ledger</h3>
+                <h4 class="judul">Hari, tanggal bulan tahun - Hari, tanggal bulan tahun</h4>
+                <!--weekly-->
                 <hr>
             </div>
             <div class="col-md-3">
 
             </div>
-            <div class="col-md-6 tablemenu">
-                <h4>Menu List</h4>
+            <div class="col-md-10 tablemenu">
+                <h4>Outcome List</h4>
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Price Menu</th>
-                            <th>Photo</th>
-                            <th>Delete Menu</th>
+                            <th>KAS</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>Date</th>
+                            <th>Item Name</th>
+                            <th></th>
+                            <th>Debit</th>
+                            <th>Kredit</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1</td>
-                            <td>Ayam Goreng</td>
-                            <td>10000</td>
-                            <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
-                            <td class="link"><a href="delete.html">Delete</a></td>
+                            <td>Saldo Awal:</td>
+                            <td></td>
+                            <th></th>
+                            <td>50000000</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Saturday, 21 October 2017</td>
+                            <td>Pembelian minyak goreng</td>
+                            <td></td>
+                            <td></td>
+                            <td>100000</td>
+
 
                         </tr>
                         <tr>
-                            <td>2</td>
-                            <td>Ayam Bakar</td>
-                            <td>15000</td>
-                            <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
-                            <td class="link"><a href="delete.html">Delete</a></td>
-
+                            <td>Sunday, 22 October 2017</td>
+                            <td>Pembelian beras 1 karung</td>
+                            <td></td>
+                            <td></td>
+                            <td>1500000</td>
                         </tr>
                     </tbody>
+                    <thead>
+                        <tr>
+                            <th>Saldo Awal:</th>
+                            <th>50000000</th>
+                            <th>Total:</th>
+                            <th>50000000</th>
+                            <th>50000000</th>
+                        </tr>
+                        <tr>
+                            <th>Saldo Akhir:</th>
+                            <th>50000000</th>
+                            <th>Mutasi:</th>
+                            <th>50000000</th>
+                            <th></th>
+                        </tr>
+                    </thead>
                 </table>
                 <hr>
             </div>
-            
-            <div class="col-md-2 tablemenu">
-                <h4>Entry Menu</h4>
-                <form>
-                    Menu Name:<br>
-                    <input type="text" name="menuname"><br>
-                    Menu Price:<br>
-                    <input type="text" name="menuprice"><br>
-                    Category:<br>
-                    <select name="categoryselector" id="categoryselector" class="form-control">
-                        <option value="Food">Food</option>
-                        <option value="Drink">Drink</option>
-                    </select>
-                    Upload Photo:<br>
-                    <button>Browse</button>
-                    <input type="text" name="photopath" cols="10" rows="1"><br><br>
-                    <button type="submit">OK</button>
-                </form>
-            </div>
-        </div>
-        <div id="chart_container">
-            <div id="chart"></div>
         </div>
     </div>
 </body>

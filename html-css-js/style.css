@@ -89,3 +89,12 @@
 .tablemenu{
     padding-left: 55px;
 }
+
+.judul{
+    text-align: center !important;
+}
+
+.kop{
+    background-color: #ce0a48 !important;
+    color: whitesmoke;
+}
