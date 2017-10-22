@@ -25,7 +25,6 @@ public class IncomeDaoImpl implements IncomeDao {
     private static final String income_amount = "income_amount";
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
-    List incomeList;
 
     public IncomeDaoImpl() {
         jdbcTemplate.setDataSource(DataSourceConfig.dataSource());

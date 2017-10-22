@@ -24,6 +24,8 @@ public class CashierController {
     OrderedMenuDaoImpl orderedMenuDao = new OrderedMenuDaoImpl();
     RestaurantDaoImpl restaurantDao = new RestaurantDaoImpl();
     IncomeDaoImpl incomeDao = new IncomeDaoImpl();
+    TotalDebitKreditDaoImpl totalDebitKreditDao = new TotalDebitKreditDaoImpl();
+    SaldoDaoImpl saldoDao = new SaldoDaoImpl();
     Restaurant restaurant;
 
     @GetMapping(value = "/cashier", produces = MediaType.TEXT_HTML_VALUE)
@@ -105,10 +107,15 @@ public class CashierController {
         else
             week=4;
         boolean isIncomeExists = incomeDao.isIncomeExists(restaurant.getId_restaurant());
-        if(!isIncomeExists)
+        if(!isIncomeExists){
             incomeDao.Insert(restaurant.getId_restaurant(), week, LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), order.getPrice_total());
-        else
+            totalDebitKreditDao.Insert(0, restaurant.getId_restaurant(), LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), order.getPrice_total());
+        }
+        else {
             incomeDao.Update(restaurant.getId_restaurant(), order.getPrice_total());
+            totalDebitKreditDao.Update(0, restaurant.getId_restaurant(), LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), order.getPrice_total());
+            saldoDao.Update(0, restaurant.getId_restaurant(), LocalDate.now().getMonthValue(), LocalDate.now().getYear(), order.getPrice_total());
+        }
         if(statusOrder==1 && statusOrderedMenu==1)
             mav.setViewName("redirect:/cashier");
         else

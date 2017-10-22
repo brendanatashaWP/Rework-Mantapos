@@ -20,6 +20,10 @@ public class MantaposApplication {
 
 		IncomeDaoImpl incomeDao = new IncomeDaoImpl();
 		incomeDao.CreateTable();
+		SaldoDaoImpl saldoDao = new SaldoDaoImpl();
+		saldoDao.CreateTable();
+		TotalDebitKreditDaoImpl totalDebitKreditDao = new TotalDebitKreditDaoImpl();
+		totalDebitKreditDao.CreateTable();
 
 		OrderedMenuDaoImpl orderedMenuDao = new OrderedMenuDaoImpl();
 		orderedMenuDao.CreateTable();
