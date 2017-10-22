@@ -1,12 +1,10 @@
 package project.blibli.mantapos.Controller;
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.blibli.mantapos.Beans_Model.User;
-import project.blibli.mantapos.Dao.UserDao;
 import project.blibli.mantapos.ImplementationDao.UserDaoImpl;
 
 import java.util.HashMap;

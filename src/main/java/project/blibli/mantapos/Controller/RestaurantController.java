@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.blibli.mantapos.Beans_Model.Restaurant;
-import project.blibli.mantapos.Dao.RestaurantDao;
 import project.blibli.mantapos.ImplementationDao.RestaurantDaoImpl;
 
 import javax.validation.Valid;

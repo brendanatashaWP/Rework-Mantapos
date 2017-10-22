@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import project.blibli.mantapos.Beans_Model.Restaurant;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.RestaurantDao;
+import project.blibli.mantapos.Mapper.RestaurantMapper;
 
 public class RestaurantDaoImpl implements RestaurantDao{
     private static final String table_name = "restaurant";
@@ -40,5 +41,16 @@ public class RestaurantDaoImpl implements RestaurantDao{
                 restaurant.getRestaurantName(), restaurant.getRestaurantAddress()
         });
         return status;
+    }
+
+    @Override
+    public Restaurant GetRestaurantInfo(String username) {
+        String query = "SELECT users.id_restaurant," +
+                "restaurant.id," +
+                "restaurant.restaurant_name," +
+                "restaurant.restaurant_address" +
+                " FROM users, restaurant WHERE users.id_restaurant=restaurant.id AND users.username=?";
+        Restaurant restaurant = jdbcTemplate.queryForObject(query, new Object[] {username}, new RestaurantMapper());
+        return restaurant;
     }
 }
