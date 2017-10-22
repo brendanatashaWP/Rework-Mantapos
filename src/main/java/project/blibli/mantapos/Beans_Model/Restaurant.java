@@ -3,13 +3,13 @@ package project.blibli.mantapos.Beans_Model;
 import javax.validation.constraints.NotNull;
 
 public class Restaurant {
-    private String id_restaurant;
+    private int id_restaurant;
 
-    public String getId_restaurant() {
+    public int getId_restaurant() {
         return id_restaurant;
     }
 
-    public void setId_restaurant(String id_restaurant) {
+    public void setId_restaurant(int id_restaurant) {
         this.id_restaurant = id_restaurant;
     }
 

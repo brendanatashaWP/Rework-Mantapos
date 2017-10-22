@@ -47,11 +47,34 @@ public class IncomeDaoImpl implements IncomeDao {
     }
 
     @Override
-    public int Insert(Restaurant restaurant, Income income) {
-        int status;
+    public int Insert(int id_resto, int weekk, int monthh, int yearr, int income_amountt) {
         String query = "INSERT INTO " + table_name + "(" + id_restaurant + "," + date + "," + week + "," + month + "," + year + "," +income_amount + ")" +
                 "VALUES(?,?,?,?,?,?)";
-        status = jdbcTemplate.update(query, new Object[] { restaurant.getId_restaurant(), LocalDate.now().toString(), income.getWeek(), income.getMonth(), income.getYear(), income.getIncome_amount() });
+        int status = jdbcTemplate.update(query, new Object[] { id_resto, LocalDate.now().toString(), weekk, monthh, yearr, income_amountt});
         return status;
+    }
+
+    @Override
+    public int Update(int id_resto, int income_amountt) {
+        String query = "UPDATE " + table_name + " SET " + income_amount + "=? WHERE " + id_restaurant + "=? AND " + date + "=?";
+        int status = jdbcTemplate.update(query, new Object[] {getIncomeAmount(id_resto)+income_amountt, id_resto, LocalDate.now().toString()});
+        return status;
+    }
+
+    @Override
+    public boolean isIncomeExists(int id_resto) {
+        boolean result=false;
+        String query = "SELECT COUNT(*) FROM " + table_name + " WHERE " + id_restaurant + "=? AND " + date + "=?";
+        int count = jdbcTemplate.queryForObject(query, new Object[] {id_resto, LocalDate.now().toString()}, Integer.class);
+        if(count>0)
+            result=true;
+        return result;
+    }
+
+    @Override
+    public int getIncomeAmount(int id_resto) {
+        String query = "SELECT " + income_amount + " FROM " + table_name + " WHERE " + id_restaurant + "=? AND " + date + "=?";
+        int incomeAmount = jdbcTemplate.queryForObject(query, new Object[] {id_resto, LocalDate.now().toString()}, Integer.class);
+        return incomeAmount;
     }
 }

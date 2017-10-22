@@ -8,11 +8,10 @@ import project.blibli.mantapos.Beans_Model.Income;
 import project.blibli.mantapos.Beans_Model.Menu;
 import project.blibli.mantapos.Beans_Model.Order;
 import project.blibli.mantapos.Beans_Model.Restaurant;
-import project.blibli.mantapos.ImplementationDao.MenuDaoImpl;
-import project.blibli.mantapos.ImplementationDao.OrderDaoImpl;
-import project.blibli.mantapos.ImplementationDao.OrderedMenuDaoImpl;
-import project.blibli.mantapos.ImplementationDao.RestaurantDaoImpl;
+import project.blibli.mantapos.ImplementationDao.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,8 @@ public class CashierController {
     OrderDaoImpl orderDao = new OrderDaoImpl();
     OrderedMenuDaoImpl orderedMenuDao = new OrderedMenuDaoImpl();
     RestaurantDaoImpl restaurantDao = new RestaurantDaoImpl();
+    IncomeDaoImpl incomeDao = new IncomeDaoImpl();
+    Restaurant restaurant;
 
     @GetMapping(value = "/cashier", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView cashierHtml(Authentication authentication){
@@ -36,7 +37,7 @@ public class CashierController {
         String loggedInUsername = authentication.getName();
         mav.addObject("loggedInUsername", loggedInUsername);
 
-        Restaurant restaurant = restaurantDao.GetRestaurantInfo(loggedInUsername);
+        restaurant = restaurantDao.GetRestaurantInfo(loggedInUsername);
         mav.addObject("restaurant", restaurant);
         return mav;
     }
@@ -93,6 +94,21 @@ public class CashierController {
             statusOrderedMenu = orderedMenuDao.Insert(lastOrderId, Integer.parseInt(array_id_order[i]),
                     Integer.parseInt(array_qty[i]));
         }
+        int tanggal = LocalDateTime.now().getDayOfMonth();
+        int week = 0;
+        if (tanggal<=7)
+            week=1;
+        else if(tanggal>7 && tanggal<=14)
+            week=2;
+        else if(tanggal>14 && tanggal<=21)
+            week=3;
+        else
+            week=4;
+        boolean isIncomeExists = incomeDao.isIncomeExists(restaurant.getId_restaurant());
+        if(!isIncomeExists)
+            incomeDao.Insert(restaurant.getId_restaurant(), week, LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), order.getPrice_total());
+        else
+            incomeDao.Update(restaurant.getId_restaurant(), order.getPrice_total());
         if(statusOrder==1 && statusOrderedMenu==1)
             mav.setViewName("redirect:/cashier");
         else

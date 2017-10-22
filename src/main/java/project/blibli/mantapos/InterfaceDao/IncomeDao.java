@@ -7,5 +7,8 @@ import java.util.List;
 
 public interface IncomeDao {
     void CreateTable();
-    int Insert(Restaurant restaurant, Income income);
+    int Insert(int id_resto, int weekk, int monthh, int yearr, int income_amountt);
+    int Update(int id_resto, int income_amountt);
+    boolean isIncomeExists(int id_resto);
+    int getIncomeAmount(int id_resto);
 }
