@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface OrderDao {
     void CreateTable();
-    int Insert(Order order);
-    List<Order> getAll();
+    int Insert(Order order, int id_restoo);
+    List<Order> getOrderPriceTotal(int id_restoo, int monthh, int yearr);
     int getLastOrderId();
 }

@@ -4,7 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import project.blibli.mantapos.Beans_Model.Order;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.OrderDao;
-import project.blibli.mantapos.Mapper.OrderMapper;
+import project.blibli.mantapos.Mapper.OrderPriceTotalMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +26,7 @@ public class OrderDaoImpl implements OrderDao {
     private static final String week = "week";
     private static final String month = "month";
     private static final String year = "year";
+    private static final String id_resto = "id_restaurant";
 
     public OrderDaoImpl(){
         jdbcTemplate.setDataSource(DataSourceConfig.dataSource());
@@ -43,12 +44,13 @@ public class OrderDaoImpl implements OrderDao {
                 ordered_time + " TEXT NOT NULL, " +
                 week + " INT NOT NULL, " +
                 month + " INT NOT NULL, " +
-                year + " INT NOT NULL)";
+                year + " INT NOT NULL, " +
+                id_resto + " INT NOT NULL)";
         jdbcTemplate.execute(query);
     }
 
     @Override
-    public int Insert(Order order) {
+    public int Insert(Order order, int id_restoo) {
         int status;
         String query = "INSERT INTO " + table_name +
                 "(" +
@@ -59,8 +61,9 @@ public class OrderDaoImpl implements OrderDao {
                 ordered_time + "," +
                 week + "," +
                 month + "," +
-                year + ")" +
-                "VALUES (?,?,?,?,?,?,?,?)";
+                year + "," +
+                id_resto + ")" +
+                "VALUES (?,?,?,?,?,?,?,?,?)";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String jam = dtf.format(now);
@@ -77,16 +80,16 @@ public class OrderDaoImpl implements OrderDao {
             week=4;
         status = jdbcTemplate.update(query, new Object[]{
                 order.getCustomer_name(), order.getTable_no(), order.getPrice_total(),
-                "'" + order.getNotes() + "'", LocalDate.now().toString() + "," + jam, week, LocalDate.now().getMonthValue(), LocalDateTime.now().getYear()
+                "'" + order.getNotes() + "'", LocalDate.now().toString() + "," + jam, week, LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), id_restoo
         });
         return status;
     }
 
     @Override
-    public List<Order> getAll() {
+    public List<Order> getOrderPriceTotal(int id_restoo, int monthh, int yearr) {
         List<Order> orderList = new ArrayList<>();
-        String query = "SELECT * FROM " + table_name;
-        orderList = jdbcTemplate.query(query, new OrderMapper());
+        String query = "SELECT " + price_total + "," + ordered_time + " FROM " + table_name + " WHERE " + id_resto + "=? AND " + month + "=? AND " + year + "=?";
+        orderList = jdbcTemplate.query(query, new Object[] {id_restoo, monthh, yearr}, new OrderPriceTotalMapper());
         return orderList;
     }
 

@@ -1,17 +1,14 @@
 package project.blibli.mantapos.ImplementationDao;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import project.blibli.mantapos.Beans_Model.DailyIncome;
 import project.blibli.mantapos.Beans_Model.Income;
-import project.blibli.mantapos.Beans_Model.Restaurant;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.IncomeDao;
+import project.blibli.mantapos.Mapper.DailyIncomeMapper;
+import project.blibli.mantapos.Mapper.IncomeMapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class IncomeDaoImpl implements IncomeDao {
@@ -56,7 +53,7 @@ public class IncomeDaoImpl implements IncomeDao {
     @Override
     public int Update(int id_resto, int income_amountt) {
         String query = "UPDATE " + table_name + " SET " + income_amount + "=? WHERE " + id_restaurant + "=? AND " + date + "=?";
-        int status = jdbcTemplate.update(query, new Object[] {getIncomeAmount(id_resto)+income_amountt, id_resto, LocalDate.now().toString()});
+        int status = jdbcTemplate.update(query, new Object[] {getIncomeAmountForUpdate(id_resto)+income_amountt, id_resto, LocalDate.now().toString()});
         return status;
     }
 
@@ -71,9 +68,22 @@ public class IncomeDaoImpl implements IncomeDao {
     }
 
     @Override
-    public int getIncomeAmount(int id_resto) {
+    public int getIncomeAmountForUpdate(int id_resto) {
         String query = "SELECT " + income_amount + " FROM " + table_name + " WHERE " + id_restaurant + "=? AND " + date + "=?";
         int incomeAmount = jdbcTemplate.queryForObject(query, new Object[] {id_resto, LocalDate.now().toString()}, Integer.class);
         return incomeAmount;
+    }
+
+    @Override
+    public List<DailyIncome> getDailyIncome(int id_restoo, int monthh, int yearr) {
+        String query = "SELECT " +
+                "ordered_menu.menu, " +
+                "ordered_menu.quantity, " +
+                "orderr.price_total, " +
+                "orderr.order_time " +
+                "FROM ordered_menu, orderr " +
+                "WHERE id_restaurant=? AND month=? AND year =? AND orderr.id=ordered_menu.id_order";
+        List<DailyIncome> dailyIncomeList = jdbcTemplate.query(query, new Object[] {id_restoo, monthh, yearr}, new DailyIncomeMapper());
+        return dailyIncomeList;
     }
 }

@@ -58,7 +58,7 @@ public class CashierController {
         int status = 0;
         String errorMsg = null;
         try{
-            status = orderDao.Insert(order);
+            status = orderDao.Insert(order, restaurant.getId_restaurant());
             Income income = new Income();
         } catch (Exception ex){
             errorMsg = ex.toString();
@@ -89,7 +89,7 @@ public class CashierController {
                                      @RequestParam(value = "array_id_order", required = false) String[] array_id_order,
                                      @RequestParam(value = "array_qty", required = false) String[] array_qty){
         ModelAndView mav = new ModelAndView();
-        int statusOrder = orderDao.Insert(order);
+        int statusOrder = orderDao.Insert(order, restaurant.getId_restaurant());
         int lastOrderId = orderDao.getLastOrderId();
         int statusOrderedMenu = 0;
         for(int i=0; i<array_id_order.length; i++){

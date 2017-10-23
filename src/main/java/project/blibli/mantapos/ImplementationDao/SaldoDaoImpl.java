@@ -75,4 +75,11 @@ public class SaldoDaoImpl implements SaldoDao {
         int saldoAkhir = jdbcTemplate.queryForObject(query, new Object[] {id_restoo, monthh, yearr}, Integer.class);
         return saldoAkhir;
     }
+
+    @Override
+    public int getSaldoAwal(int id_restoo, int monthh, int yearr) {
+        String query = "SELECT " + saldo_awal + " FROM " + table_name + " WHERE " + id_resto + "=? AND " + month + "=? AND " + year + "=?";
+        int saldo_awal = jdbcTemplate.queryForObject(query, new Object[] {id_restoo, monthh, yearr}, Integer.class);
+        return saldo_awal;
+    }
 }

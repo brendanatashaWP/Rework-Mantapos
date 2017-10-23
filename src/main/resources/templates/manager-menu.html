@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MENU</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">mantaPOS</a>
+            </div>
+
+        </div>
+    </nav>
+    <div class="col-md-2">
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="nav" id="side-menu">
+                <li>
+                    <a href="/dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="/dashboard-menu"><i class=""></i>Menu</a>
+                </li>
+                <li>
+                    <a href="discount.html"><i class=""></i>Discount</a>
+                </li>
+                <li>
+                    <a href="cashier.html"><i class=""></i>Cashier</a>
+                </li>
+                <li>
+                    <a href="#">Keuangan<span class="glyphicon glyphicon-chevron-left"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="outcome.html">Outcome</a>
+                        </li>
+                        <li>
+                            <a href="optionforgeneralledger.html">General Ledger</a>
+                        </li>
+                    </ul>
+                </li>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="col-md-6">
+            <h3>Menu</h3>
+            <hr/>
+        </div>
+        <div class="col-md-3">
+
+        </div>
+        <div class="col-md-6 tablemenu">
+            <h4>Menu List</h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Price Menu</th>
+                    <th>Photo</th>
+                    <th>Delete Menu</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Ayam Goreng</td>
+                    <td>10000</td>
+                    <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
+                    <td class="link"><a href="delete.html">Delete</a></td>
+
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Ayam Bakar</td>
+                    <td>15000</td>
+                    <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
+                    <td class="link"><a href="delete.html">Delete</a></td>
+
+                </tr>
+                </tbody>
+            </table>
+            <hr/>
+        </div>
+
+        <div class="col-md-2 tablemenu">
+            <h4>Entry Menu</h4>
+            <form>
+                Menu Name:<br/>
+                <input type="text" name="menuname"/><br/>
+                Menu Price:<br/>
+                <input type="text" name="menuprice"/><br/>
+                Category:<br/>
+                <select name="categoryselector" id="categoryselector" class="form-control">
+                    <option value="Food">Food</option>
+                    <option value="Drink">Drink</option>
+                </select>
+                Upload Photo:<br/>
+                <button>Browse</button>
+                <input type="text" name="photopath" cols="10" rows="1"/><br/><br/>
+                <button type="submit">OK</button>
+            </form>
+        </div>
+    </div>
+    <div id="chart_container">
+        <div id="chart"></div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,11 +1,19 @@
 package project.blibli.mantapos.Beans_Model;
 
 public class Order {
-    private int id, week, month, year, price_total;
+    private int id, week, month, year, price_total, id_restaurant;
     private String customer_name;
     private String ordered_time;
     private String notes;
     private String table_no;
+
+    public int getId_restaurant() {
+        return id_restaurant;
+    }
+
+    public void setId_restaurant(int id_restaurant) {
+        this.id_restaurant = id_restaurant;
+    }
 
     public String getNotes() {
         return notes;
