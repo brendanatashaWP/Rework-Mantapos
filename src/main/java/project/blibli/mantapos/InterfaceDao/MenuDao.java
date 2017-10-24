@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MenuDao {
     void CreateTable();
-    int Insert(Menu menu);
-    List<Menu> getAllMenu();
-    String getMenuById(int id);
+    void Insert(int id_restoo, Menu menu);
+    List<Menu> getAllMenu(int id_restoo);
+    int getLastId(int id_restoo);
 }

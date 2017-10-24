@@ -1,9 +1,14 @@
 package project.blibli.mantapos.ImplementationDao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import project.blibli.mantapos.Beans_Model.User;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.UserDao;
+import project.blibli.mantapos.Mapper.UserMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDaoImpl implements UserDao{
     private static final String table_name = "users";
@@ -11,25 +16,21 @@ public class UserDaoImpl implements UserDao{
     private static final String username = "username";
     private static final String password = "password";
     private static final String role = "role";
-    private static final String status_user = "status";
     private static final String enabled = "enabled";
     private static final String nama_lengkap = "nama_lengkap";
     private static final String nomor_ktp = "nomor_ktp";
     private static final String nomor_telepon = "nomor_telepon";
     private static final String alamat = "alamat";
-    private static final String id_restaurant = "id_restaurant";
+    private static final String id_resto = "id_resto";
 
     private static final String role_type = "role_type";
     private static final String role_owner = "owner";
     private static final String role_manager = "manager";
     private static final String role_cashier = "cashier";
-    private static final String status_type = "status_type";
-    private static final String status_aktif = "active";
-    private static final String status_tidak_aktif = "inactive";
 
     private static final String table_role = "user_roles";
 
-    private static final String ref_table_restaurant = "restaurant";
+    private static final String ref_table_resto = "restoran";
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
@@ -44,7 +45,11 @@ public class UserDaoImpl implements UserDao{
                 "'" + role_manager + "'," +
                 "'" + role_cashier + "'" +
                 ")";
-        jdbcTemplate.execute(query);
+        try{
+            jdbcTemplate.execute(query);
+        } catch (Exception ex){
+            System.out.println("Gagal create role : " + ex.toString());
+        }
     }
 
     @Override
@@ -59,23 +64,32 @@ public class UserDaoImpl implements UserDao{
                 nomor_ktp + " TEXT NOT NULL, " +
                 nomor_telepon + " TEXT NOT NULL, " +
                 alamat + " TEXT NOT NULL, " +
-                id_restaurant + " INT NOT NULL, " +
-                "CONSTRAINT id_restaurant_FK FOREIGN KEY (" + id_restaurant + ") REFERENCES " + ref_table_restaurant + "(" + id + "))";
-        jdbcTemplate.execute(query);
+                id_resto + " INT NOT NULL, " +
+                "CONSTRAINT id_restoran_fk FOREIGN KEY (" + id_resto + ") REFERENCES " + ref_table_resto + "(" + id + "))";
+        try{
+            jdbcTemplate.execute(query);
+        } catch (Exception ex){
+            System.out.println("Gagal create table user : " + ex.toString());
+        }
     }
 
     @Override
     public void CreateTableRole() {
         String query = "CREATE TABLE IF NOT EXISTS " + table_role +
                 "(" +
+                id + " INT NOT NULL, " +
                 username + " TEXT NOT NULL, " +
-                role + " " + role_type + " NOT NULL)";
-        jdbcTemplate.execute(query);
+                role + " " + role_type + " NOT NULL, " +
+                "CONSTRAINT id_user_fk FOREIGN KEY (" + id + ")" + "REFERENCES " + table_name + "(" + id + "))";
+        try{
+            jdbcTemplate.execute(query);
+        } catch (Exception ex){
+            System.out.println("Gagal create table role : " + ex.toString());
+        }
     }
 
     @Override
-    public int Insert(User user) {
-        int status;
+    public void Insert(User user) {
         String query = "INSERT INTO " + table_name +
                 "(" +
                 username + "," +
@@ -85,21 +99,59 @@ public class UserDaoImpl implements UserDao{
                 nomor_ktp + "," +
                 nomor_telepon + "," +
                 alamat + "," +
-                id_restaurant +
+                id_resto +
                 ")" + " VALUES (?,?,TRUE,?,?,?,?,?)";
-        status = jdbcTemplate.update(query, new Object[]{
-                user.getUsername(), user.getPassword(), user.getNama_lengkap(),
-                user.getNomor_ktp(), user.getNomor_telepon(), user.getAlamat(),
-                user.getId_restaurant()
-        });
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        try{
+            jdbcTemplate.update(query, new Object[]{
+                    user.getUsername(), hashedPassword, user.getNama_lengkap(),
+                    user.getNomor_ktp(), user.getNomor_telepon(), user.getAlamat(),
+                    user.getId_resto()
+            });
+        } catch (Exception ex){
+            System.out.println("Gagal insert user : " + ex.toString());
+        }
         String query2 = "INSERT INTO " + table_role +
                 "(" +
+                id + "," +
                 username + "," +
                 role +
-                ")" + " VALUES (?,?::" +role_type + ")";
-        jdbcTemplate.update(query2, new Object[]{
-                user.getUsername(), user.getRole()
-        });
-        return status;
+                ")" + " VALUES (?,?,?::" +role_type + ")";
+        try {
+            jdbcTemplate.update(query2, new Object[]{
+                    GetLastInsertedUserId(), user.getUsername(), user.getRole()
+            });
+        } catch (Exception ex){
+            System.out.println("Gagal insert user role : " + ex.toString());
+        }
+    }
+
+    @Override
+    public List<User> getAllUser(int id_restoo) {
+        List<User> userList = new ArrayList<>();
+        String query = "SELECT *,user_roles.role FROM " +
+                table_name + "," + table_role +
+                " WHERE " + id_resto + "=?" +
+                " AND user_roles.username=users.username" +
+                " AND user_roles.role=?::" + role_type;
+        try{
+            userList = jdbcTemplate.query(query, new Object[] {id_restoo, role_cashier}, new UserMapper());
+        } catch (Exception ex){
+            System.out.println("Gagal get all user : " + ex.toString());
+        }
+        return userList;
+    }
+
+    @Override
+    public int GetLastInsertedUserId() {
+        int last_id=0;
+        String query = "SELECT MAX(" + id + ") FROM " + table_name;
+        try{
+            last_id = jdbcTemplate.queryForObject(query, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal get last inserted user id : " + ex.toString());
+        }
+        return last_id;
     }
 }

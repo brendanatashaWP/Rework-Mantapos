@@ -72,13 +72,24 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="order : ${orderList}">
+                <th:block th:each="ledger : ${ledgerList}">
                     <tr>
-                        <td th:text="${order.ordered_time}"/>
-                        <td>Penjualan menu</td>
+                        <td th:text="${ledger.waktu}"/>
+                        <div th:if="${ledger.tipe == 'debit'}">
+                            <td>Penjualan menu</td>
+                        </div>
+                        <div th:if="${ledger.tipe == 'kredit'}">
+                            <td th:text="${ledger.keperluan}"/>
+                        </div>
                         <td></td>
-                        <td th:text="${order.price_total}"/>
-                        <td></td>
+                        <div th:if="${ledger.tipe == 'debit'}">
+                            <td th:text="${ledger.biaya}"/>
+                            <td></td>
+                        </div>
+                        <div th:if="${ledger.tipe == 'kredit'}">
+                            <td></td>
+                            <td th:text="${ledger.biaya}"/>
+                        </div>
                     </tr>
                 </th:block>
                 </tbody>

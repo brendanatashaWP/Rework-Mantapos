@@ -4,6 +4,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import project.blibli.mantapos.Beans_Model.Outcome;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.OutcomeDao;
+import project.blibli.mantapos.Mapper.OutcomeMapper;
+
+import java.util.List;
 
 public class OutcomeDaoImpl implements OutcomeDao{
 
@@ -57,5 +60,12 @@ public class OutcomeDaoImpl implements OutcomeDao{
                 outcome.getSupp_name(), outcome.getSupp_location()
         });
         return status;
+    }
+
+    @Override
+    public List<Outcome> getOutcome(int id_restoo) {
+        String query = "SELECT * FROM " + table_name + " WHERE " + id_resto + "=?";
+        List<Outcome> outcomeList = jdbcTemplate.query(query, new Object[] {id_restoo}, new OutcomeMapper());
+        return outcomeList;
     }
 }

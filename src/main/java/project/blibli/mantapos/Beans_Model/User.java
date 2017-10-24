@@ -2,9 +2,9 @@ package project.blibli.mantapos.Beans_Model;
 
 public class User {
     private int id;
-    private String username, password, role, status;
+    private String username, password, role;
     private String nama_lengkap, nomor_ktp, nomor_telepon, alamat;
-    private int id_restaurant;
+    private int id_resto;
 
     public int getId() {
         return id;
@@ -36,14 +36,6 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getNama_lengkap() {
@@ -78,11 +70,11 @@ public class User {
         this.alamat = alamat;
     }
 
-    public int getId_restaurant() {
-        return id_restaurant;
+    public int getId_resto() {
+        return id_resto;
     }
 
-    public void setId_restaurant(int id_restaurant) {
-        this.id_restaurant = id_restaurant;
+    public void setId_resto(int id_resto) {
+        this.id_resto = id_resto;
     }
 }

@@ -53,15 +53,15 @@
                     <div id="makanan" class="tab-pane fade in active">
                         <div class="scroll menu">
                             <th:block th:each="menu : ${menuList}"
-                                      th:if="${menu.category_menu == 'food'}">
+                                      th:if="${menu.kategori_menu == 'food'}">
                                     <!--tanda \ adalah escape character-->
-                                    <a class="menuCard" href="#" th:onclick="'javascript:addToCart(\' '+ ${menu.id_menu} +' \',\' '+ ${menu.name_menu} +' \',\' '+ ${menu.price_total_menu} +' \');'">
+                                    <a class="menuCard" href="#" th:onclick="'javascript:addToCart(\' '+ ${menu.id} +' \',\' '+ ${menu.nama_menu} +' \',\' '+ ${menu.harga_menu} +' \');'">
                                         <div class="panel panel-default panel-menu">
                                             <div class="panel-body">
-                                                <img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"
+                                                <img th:src="@{${menu.lokasi_gambar_menu}}" class="img-thumbnail" alt="ayam goreng"
                                                      width="80" height="80" style="margin-right: 10px"/>
-                                                <h3 th:text="${menu.name_menu}"/>
-                                                <h4 th:text="'Rp ' + ${menu.price_total_menu}"/>
+                                                <h3 th:text="${menu.nama_menu}"/>
+                                                <h4 th:text="'Rp ' + ${menu.harga_menu}"/>
                                             </div>
                                         </div>
                                     </a>
@@ -71,15 +71,15 @@
                     <div id="minuman" class="tab-pane fade">
                         <div class="scroll menu">
                             <th:block th:each="menu : ${menuList}"
-                                      th:if="${menu.category_menu == 'drink'}">
+                                      th:if="${menu.kategori_menu == 'drink'}">
                                 <!--tanda \ adalah escape character-->
-                                <a class="menuCard" href="#" th:onclick="'javascript:addToCart(\' '+ ${menu.id_menu} +' \',\' '+ ${menu.name_menu} +' \',\' '+ ${menu.price_total_menu} +' \');'">
+                                <a class="menuCard" href="#" th:onclick="'javascript:addToCart(\' '+ ${menu.id} +' \',\' '+ ${menu.nama_menu} +' \',\' '+ ${menu.harga_menu} +' \');'">
                                     <div class="panel panel-default panel-menu">
                                         <div class="panel-body">
-                                            <img src="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg" class="img-thumbnail" alt="ayam goreng"
+                                            <img th:src="@{${menu.lokasi_gambar_menu}}" class="img-thumbnail" alt="ayam goreng"
                                                  width="80" height="80" style="margin-right: 10px"/>
-                                            <h3 th:text="${menu.name_menu}"/>
-                                            <h4 th:text="'Rp ' + ${menu.price_total_menu}"/>
+                                            <h3 th:text="${menu.nama_menu}"/>
+                                            <h4 th:text="'Rp ' + ${menu.harga_menu}"/>
                                         </div>
                                     </div>
                                 </a>
@@ -139,7 +139,7 @@
                         <!--<%&#45;&#45;<input id="restaurant_name" name="restaurant_name" type="hidden">&#45;&#45;%>-->
                         <!--<%&#45;&#45;<input id="restaurant_address" name="restaurant_address" type="hidden">&#45;&#45;%>-->
                         <!--<%&#45;&#45;<input id="customer_name" name="customer_name" type="hidden">&#45;&#45;%>-->
-                        <!--<%&#45;&#45;<input id="price_total" name="price_total" type="hidden">&#45;&#45;%>-->
+                        <!--<%&#45;&#45;<input id="biaya" name="biaya" type="hidden">&#45;&#45;%>-->
                         <!--<%&#45;&#45;<input id="cash_paid" name="cash_paid" type="hidden">&#45;&#45;%>-->
                         <!--<%&#45;&#45;<input id="cash_change" name="cash_change" type="hidden">&#45;&#45;%>-->
                         <!--<%&#45;&#45;<button formtarget="_blank" type="submit" class="btn" id="btnPrint">PRINT RECEIPT</button>&#45;&#45;%>-->
@@ -196,7 +196,7 @@
                         <input type="hidden" name="customer_name" id="inputCustName"/>
                         <input type="hidden" name="table_no" id="inputTableNo"/>
                         <input type="hidden" name="notes" id="inputNotes"/>
-                        <input type="hidden" name="price_total" id="inputPriceTotal"/>
+                        <input type="hidden" name="biaya" id="inputPriceTotal"/>
                         <!--<%&#45;&#45;<input type="hidden" name="array_id_order" id="array_id_order">&#45;&#45;%>-->
                         <!--<%&#45;&#45;<input type="hidden" name="array_qty" id="array_qty">&#45;&#45;%>-->
                         <button type="button" class="submit" data-toggle="modal" data-target="#changeModal" onclick="passToChangeModal()">OK</button>
@@ -222,13 +222,13 @@
                         <!--<%&#45;&#45;KE CONTROLLER&#45;&#45;%>-->
                         <button id="btnReceipt" type="submit" class="btn" data-toggle="modal" data-target="#receiptModal" onclick="setReceiptData()">RECEIPT</button>
                         <form action="/add-order" method="post">
-                            <!--<%&#45;&#45;dummy data restaurant&#45;&#45;%>-->
-                            <input type="hidden" name="restaurant_name" id="inputRestaurantName" th:value="${restaurant.restaurant_name}"/>
-                            <input type="hidden" name="restaurant_address" id="inputRestaurantAddress" th:value="${restaurant.restaurant_address}"/>
+                            <!--<%&#45;&#45;dummy data restoran&#45;&#45;%>-->
+                            <input type="hidden" name="nama_resto" id="inputRestaurantName" th:value="${restoran.nama_resto}"/>
+                            <input type="hidden" name="lokasi_resto" id="inputRestaurantAddress" th:value="${restoran.lokasi_resto}"/>
                             <input type="hidden" name="customer_name" id="inputCustNameChange"/>
                             <input type="hidden" name="table_no" id="inputTableNoChange"/>
                             <input type="hidden" name="notes" id="inputNotesChange"/>
-                            <input type="hidden" name="price_total" id="inputPriceTotalChange"/>
+                            <input type="hidden" name="biaya" id="inputPriceTotalChange"/>
                             <input type="hidden" name="cash_paid" id="inputCashPaid"/>
                             <input type="hidden" name="cash_change" id="inputCashChange"/>
                             <input type="hidden" name="array_id_order" id="array_id_orderChange"/>
@@ -243,8 +243,8 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 th:text="${restaurant.restaurant_name}" id="restaurantNameReceipt" class="topModal" style="text-align:center"></h4>
-                        <h4 th:text="${restaurant.restaurant_address}" id="restaurantAddressReceipt" style="text-align: center"></h4>
+                        <h4 th:text="${restoran.nama_resto}" id="restaurantNameReceipt" class="topModal" style="text-align:center"></h4>
+                        <h4 th:text="${restoran.lokasi_resto}" id="restaurantAddressReceipt" style="text-align: center"></h4>
                         <h5 id="custNameReceipt">Dedy</h5>
                     </div>
                     <div class="modal-body">

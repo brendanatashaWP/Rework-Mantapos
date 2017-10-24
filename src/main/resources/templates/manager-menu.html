@@ -8,16 +8,21 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
 <body>
-<div class="container">
-    <nav class="navbar navbar">
+    <nav class="navbar" style="margin-bottom: 0px">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">mantaPOS</a>
+                <a class="navbar-brand" href="#">mantapos</a>
             </div>
-
+            <div class="navbar-header navbar-right">
+                <form action="/logout" method="post" id="logoutForm">
+                    <input type="hidden" name="${_csrf.parameterName}"
+                           value="${_csrf.token}" />
+                    <a onclick="document.getElementById('logoutForm').submit()" href="#" class="navbar-brand" id="#btnLogOut">logout</a>
+                </form>
+            </div>
         </div>
     </nav>
-    <div class="col-md-2">
+    <div class="col-md-2" style="padding-left: 0px">
         <div class="navbar-default sidebar" role="navigation">
             <div class="nav" id="side-menu">
                 <li>
@@ -39,7 +44,7 @@
                             <a href="outcome.html">Outcome</a>
                         </li>
                         <li>
-                            <a href="optionforgeneralledger.html">General Ledger</a>
+                            <a href="generalledger.html">General Ledger</a>
                         </li>
                     </ul>
                 </li>
@@ -59,30 +64,23 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>No</th>
                     <th>Name</th>
                     <th>Price Menu</th>
                     <th>Photo</th>
+                    <th>Category</th>
                     <th>Delete Menu</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Ayam Goreng</td>
-                    <td>10000</td>
-                    <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
-                    <td class="link"><a href="delete.html">Delete</a></td>
-
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Ayam Bakar</td>
-                    <td>15000</td>
-                    <td class="link"><a href="https://pbs.twimg.com/profile_images/3665434024/5693c7ebd1873c1efe0955c676a2c41d.jpeg">Link</a></td>
-                    <td class="link"><a href="delete.html">Delete</a></td>
-
-                </tr>
+                    <th:block th:each="menu:${menuList}">
+                        <tr>
+                            <td th:text="${menu.nama_menu}"/>
+                            <td th:text="${menu.harga_menu}"/>
+                            <td><a target="_blank" th:href="@{${menu.lokasi_gambar_menu}}">Photo</a></td>
+                            <td th:text="${menu.kategori_menu}"/>
+                            <td><a th:href="@{/delete/menu/{id}(id=${menu.id})}">Delete</a></td>
+                        </tr>
+                    </th:block>
                 </tbody>
             </table>
             <hr/>
@@ -90,26 +88,21 @@
 
         <div class="col-md-2 tablemenu">
             <h4>Entry Menu</h4>
-            <form>
+            <form action="/add-menu" method="post" enctype="multipart/form-data" commandName="multipartFile">
                 Menu Name:<br/>
-                <input type="text" name="menuname"/><br/>
+                <input type="text" name="nama_menu"/><br/>
                 Menu Price:<br/>
-                <input type="text" name="menuprice"/><br/>
+                <input type="text" name="harga_menu"/><br/>
                 Category:<br/>
-                <select name="categoryselector" id="categoryselector" class="form-control">
-                    <option value="Food">Food</option>
-                    <option value="Drink">Drink</option>
+                <select name="kategori_menu" class="form-control">
+                    <option value="food">Food</option>
+                    <option value="drink">Drink</option>
                 </select>
                 Upload Photo:<br/>
-                <button>Browse</button>
-                <input type="text" name="photopath" cols="10" rows="1"/><br/><br/>
+                <input type="file" name="multipartFile"/><br/>
                 <button type="submit">OK</button>
             </form>
         </div>
     </div>
-    <div id="chart_container">
-        <div id="chart"></div>
-    </div>
-</div>
 </body>
 </html>

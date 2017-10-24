@@ -1,47 +1,47 @@
 package project.blibli.mantapos.Beans_Model;
 
 public class Menu {
-    private int id_menu;
-    private String name_menu, photo_location_menu, category_menu;
-    private int price_total_menu;
+    private int id;
+    private String nama_menu, lokasi_gambar_menu, kategori_menu;
+    private int harga_menu;
 
-    public int getId_menu() {
-        return id_menu;
+    public int getId() {
+        return id;
     }
 
-    public void setId_menu(int id_menu) {
-        this.id_menu = id_menu;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getName_menu() {
-        return name_menu;
+    public String getNama_menu() {
+        return nama_menu;
     }
 
-    public void setName_menu(String name_menu) {
-        this.name_menu = name_menu;
+    public void setNama_menu(String nama_menu) {
+        this.nama_menu = nama_menu;
     }
 
-    public String getPhoto_location_menu() {
-        return photo_location_menu;
+    public String getLokasi_gambar_menu() {
+        return lokasi_gambar_menu;
     }
 
-    public void setPhoto_location_menu(String photo_location_menu) {
-        this.photo_location_menu = photo_location_menu;
+    public void setLokasi_gambar_menu(String lokasi_gambar_menu) {
+        this.lokasi_gambar_menu = lokasi_gambar_menu;
     }
 
-    public int getPrice_total_menu() {
-        return price_total_menu;
+    public int getHarga_menu() {
+        return harga_menu;
     }
 
-    public void setPrice_total_menu(int price_total_menu) {
-        this.price_total_menu = price_total_menu;
+    public void setHarga_menu(int harga_menu) {
+        this.harga_menu = harga_menu;
     }
 
-    public String getCategory_menu() {
-        return category_menu;
+    public String getKategori_menu() {
+        return kategori_menu;
     }
 
-    public void setCategory_menu(String category_menu) {
-        this.category_menu = category_menu;
+    public void setKategori_menu(String kategori_menu) {
+        this.kategori_menu = kategori_menu;
     }
 }

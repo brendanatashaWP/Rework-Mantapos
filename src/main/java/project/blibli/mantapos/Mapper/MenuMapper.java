@@ -10,11 +10,11 @@ public class MenuMapper implements RowMapper<Menu>{
     @Override
     public Menu mapRow(ResultSet resultSet, int i) throws SQLException {
         Menu menu = new Menu();
-        menu.setId_menu(resultSet.getInt("id"));
-        menu.setName_menu(resultSet.getString("name"));
-        menu.setPrice_total_menu(resultSet.getInt("price"));
-        menu.setPhoto_location_menu(resultSet.getString("photo_link"));
-        menu.setCategory_menu(resultSet.getString("category"));
+        menu.setId(resultSet.getInt("id"));
+        menu.setNama_menu(resultSet.getString("nama_menu"));
+        menu.setHarga_menu(resultSet.getInt("harga_menu"));
+        menu.setLokasi_gambar_menu(resultSet.getString("lokasi_gambar_menu"));
+        menu.setKategori_menu(resultSet.getString("kategori_menu"));
         return menu;
     }
 }

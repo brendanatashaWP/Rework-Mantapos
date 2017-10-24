@@ -2,11 +2,13 @@ package project.blibli.mantapos.Config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
@@ -17,6 +19,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("dataSource")
     @Autowired
     DataSource dataSource;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
@@ -27,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery(
                         "select username, password, enabled from users where username=?")
                 .authoritiesByUsernameQuery(
-                        "select username, role from user_roles where username=?");
+                        "select username, role from user_roles where username=?")
+                .passwordEncoder(bCryptPasswordEncoder);
     }
 
     @Override
@@ -36,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //pada access disini pakai hasAuthority (instead of hasRole) karena
                 //kalau pake hasRole, di database harus ada prefix ROLE_ pada record-nya, contoh ROLE_CASHIER
                 .antMatchers("/cashier/**").access("hasAuthority('cashier')")
-                .antMatchers("/dashboard/**", "/add-saldo-awal/**", "/dashboard-menu/**", "/ledger-choose-range/**", "/ledger-range-weekly/**", "/outcome/**").access("hasAuthority('manager')")
+                .antMatchers("/dashboard/**", "/menu/**", "/outcome/**", "/employee/**", "/range/**", "/add-menu/**", "/add-cashier/**", "/outcome-post/**", "/daily/**").access("hasAuthority('manager')")
                 .and()
                 .formLogin().loginPage("/login").failureUrl("/login?error")
                 .defaultSuccessUrl("/")
