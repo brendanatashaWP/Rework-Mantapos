@@ -4,7 +4,41 @@ public class Outcome {
     private int outcome_amount;
     private String item_name;
     private int qty;
-    private String supp_name, supp_location, supp_contact;
+    private String supp_name, supp_location;
+    private String outcome_date;
+    private int week, month, year;
+
+    public String getOutcome_date() {
+        return outcome_date;
+    }
+
+    public void setOutcome_date(String outcome_date) {
+        this.outcome_date = outcome_date;
+    }
+
+    public int getWeek() {
+        return week;
+    }
+
+    public void setWeek(int week) {
+        this.week = week;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
 
     public int getOutcome_amount() {
         return outcome_amount;
@@ -44,13 +78,5 @@ public class Outcome {
 
     public void setSupp_location(String supp_location) {
         this.supp_location = supp_location;
-    }
-
-    public String getSupp_contact() {
-        return supp_contact;
-    }
-
-    public void setSupp_contact(String supp_contact) {
-        this.supp_contact = supp_contact;
     }
 }

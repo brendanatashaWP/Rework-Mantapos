@@ -25,6 +25,9 @@ public class MantaposApplication {
 		TotalDebitKreditDaoImpl totalDebitKreditDao = new TotalDebitKreditDaoImpl();
 		totalDebitKreditDao.CreateTable();
 
+		OutcomeDaoImpl outcomeDao = new OutcomeDaoImpl();
+		outcomeDao.CreateTable();
+
 		OrderedMenuDaoImpl orderedMenuDao = new OrderedMenuDaoImpl();
 		orderedMenuDao.CreateTable();
 

@@ -9,6 +9,7 @@ import project.blibli.mantapos.Beans_Model.Menu;
 import project.blibli.mantapos.Beans_Model.Order;
 import project.blibli.mantapos.Beans_Model.Restaurant;
 import project.blibli.mantapos.ImplementationDao.*;
+import project.blibli.mantapos.WeekGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -97,19 +98,12 @@ public class CashierController {
                     Integer.parseInt(array_qty[i]));
         }
         int tanggal = LocalDateTime.now().getDayOfMonth();
-        int week = 0;
-        if (tanggal<=7)
-            week=1;
-        else if(tanggal>7 && tanggal<=14)
-            week=2;
-        else if(tanggal>14 && tanggal<=21)
-            week=3;
-        else
-            week=4;
+        int week = WeekGenerator.GetWeek(tanggal);
         boolean isIncomeExists = incomeDao.isIncomeExists(restaurant.getId_restaurant());
         if(!isIncomeExists){
             incomeDao.Insert(restaurant.getId_restaurant(), week, LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), order.getPrice_total());
             totalDebitKreditDao.Insert(0, restaurant.getId_restaurant(), LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), order.getPrice_total());
+            saldoDao.Update(0, restaurant.getId_restaurant(), LocalDate.now().getMonthValue(), LocalDate.now().getYear(), order.getPrice_total());
         }
         else {
             incomeDao.Update(restaurant.getId_restaurant(), order.getPrice_total());

@@ -5,6 +5,7 @@ import project.blibli.mantapos.Beans_Model.Order;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.OrderDao;
 import project.blibli.mantapos.Mapper.OrderPriceTotalMapper;
+import project.blibli.mantapos.WeekGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -69,15 +70,7 @@ public class OrderDaoImpl implements OrderDao {
         String jam = dtf.format(now);
 
         int tanggal = LocalDateTime.now().getDayOfMonth();
-        int week = 0;
-        if (tanggal<=7)
-            week=1;
-        else if(tanggal>7 && tanggal<=14)
-            week=2;
-        else if(tanggal>14 && tanggal<=21)
-            week=3;
-        else
-            week=4;
+        int week = WeekGenerator.GetWeek(tanggal);
         status = jdbcTemplate.update(query, new Object[]{
                 order.getCustomer_name(), order.getTable_no(), order.getPrice_total(),
                 "'" + order.getNotes() + "'", LocalDate.now().toString() + "," + jam, week, LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), id_restoo
