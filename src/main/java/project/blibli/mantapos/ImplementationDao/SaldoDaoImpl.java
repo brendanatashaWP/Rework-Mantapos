@@ -1,12 +1,10 @@
 package project.blibli.mantapos.ImplementationDao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import project.blibli.mantapos.Beans_Model.DebitKredit;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.SaldoDao;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class SaldoDaoImpl implements SaldoDao {
     private static final String table_name = "saldo_awal";

@@ -25,26 +25,16 @@ public class MantaposApplication {
 		orderDao.CreateTipe();
 		orderDao.CreateTable();
 
-//		IncomeDaoImpl incomeDao = new IncomeDaoImpl();
-//		incomeDao.CreateTable();
 		SaldoDaoImpl saldoDao = new SaldoDaoImpl();
 		saldoDao.CreateTable();
 //		saldoDao.AddSaldoAwal(1, 500000);
-//		TotalDebitKreditDaoImpl totalDebitKreditDao = new TotalDebitKreditDaoImpl();
-//		totalDebitKreditDao.CreateTable();
-
-//		OutcomeDaoImpl outcomeDao = new OutcomeDaoImpl();
-//		outcomeDao.CreateTable();
 
 		MenuYangDipesanDaoImpl orderedMenuDao = new MenuYangDipesanDaoImpl();
 		orderedMenuDao.CreateTable();
 
 		UserDaoImpl userDao = new UserDaoImpl();
-		try{
-			userDao.CreateRole();
-		} catch (Exception ex){
-			System.out.println("Create role exception : " + ex.toString());
-		}
+		userDao.CreateRole();
+
 		userDao.CreateTableUser();
 		userDao.CreateTableRole();
 		User user = new User();
