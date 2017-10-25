@@ -148,10 +148,9 @@ public class ManagerController {
         return new ModelAndView("redirect:/outcome");
     }
 
-    @PostMapping(value = "/ledger/{skala}")
+    @PostMapping(value = "/ledger")
     //get bulan yang dikehendaki di tahun LocalDate.now().getYear()
-    public ModelAndView Ledger(@PathVariable(value = "skala", required = false) Integer skala,
-                               @RequestParam(value = "HarianAtauMingguan", required = false) String HarianAtauMingguan,
+    public ModelAndView Ledger(@RequestParam(value = "Skala", required = false) String skala,
                                @RequestParam(value = "month", required = false) Integer month,
                                @RequestParam(value = "year", required = false) Integer year,
                                Authentication authentication){
@@ -161,32 +160,29 @@ public class ManagerController {
         List<Ledger> ledgerList = new ArrayList<>();
         int saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
         String skala_ledger=""; //skala ledger bisa harian, mingguan, bulanan, atau tahunan
-        //TODO bentrok antara month dan year, kalau pilih mingguan/harian dan pilih bulan, maka error karena parameter year juga terpilih
-        //TODO begitu juga pilih bulanan, maka error karena month nya ada parameternya
-        //TODO coba dibuat URL routing nya satu aja, tetap /ledger kalau bisa
-        //TODO kalau gak bisa, ya dibuat beda-beda, ada yg /ledger/harian dan /ledger/mingguan
-        //TODO sama /ledger/bulanan dan /ledger/tahunan
-        if(skala==1){ //harian atau mingguan
-            total_kredit = ledgerDao.GetTotalKreditBulanan(id_resto, month, LocalDate.now().getYear());
-            total_debit = ledgerDao.GetTotalDebitBulanan(id_resto, month, LocalDate.now().getYear());
-            saldo_awal = saldoDao.getSaldoAwal(id_resto, month, LocalDate.now().getYear());
+        if(skala.equals("harian") || skala.equals("mingguan")){ //harian atau mingguan
+            total_kredit = ledgerDao.GetTotalKreditBulanan(id_resto, month, year);
+            total_debit = ledgerDao.GetTotalDebitBulanan(id_resto, month, year);
+            saldo_awal = saldoDao.getSaldoAwal(id_resto, month, year);
             saldo_akhir = saldo_awal+total_debit-total_kredit;
             mutasi = saldo_awal-saldo_akhir;
-            if(HarianAtauMingguan.equals("harian")){
-                ledgerList = ledgerDao.GetDailyLedger(id_resto, month, LocalDate.now().getYear());
+            if(skala.equals("harian")){
+                ledgerList = ledgerDao.GetDailyLedger(id_resto, month, year);
                 skala_ledger = "HARIAN";
-            } else if(HarianAtauMingguan.equals("mingguan")){ //mingguan
-                ledgerList = ledgerDao.GetWeeklyLedger(id_resto, month, LocalDate.now().getYear());
+            } else if(skala.equals("mingguan")){ //mingguan
+                ledgerList = ledgerDao.GetWeeklyLedger(id_resto, month, year);
                 skala_ledger = "MINGGUAN";
             }
-        } else if(skala==2){ //bulanan
+        } else if(skala.equals("bulanan")){ //bulanan
             total_kredit = ledgerDao.GetTotalKreditTahunan(id_resto, year);
             total_debit = ledgerDao.GetTotalDebitTahunan(id_resto, year);
-            saldo_awal = saldoDao.getSaldoAwal(id_resto, month, LocalDate.now().getYear());
+            saldo_awal = saldoDao.getSaldoAwal(id_resto, month, year);
             saldo_akhir = saldo_awal+total_debit-total_kredit;
             mutasi = saldo_awal-saldo_akhir;
             ledgerList = ledgerDao.GetMonthlyLedger(id_resto, year);
             skala_ledger = "BULANAN";
+        } else{ //tahunan
+
         }
 
         mav.addObject("saldo_awal", saldo_awal);

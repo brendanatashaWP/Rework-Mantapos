@@ -63,11 +63,14 @@
                     <th></th>
                 </tr>
                 <tr>
-                    <div th:if="${skala_ledger == 'harian'}">
+                    <div th:if="${skala_ledger == 'HARIAN'}">
                         <th>Tanggal,Jam</th>
                     </div>
-                    <div th:if="${skala_ledger == 'mingguan'}">
+                    <div th:if="${skala_ledger == 'MINGGUAN'}">
                         <th>Minggu ke-</th>
+                    </div>
+                    <div th:if="${skala_ledger == 'BULANAN'}">
+                        <th>Bulan ke-</th>
                     </div>
                     <th>Keperluan</th>
                     <th></th>
@@ -100,6 +103,26 @@
                     <div th:if="${skala_ledger == 'MINGGUAN'}">
                         <tr>
                             <td th:text="${ledger.week}"/>
+                            <div th:if="${ledger.tipe == 'debit'}">
+                                <td>Pemasukkan</td>
+                            </div>
+                            <div th:if="${ledger.tipe == 'kredit'}">
+                                <td>Pengeluaran</td>
+                            </div>
+                            <td></td>
+                            <div th:if="${ledger.tipe == 'debit'}">
+                                <td th:text="${ledger.biaya}"/>
+                                <td></td>
+                            </div>
+                            <div th:if="${ledger.tipe == 'kredit'}">
+                                <td></td>
+                                <td th:text="${ledger.biaya}"/>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:if="${skala_ledger == 'BULANAN'}">
+                        <tr>
+                            <td th:text="${ledger.month}"/>
                             <div th:if="${ledger.tipe == 'debit'}">
                                 <td>Pemasukkan</td>
                             </div>

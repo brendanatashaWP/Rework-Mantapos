@@ -49,45 +49,23 @@
             <h4>Pilih jangka waktunya</h4>
             <hr/>
         </div>
-        <div class="col-md-3 radio">
-            <form action="/ledger/1" method="post">
-                <input checked="checked" type="radio" name="Skala" value="harian"/>Harian<br/>
-                <input type="radio" name="Skala" value="mingguan"/>Mingguan<br/>
-                <!--TODO generate bulan ini dari yang ada di DB-->
+        <div class="col-md-10">
+            <form action="/ledger" method="post">
+                <div class="row">
+                    <input checked="checked" type="radio" name="Skala" value="harian"/>Harian<br/>
+                    <input type="radio" name="Skala" value="mingguan"/>Mingguan<br/>
+                    <input type="radio" name="Skala" value="bulanan"/>Bulanan<br/>
+                    <input type="radio" name="Skala" value="tahunan"/>Tahunan<br/>
+                </div>
                 <select name="month" id="monthselector">
                     <th:block th:each="item : ${monthAndYearList}">
                         <option th:value="${item.month}" th:text="${item.keperluan}"/>
                     </th:block>
-                    <!--<option value="1">January</option>-->
-                    <!--<option value="2">February</option>-->
-                    <!--<option value="3">March</option>-->
-                    <!--<option value="4">April</option>-->
-                    <!--<option value="5">May</option>-->
-                    <!--<option value="6">June</option>-->
-                    <!--<option value="7">July</option>-->
-                    <!--<option value="8">August</option>-->
-                    <!--<option value="9">September</option>-->
-                    <!--<option value="10">October</option>-->
-                    <!--<option value="11">November</option>-->
-                    <!--<option value="12">December</option>-->
                 </select>
-                <div>
-                    <button type="submit">OK</button>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-3 radio">
-            <h5>Bulanan:</h5>
-            <form action="/ledger/2" method="post">
-                <input type="radio" name="Skala" value="bulanan"/>Bulanan<br/>
-                <!--TODO generate tahun ini dari yang ada di DB-->
                 <select name="year" id="yearselector">
                     <th:block th:each="item : ${monthAndYearList}">
                         <option th:value="${item.year}" th:text="${item.year}"/>
                     </th:block>
-                    <!--<option value="2017">2017</option>-->
-                    <!--<option value="2016">2016</option>-->
-                    <!--<option value="2015">2015</option>-->
                 </select>
                 <div>
                     <button type="submit">OK</button>
