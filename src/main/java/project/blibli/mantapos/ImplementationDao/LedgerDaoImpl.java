@@ -5,8 +5,10 @@ import project.blibli.mantapos.Beans_Model.Ledger;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.LedgerDao;
 import project.blibli.mantapos.Mapper.KreditMapper;
+import project.blibli.mantapos.Mapper.LedgerBulananMapper;
 import project.blibli.mantapos.Mapper.LedgerHarianMapper;
 import project.blibli.mantapos.Mapper.LedgerMingguanMapper;
+import project.blibli.mantapos.MonthNameGenerator;
 import project.blibli.mantapos.WeekGenerator;
 
 import java.time.LocalDate;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class LedgerDaoImpl implements LedgerDao {
 
@@ -104,6 +107,25 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
+    public List<Ledger> GetMonthAndYearList(int id_restoo) {
+        List<Ledger> monthAndYearList = new ArrayList<>();
+        String query = "SELECT " + month + "," + year + " FROM " + table_name +
+                " WHERE " + id_resto + "=?" +
+                " GROUP BY " + month + "," + year +
+                " ORDER BY " + month + "," + year + " ASC";
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(query, new Object[] {id_restoo});
+        for (Map row : rows){
+            Ledger ledger = new Ledger();
+            //Keperluan di bawah ini bukanlah keperluan, tapi untuk String nama bulan (alih fungsi)
+            ledger.setKeperluan(MonthNameGenerator.MonthNameGenerator((Integer) row.get(month)));
+            ledger.setMonth((Integer) row.get(month));
+            ledger.setYear((Integer) row.get(year));
+            monthAndYearList.add(ledger);
+        }
+        return monthAndYearList;
+    }
+
+    @Override
     public List<Ledger> GetDailyLedger(int id_restoo, int monthh, int yearr) {
         List<Ledger> ledgerList = new ArrayList<>();
         String query = "SELECT *" + " FROM " + table_name +
@@ -128,6 +150,21 @@ public class LedgerDaoImpl implements LedgerDao {
             ledgerList = jdbcTemplate.query(query, new Object[] {id_restoo, monthh, yearr}, new LedgerMingguanMapper());
         } catch (Exception ex){
             System.out.println("Gagal get weekly ledger : " + ex.toString());
+        }
+        return ledgerList;
+    }
+
+    @Override
+    public List<Ledger> GetMonthlyLedger(int id_restoo, int yearr) {
+        List<Ledger> ledgerList = new ArrayList<>();
+        String query = "SELECT " + month + "," + tipe + ", SUM(" + biaya + ") FROM " + table_name +
+                " WHERE " + id_resto + "=? AND " + year + "=?" +
+                " GROUP BY " + month + "," + tipe +
+                " ORDER BY " + month + "," + tipe + " ASC";
+        try {
+            ledgerList = jdbcTemplate.query(query, new Object[] {id_restoo, yearr}, new LedgerBulananMapper());
+        } catch (Exception ex){
+            System.out.println("Gagal get monthly ledger : " + ex.toString());
         }
         return ledgerList;
     }
@@ -163,6 +200,21 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
+    public int GetTotalDebitTahunan(int id_restoo, int yearr) {
+        int TotalDebit=0;
+        String query = "SELECT SUM(" + biaya + ") FROM " + table_name +
+                " WHERE " + id_resto + "=? AND " + year + "=? AND " + tipe + "=?::" + tipe_ledger;
+        try{
+            TotalDebit = jdbcTemplate.queryForObject(query, new Object[] {
+                    id_restoo, yearr, tipe_debit
+            }, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal get total debit tahunan : " + ex.toString());
+        }
+        return TotalDebit;
+    }
+
+    @Override
     public int GetTotalKreditBulanan(int id_restoo, int monthh, int yearr) {
         int TotalKredit=0;
         String query = "SELECT SUM(" + biaya + ") FROM " + table_name +
@@ -175,6 +227,21 @@ public class LedgerDaoImpl implements LedgerDao {
         } catch (Exception ex){
             TotalKredit=0;
             System.out.println("Gagal get total kredit bulanan : " + ex.toString());
+        }
+        return TotalKredit;
+    }
+
+    @Override
+    public int GetTotalKreditTahunan(int id_restoo, int yearr) {
+        int TotalKredit=0;
+        String query = "SELECT SUM(" + biaya + ") FROM " + table_name +
+                " WHERE " + id_resto + "=? AND " + year + "=? AND " + tipe + "=?::" + tipe_ledger;
+        try{
+            TotalKredit = jdbcTemplate.queryForObject(query, new Object[] {
+                    id_restoo, yearr, tipe_kredit
+            }, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal get total kredit tahunan : " + ex.toString());
         }
         return TotalKredit;
     }

@@ -60,8 +60,11 @@ public class ManagerController {
         return new ModelAndView("manager-cashier", "userList", userList);
     }
     @GetMapping(value = "/range", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView ledgerChooseRangeHtml(){
-        return new ModelAndView("manager-pilih-range-ledger");
+    public ModelAndView ledgerChooseRangeHtml(Authentication authentication){
+        String username = authentication.getName();
+        id_resto = restoranDao.GetRestoranId(username);
+        List<Ledger> monthAndYearList = ledgerDao.GetMonthAndYearList(id_resto);
+        return new ModelAndView("manager-pilih-range-ledger", "monthAndYearList", monthAndYearList);
     }
 
 //    @PostMapping(value = "/add-saldo-awal", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -139,60 +142,56 @@ public class ManagerController {
         int week = WeekGenerator.GetWeek(tanggal); ledger.setWeek(week);
         int month = Integer.parseInt(dateSplit[1]); ledger.setMonth(month);
         int year = Integer.parseInt(dateSplit[0]); ledger.setYear(year);
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-//        LocalDateTime now = LocalDateTime.now();
-//        String jam = dtf.format(now);
         ledger.setTipe("kredit");
         ledger.setKeperluan(ledger.getKeperluan() + "(" + qty + ")");
         ledgerDao.Insert(ledger, id_resto);
-//        outcome.setOutcome_date(outcome.getOutcome_date() + "," + jam);
-//        System.out.println("Week : " + week + ", Month : " + month + ", Year : " + year);
-//        int status = outcomeDao.Insert(restoran.getId(), outcome);
-//        boolean isIncomeExists = incomeDao.isIncomeExists(restoran.getId());
-//        if(!isIncomeExists){
-//            debitKreditDao.Insert(1, restoran.getId(), LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), outcome.getOutcome_amount());
-//        } else{
-//            debitKreditDao.Update(1, restoran.getId(), LocalDate.now().getMonthValue(), LocalDateTime.now().getYear(), outcome.getOutcome_amount());
-//            saldoDao.Update(1, restoran.getId(), LocalDate.now().getMonthValue(), LocalDate.now().getYear(), outcome.getOutcome_amount());
-//        }
         return new ModelAndView("redirect:/outcome");
     }
 
-    @PostMapping(value = "/ledger")
+    @PostMapping(value = "/ledger/{skala}")
     //get bulan yang dikehendaki di tahun LocalDate.now().getYear()
-    public ModelAndView LedgerHarian(@RequestParam("month") int month,
-                                     @RequestParam("HarianAtauMingguan") String harianAtauMingguan,
-                                     Authentication authentication){
+    public ModelAndView Ledger(@PathVariable(value = "skala", required = false) Integer skala,
+                               @RequestParam(value = "HarianAtauMingguan", required = false) String HarianAtauMingguan,
+                               @RequestParam(value = "month", required = false) Integer month,
+                               @RequestParam(value = "year", required = false) Integer year,
+                               Authentication authentication){
         ModelAndView mav = new ModelAndView();
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-//        int saldo_akhir = saldoDao.getSaldoAkhir(restoran.getId(), income.getMonth(), LocalDate.now().getYear());
-//        List<DebitKredit> debitKreditList = debitKreditDao.getDebitKreditAmount(restoran.getId(), income.getMonth(), LocalDate.now().getYear());
-//        int total_debit=0, total_kredit=0;
-//        for (DebitKredit item:debitKreditList
-//             ) {
-//            total_debit = item.getDebit();
-//            total_kredit = item.getKredit();
-//        }
-        int saldo_awal=0, total_debit_bulanan=0, total_kredit_bulanan=0, saldo_akhir=0, mutasi=0;
-        String skala_ledger=""; //skala ledger bisa harian, mingguan, bulanan, atau tahunan
         List<Ledger> ledgerList = new ArrayList<>();
-        total_kredit_bulanan = ledgerDao.GetTotalKreditBulanan(id_resto, month, LocalDate.now().getYear());
-        total_debit_bulanan = ledgerDao.GetTotalDebitBulanan(id_resto, month, LocalDate.now().getYear());
-        saldo_awal = saldoDao.getSaldoAwal(id_resto, month, LocalDate.now().getYear());
-        saldo_akhir = saldo_awal+total_debit_bulanan-total_kredit_bulanan;
-        mutasi = saldo_awal-saldo_akhir;
-        if(harianAtauMingguan.equals("harian")){
-            ledgerList = ledgerDao.GetDailyLedger(id_resto, month, LocalDate.now().getYear());
-            skala_ledger = "HARIAN";
-        } else{ //mingguan
-            ledgerList = ledgerDao.GetWeeklyLedger(id_resto, month, LocalDate.now().getYear());
-            skala_ledger = "MINGGUAN";
+        int saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
+        String skala_ledger=""; //skala ledger bisa harian, mingguan, bulanan, atau tahunan
+        //TODO bentrok antara month dan year, kalau pilih mingguan/harian dan pilih bulan, maka error karena parameter year juga terpilih
+        //TODO begitu juga pilih bulanan, maka error karena month nya ada parameternya
+        //TODO coba dibuat URL routing nya satu aja, tetap /ledger kalau bisa
+        //TODO kalau gak bisa, ya dibuat beda-beda, ada yg /ledger/harian dan /ledger/mingguan
+        //TODO sama /ledger/bulanan dan /ledger/tahunan
+        if(skala==1){ //harian atau mingguan
+            total_kredit = ledgerDao.GetTotalKreditBulanan(id_resto, month, LocalDate.now().getYear());
+            total_debit = ledgerDao.GetTotalDebitBulanan(id_resto, month, LocalDate.now().getYear());
+            saldo_awal = saldoDao.getSaldoAwal(id_resto, month, LocalDate.now().getYear());
+            saldo_akhir = saldo_awal+total_debit-total_kredit;
+            mutasi = saldo_awal-saldo_akhir;
+            if(HarianAtauMingguan.equals("harian")){
+                ledgerList = ledgerDao.GetDailyLedger(id_resto, month, LocalDate.now().getYear());
+                skala_ledger = "HARIAN";
+            } else if(HarianAtauMingguan.equals("mingguan")){ //mingguan
+                ledgerList = ledgerDao.GetWeeklyLedger(id_resto, month, LocalDate.now().getYear());
+                skala_ledger = "MINGGUAN";
+            }
+        } else if(skala==2){ //bulanan
+            total_kredit = ledgerDao.GetTotalKreditTahunan(id_resto, year);
+            total_debit = ledgerDao.GetTotalDebitTahunan(id_resto, year);
+            saldo_awal = saldoDao.getSaldoAwal(id_resto, month, LocalDate.now().getYear());
+            saldo_akhir = saldo_awal+total_debit-total_kredit;
+            mutasi = saldo_awal-saldo_akhir;
+            ledgerList = ledgerDao.GetMonthlyLedger(id_resto, year);
+            skala_ledger = "BULANAN";
         }
 
         mav.addObject("saldo_awal", saldo_awal);
-        mav.addObject("total_debit", total_debit_bulanan);
-        mav.addObject("total_kredit", total_kredit_bulanan);
+        mav.addObject("total_debit", total_debit);
+        mav.addObject("total_kredit", total_kredit);
         mav.addObject("saldo_akhir", saldo_akhir);
         mav.addObject("mutasi", mutasi);
         mav.addObject("ledgerList", ledgerList);
