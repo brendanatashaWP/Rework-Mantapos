@@ -6,6 +6,7 @@ import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.LedgerDao;
 import project.blibli.mantapos.Mapper.KreditMapper;
 import project.blibli.mantapos.Mapper.LedgerHarianMapper;
+import project.blibli.mantapos.Mapper.LedgerMingguanMapper;
 import project.blibli.mantapos.WeekGenerator;
 
 import java.time.LocalDate;
@@ -117,11 +118,27 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
+    public List<Ledger> GetWeeklyLedger(int id_restoo, int monthh, int yearr) {
+        List<Ledger> ledgerList = new ArrayList<>();
+        String query = "SELECT " + week + "," + tipe + ", SUM(" + biaya + ") FROM " + table_name +
+                " WHERE " + id_resto + "=? AND " + month + "=? AND " + year + "=?" +
+                " GROUP BY " + tipe + "," + week +
+                " ORDER BY " + week + "," + tipe + " ASC";
+        try{
+            ledgerList = jdbcTemplate.query(query, new Object[] {id_restoo, monthh, yearr}, new LedgerMingguanMapper());
+        } catch (Exception ex){
+            System.out.println("Gagal get weekly ledger : " + ex.toString());
+        }
+        return ledgerList;
+    }
+
+    @Override
     public List<Ledger> GetDailyKredit(int id_restoo) {
         List<Ledger> ledgerList = new ArrayList<>();
-        String query = "SELECT " + biaya + " FROM " + table_name + " WHERE " + tipe + "=?::" + tipe_ledger;
+        String query = "SELECT *" + " FROM " + table_name + " WHERE " + tipe + "=?::" + tipe_ledger +
+                " AND " + id_resto + "=?";
         try{
-            jdbcTemplate.queryForObject(query, new Object[] {tipe_kredit}, new KreditMapper());
+            ledgerList = jdbcTemplate.query(query, new Object[] {tipe_kredit, id_restoo}, new KreditMapper());
         } catch (Exception ex){
             System.out.println("Gagal get daily kredit : " + ex.toString());
         }

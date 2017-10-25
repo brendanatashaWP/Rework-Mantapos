@@ -9,6 +9,7 @@ public interface LedgerDao {
     void CreateTipe();
     void Insert(Ledger ledger, int id_restoo);
     List<Ledger> GetDailyLedger(int id_restoo, int monthh, int yearr);
+    List<Ledger> GetWeeklyLedger(int id_restoo, int monthh, int yearr);
     List<Ledger> GetDailyKredit(int id_restoo);
     int GetTotalDebitBulanan(int id_restoo, int monthh, int yearr);
     int GetTotalKreditBulanan(int id_restoo, int monthh, int yearr);

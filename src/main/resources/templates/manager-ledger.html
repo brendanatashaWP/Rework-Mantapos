@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Laporan Harian</title>
+    <title th:text="${skala_ledger}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
@@ -45,9 +45,8 @@
         </div>
     </div>
         <div class="col-md-10">
-            <h3 class="judul">General Ledger</h3>
-            <h4 class="judul">Hari, tanggal bulan tahun - Hari, tanggal bulan tahun</h4>
-            <!--weekly-->
+            <h3 class="judul">Buku Besar</h3>
+            <h4 th:text="${skala_ledger}"/>
             <hr/>
         </div>
         <div class="col-md-3">
@@ -64,8 +63,13 @@
                     <th></th>
                 </tr>
                 <tr>
-                    <th>Date</th>
-                    <th>Item Name</th>
+                    <div th:if="${skala_ledger == 'harian'}">
+                        <th>Tanggal,Jam</th>
+                    </div>
+                    <div th:if="${skala_ledger == 'mingguan'}">
+                        <th>Minggu ke-</th>
+                    </div>
+                    <th>Keperluan</th>
                     <th></th>
                     <th>Debit</th>
                     <th>Kredit</th>
@@ -73,24 +77,46 @@
                 </thead>
                 <tbody>
                 <th:block th:each="ledger : ${ledgerList}">
-                    <tr>
-                        <td th:text="${ledger.waktu}"/>
-                        <div th:if="${ledger.tipe == 'debit'}">
-                            <td>Penjualan menu</td>
-                        </div>
-                        <div th:if="${ledger.tipe == 'kredit'}">
-                            <td th:text="${ledger.keperluan}"/>
-                        </div>
-                        <td></td>
-                        <div th:if="${ledger.tipe == 'debit'}">
-                            <td th:text="${ledger.biaya}"/>
+                    <div th:if="${skala_ledger == 'HARIAN'}">
+                        <tr>
+                            <td th:text="${ledger.waktu}"/>
+                            <div th:if="${ledger.tipe == 'debit'}">
+                                <td>Penjualan menu</td>
+                            </div>
+                            <div th:if="${ledger.tipe == 'kredit'}">
+                                <td th:text="${ledger.keperluan}"/>
+                            </div>
                             <td></td>
-                        </div>
-                        <div th:if="${ledger.tipe == 'kredit'}">
+                            <div th:if="${ledger.tipe == 'debit'}">
+                                <td th:text="${ledger.biaya}"/>
+                                <td></td>
+                            </div>
+                            <div th:if="${ledger.tipe == 'kredit'}">
+                                <td></td>
+                                <td th:text="${ledger.biaya}"/>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:if="${skala_ledger == 'MINGGUAN'}">
+                        <tr>
+                            <td th:text="${ledger.week}"/>
+                            <div th:if="${ledger.tipe == 'debit'}">
+                                <td>Pemasukkan</td>
+                            </div>
+                            <div th:if="${ledger.tipe == 'kredit'}">
+                                <td>Pengeluaran</td>
+                            </div>
                             <td></td>
-                            <td th:text="${ledger.biaya}"/>
-                        </div>
-                    </tr>
+                            <div th:if="${ledger.tipe == 'debit'}">
+                                <td th:text="${ledger.biaya}"/>
+                                <td></td>
+                            </div>
+                            <div th:if="${ledger.tipe == 'kredit'}">
+                                <td></td>
+                                <td th:text="${ledger.biaya}"/>
+                            </div>
+                        </tr>
+                    </div>
                 </th:block>
                 </tbody>
                 <thead>

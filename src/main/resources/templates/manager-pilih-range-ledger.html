@@ -49,10 +49,10 @@
             <h4>Please choose your range criteria</h4>
             <hr/>
         </div>
-        <div class="col-md-5 radio">
-            <!--<label><input type="radio" name="optradio"/>Weekly</label>-->
-            <h5>Weekly:</h5>
-            <form action="/daily" method="post">
+        <div class="col-md-3 radio">
+            <form action="/ledger" method="post">
+                <input checked="checked" type="radio" name="HarianAtauMingguan" value="harian"/>Harian<br/>
+                <input type="radio" name="HarianAtauMingguan" value="mingguan"/>Mingguan<br/>
                 <select name="month" id="monthselector">
                     <option value="1">January</option>
                     <option value="2">February</option>
@@ -69,22 +69,19 @@
                 </select>
                 <div>
                     <button type="submit">OK</button>
-                    <!--TARGET NYA KE GENERALLEDGER.HTML-->
                 </div>
             </form>
         </div>
-        <div class="col-md-5 radio">
-            <!--<label><input type="radio" name="optradio"/>Monthly</label>-->
-            <h5>Yearly:</h5>
+        <div class="col-md-3 radio">
+            <h5>Bulanan:</h5>
             <select name="yearselector" id="yearselector">
                 <option value="2017">2017</option>
                 <option value="2016">2016</option>
                 <option value="2015">2015</option>
             </select>
-        </div>
-        <div>
-            <button type="submit">OK</button>
-            <!--TARGET NYA KE GENERALLEDGER.HTML-->
+            <div>
+                <button type="submit">OK</button>
+            </div>
         </div>
 </body>
 </html>
