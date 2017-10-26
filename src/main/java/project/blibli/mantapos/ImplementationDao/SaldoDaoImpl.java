@@ -1,10 +1,14 @@
 package project.blibli.mantapos.ImplementationDao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import project.blibli.mantapos.Beans_Model.SaldoAwal;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.SaldoDao;
+import project.blibli.mantapos.Mapper.SaldoAwalMapper;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SaldoDaoImpl implements SaldoDao {
     private static final String table_name = "saldo_awal";
@@ -28,6 +32,7 @@ public class SaldoDaoImpl implements SaldoDao {
                 saldo_awal + " REAL NOT NULL, " +
                 month + " INT NOT NULL, " +
                 year + " INT NOT NULL, " +
+                "UNIQUE (" + month + "," + year + ") " +
                 "CONSTRAINT id_resto_fk FOREIGN KEY (" + id_resto + ")" + "REFERENCES " + ref_table_resto + "(id))";
         try{
             jdbcTemplate.execute(query);
@@ -45,6 +50,18 @@ public class SaldoDaoImpl implements SaldoDao {
         } catch (Exception ex){
             System.out.println("Gagal add saldo awal : " + ex.toString());
         }
+    }
+
+    @Override
+    public List<SaldoAwal> getSaldoAwalTiapBulan(int id_restoo) {
+        List<SaldoAwal> saldoAwalList = new ArrayList<>();
+        String query = "SELECT *" + " FROM " + table_name + " WHERE " + id_resto + "=?";
+        try{
+            saldoAwalList = jdbcTemplate.query(query, new Object[] {id_restoo}, new SaldoAwalMapper());
+        } catch (Exception ex){
+            System.out.println("Gagal get saldo awal tiap bulan : " + ex.toString());
+        }
+        return saldoAwalList;
     }
 
     @Override

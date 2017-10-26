@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Tambah Saldo Awal</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
+</head>
+<body>
+<div th:replace="fragments/navbar-top-manager :: header"/>
+<div th:replace="fragments/navbar-side-manager :: sidebar"/>
+<div class="col-md-10">
+    <h3>Tambahkan Saldo Awal Bulanan</h3>
+    <h4>Bulan <span th:text="${bulan}"/></h4>
+</div>
+
+<div class="col-md-10">
+<h4>Daftar Saldo Awal setiap bulannya</h4>
+</div>
+
+<div class="col-md-6">
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <td>Bulan ke-</td>
+        <td>Tahun</td>
+        <td>Jumlah saldo awal</td>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="saldo : ${saldoAwalList}">
+        <tr>
+            <td th:text="${saldo.month}"/>
+            <td th:text="${saldo.year}"/>
+            <td th:text="${saldo.saldo_awal}"/>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+</div>
+<div class="col-md-4">
+    <h4>Tambah Saldo Awal</h4>
+    <form action="/saldo-post" method="post">
+        Nominal saldo awal (Rp) :<br/>
+        <input type="number" name="saldo_awal"/><br/>
+        <button type="submit">OK</button>
+    </form>
+</div>
+</body>
+</html>

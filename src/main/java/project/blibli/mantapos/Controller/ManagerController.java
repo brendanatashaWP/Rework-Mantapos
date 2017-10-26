@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Beans_Model.*;
 import project.blibli.mantapos.ImplementationDao.*;
+import project.blibli.mantapos.MonthNameGenerator;
 import project.blibli.mantapos.WeekGenerator;
 
 import javax.validation.Valid;
@@ -66,6 +67,19 @@ public class ManagerController {
         List<Ledger> monthAndYearList = ledgerDao.GetMonthAndYearList(id_resto);
         return new ModelAndView("manager-pilih-range-ledger", "monthAndYearList", monthAndYearList);
     }
+    @GetMapping(value = "/saldo")
+    public ModelAndView addSaldoAwalHtml(Authentication authentication){
+        ModelAndView mav = new ModelAndView();
+        String username = authentication.getName();
+        id_resto = restoranDao.GetRestoranId(username);
+        int intBulan = LocalDate.now().getMonthValue();
+        String bulan = MonthNameGenerator.MonthNameGenerator(intBulan);
+        List<SaldoAwal> saldoAwalList = saldoDao.getSaldoAwalTiapBulan(id_resto);
+        mav.addObject("saldoAwalList", saldoAwalList);
+        mav.addObject("bulan", bulan);
+        mav.setViewName("manager-saldo-awal");
+        return mav;
+    }
 
 //    @PostMapping(value = "/add-saldo-awal", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public Map<String, String> addSaldoAwalJson(@RequestParam("saldo_awal") int saldo_awal,
@@ -83,6 +97,14 @@ public class ManagerController {
 //        return param;
 //    }
 
+    @PostMapping(value = "/saldo-post", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView addSaldoAwalHtml(Authentication authentication,
+                                         @ModelAttribute("saldoAwal") SaldoAwal saldoAwal){
+        String username = authentication.getName();
+        id_resto = restoranDao.GetRestoranId(username);
+        saldoDao.AddSaldoAwal(id_resto, saldoAwal.getSaldo_awal());
+        return new ModelAndView("redirect:/saldo");
+    }
     @PostMapping(value = "/add-menu", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addMenuJson(@ModelAttribute("menu")Menu menu,
                                            @ModelAttribute("uploadFile") @Valid UploadMenuImage uploadMenuImage,
