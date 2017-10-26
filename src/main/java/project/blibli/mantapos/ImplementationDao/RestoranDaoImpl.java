@@ -6,6 +6,10 @@ import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.RestoranDao;
 import project.blibli.mantapos.Mapper.RestaurantMapper;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class RestoranDaoImpl implements RestoranDao {
     private static final String table_name = "restoran";
     private static final String id = "id";
@@ -60,6 +64,37 @@ public class RestoranDaoImpl implements RestoranDao {
             System.out.println("Gagal get restoran info : " + ex.toString());
         }
         return id_resto;
+    }
+
+    @Override
+    public List<Restoran> GetRestoranList() {
+        List<Restoran> restoranList = new ArrayList<>();
+        String query = "SELECT" +
+                " restoran.id, restoran.nama_resto, restoran.lokasi_resto, " +
+                " users.id, users.nama_lengkap, users.username, users.nomor_ktp, users.nomor_telepon, users.alamat" +
+                " FROM restoran, users, user_roles" +
+                " WHERE users.id_resto=restoran.id " +
+                "AND user_roles.id=users.id " +
+                "AND user_roles.role=?::role_type";
+        try{
+            List<Map<String, Object>> rows = jdbcTemplate.queryForList(query, new Object[] {"manager"});
+            for(Map row : rows){
+                Restoran restoran = new Restoran();
+                restoran.setId((Integer) row.get("id"));
+                restoran.setNama_resto((String) row.get(nama_resto));
+                restoran.setLokasi_resto((String) row.get(lokasi_resto));
+                restoran.setId_user((Integer) row.get("id"));
+                restoran.setNama_lengkap((String) row.get("nama_lengkap"));
+                restoran.setUsername((String) row.get("username"));
+                restoran.setNomor_ktp((String) row.get("nomor_ktp"));
+                restoran.setNomor_telepon((String) row.get("nomor_telepon"));
+                restoran.setAlamat((String) row.get("alamat"));
+                restoranList.add(restoran);
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get restoran list : " + ex.toString());
+        }
+        return restoranList;
     }
 
     @Override

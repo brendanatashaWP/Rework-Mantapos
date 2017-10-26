@@ -80,22 +80,11 @@ public class ManagerController {
         mav.setViewName("manager-saldo-awal");
         return mav;
     }
-
-//    @PostMapping(value = "/add-saldo-awal", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public Map<String, String> addSaldoAwalJson(@RequestParam("saldo_awal") int saldo_awal,
-//                                                Authentication authentication){
-//        Map<String, String> param = new HashMap<>();
-//        //Ambil username yang sedang login, untuk nantinya diambil ID restoran-nya
-//        String loggedInUsername = authentication.getName();
-//
-//        Restoran restoran = restoranDao.GetRestaurantInfo(loggedInUsername);
-//        int statusAddSaldoAwal = saldoDao.AddSaldoAwal(restoran.getId_resto(), saldo_awal);
-//        if(statusAddSaldoAwal==1)
-//            param.put("status", "success");
-//        else
-//            param.put("status", "failed");
-//        return param;
-//    }
+    @GetMapping(value = "/restaurant", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView restaurantListHtml(){
+        List<Restoran> restoranList = restoranDao.GetRestoranList();
+        return new ModelAndView("admin-restaurant", "restoranList", restoranList);
+    }
 
     @PostMapping(value = "/saldo-post", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addSaldoAwalHtml(Authentication authentication,
@@ -132,7 +121,6 @@ public class ManagerController {
         }
         return new ModelAndView("redirect:/menu");
     }
-
     @PostMapping(value = "/add-cashier", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addUserHtml(@ModelAttribute("user")User user,
                                     Authentication authentication){
@@ -143,16 +131,6 @@ public class ManagerController {
         userDao.Insert(user);
         return new ModelAndView("redirect:/employee");
     }
-
-//    @PostMapping(value = "/add-cashier", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public Map<String, Object> addUserJson(@ModelAttribute("user")User user){
-//        Map<String, Object> param = new HashMap<>();
-//        int status = 0;
-//        String errorMsg="Error";
-//        userDao.Insert(user);
-//        return param;
-//    }
-
     @PostMapping(value = "/outcome-post", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView outcomeHtmlPost(@ModelAttribute("ledger") Ledger ledger,
                                         @RequestParam("quantity") String qty,
@@ -169,7 +147,6 @@ public class ManagerController {
         ledgerDao.Insert(ledger, id_resto);
         return new ModelAndView("redirect:/outcome");
     }
-
     @PostMapping(value = "/ledger")
     //get bulan yang dikehendaki di tahun LocalDate.now().getYear()
     public ModelAndView Ledger(@RequestParam(value = "Skala", required = false) String skala,
@@ -216,5 +193,11 @@ public class ManagerController {
         mav.addObject("skala_ledger", skala_ledger);
         mav.setViewName("manager-ledger");
         return mav;
+    }
+    @PostMapping(value = "/add-restaurant", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView addRestaurantPost(@ModelAttribute("restoran") Restoran restoran,
+                                          @ModelAttribute("user") User user){
+
+        return new ModelAndView("redirect:/restaurant");
     }
 }

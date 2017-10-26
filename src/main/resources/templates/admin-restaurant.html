@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8"/>
+    <title>Restoran Baru</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
 <body>
-
+<div th:replace="fragments/navbar-top-manager :: header"/>
+<div class="col-md-8 col-md-offset-1">
+    <h3>Daftar Restoran yang terdaftar</h3>
+    <hr/>
+</div>
+<div class="col-md-8 col-md-offset-1">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Restoran</th>
+                <th>Alamat</th>
+                <th>Manajer</th>
+                <th>Username</th>
+                <th>No KTP</th>
+                <th>No Telepon</th>
+                <th>Alamat</th>
+                <th>Nonaktifkan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <th:block th:each="item : ${restoranList}">
+                <tr>
+                    <td th:text="${item.nama_resto}"/>
+                    <td th:text="${item.lokasi_resto}"/>
+                    <td th:text="${item.nama_lengkap}"/>
+                    <td th:text="${item.username}"/>
+                    <td th:text="${item.nomor_ktp}"/>
+                    <td th:text="${item.nomor_telepon}"/>
+                    <td th:text="${item.alamat}"/>
+                    <td><a th:href="@{/delete/manager/{id}(id=${item.id_user})}">Nonaktifkan</a></td>
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+</div>
+<div class="col-md-2">
+    <form action="/add-restaurant" method="post">
+        Nama restoran :<br/>
+        <input type="text" name="nama_resto"/><br/>
+        Lokasi restoran :<br/>
+        <input type="text" name="lokasi_resto"/><br/>
+        Nama manajer :<br/>
+        <input type="text" name="nama_lengkap"/><br/>
+        Username manajer :<br/>
+        <input type="text" name="username"/><br/>
+        Password :<br/>
+        <input type="text" name="password"/><br/>
+        Nomor KTP :<br/>
+        <input type="text" name="nomor_ktp"/><br/>
+        Nomor telepon :<br/>
+        <input type="text" name="nomor_telepon"/><br/>
+        Alamat manajer :<br/>
+        <input type="text" name="alamat"/><br/>
+    </form>
+</div>
 </body>
 </html>
