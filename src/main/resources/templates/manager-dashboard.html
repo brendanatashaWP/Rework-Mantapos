@@ -8,42 +8,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
 <body>
-    <nav class="navbar" style="margin-bottom: 0px">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">mantapos</a>
-            </div>
-        </div>
-    </nav>
-    <div class="col-md-2" style="padding-left: 0px">
-        <div class="navbar-default sidebar" role="navigation">
-            <div class="nav" id="side-menu">
-                <li>
-                    <a href="/dashboard">Dashboard</a>
-                </li>
-                <li>
-                    <a href="/dashboard-menu"><i class=""></i>Menu</a>
-                </li>
-                <li>
-                    <a href="discount.html"><i class=""></i>Discount</a>
-                </li>
-                <li>
-                    <a href="cashier.html"><i class=""></i>Cashier</a>
-                </li>
-                <li>
-                    <a href="#">Keuangan<span class="glyphicon glyphicon-chevron-left"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li>
-                            <a href="outcome.html">Outcome</a>
-                        </li>
-                        <li>
-                            <a href="generalledger.html">General Ledger</a>
-                        </li>
-                    </ul>
-                </li>
-            </div>
-        </div>
-    </div>
+<div th:replace="fragments/navbar-top-manager :: header"/>
+<div th:replace="fragments/navbar-side-manager :: sidebar"/>
     <div class="container">
         <div class="col-md-6">
             <h3>Financial Graphs</h3>

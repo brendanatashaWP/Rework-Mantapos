@@ -2,6 +2,13 @@ body{
     background: whitesmoke;
 }
 
+#btnLogOut{
+    color: whitesmoke;
+    float: right !important;
+    font-family: Helvetica, serif;
+    /*position: right !important;*/
+}
+
 .loginForm{
     padding: 100px;
 }
@@ -78,12 +85,6 @@ div.scroll.menu{
     color: whitesmoke !important;
     font-size: 35px;
     float: left;
-}
-
-#btnLogOut{
-    color: whitesmoke;
-    float: right !important;
-    /*position: right !important;*/
 }
 
 div.container.col-md-8 {

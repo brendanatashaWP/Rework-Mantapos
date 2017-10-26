@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:fragment="header-css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <link rel="stylesheet" th:href="@{/css/main.css}"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
+    </div>
+</head>
+<body>
+<div th:fragment="header">
+    <nav class="navbar" style="margin-bottom: 0px">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">mantapos</a>
+        </div>
+        <div class="navbar-header navbar-right">
+            <form action="/logout" method="post" id="logoutForm">
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}" />
+                <a onclick="document.getElementById('logoutForm').submit()" href="#" class="navbar-brand" id="#btnLogOut">logout</a>
+            </form>
+        </div>
+    </nav>
+</div>
+</body>
+</html>
