@@ -80,11 +80,6 @@ public class ManagerController {
         mav.setViewName("manager-saldo-awal");
         return mav;
     }
-    @GetMapping(value = "/restaurant", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView restaurantListHtml(){
-        List<Restoran> restoranList = restoranDao.GetRestoranList();
-        return new ModelAndView("admin-restaurant", "restoranList", restoranList);
-    }
 
     @PostMapping(value = "/saldo-post", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addSaldoAwalHtml(Authentication authentication,
@@ -193,12 +188,6 @@ public class ManagerController {
         mav.addObject("skala_ledger", skala_ledger);
         mav.setViewName("manager-ledger");
         return mav;
-    }
-    @PostMapping(value = "/add-restaurant", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView addRestaurantPost(@ModelAttribute("restoran") Restoran restoran,
-                                          @ModelAttribute("user") User user){
-
-        return new ModelAndView("redirect:/restaurant");
     }
     @GetMapping(value = "/delete/cashier/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView deleteCashier(@PathVariable("id") int id){

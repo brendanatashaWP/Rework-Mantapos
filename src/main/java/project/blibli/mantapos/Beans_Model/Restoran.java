@@ -8,6 +8,15 @@ public class Restoran {
     private String username, password;
     private String nama_lengkap, nomor_ktp, nomor_telepon, alamat;
     private int id_user;
+    private boolean enabled;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public int getId_user() {
         return id_user;

@@ -19,7 +19,7 @@
             <tr>
                 <th>Restoran</th>
                 <th>Alamat</th>
-                <th>Manajer</th>
+                <th>Pemilik</th>
                 <th>Username</th>
                 <th>No KTP</th>
                 <th>No Telepon</th>
@@ -37,7 +37,12 @@
                     <td th:text="${item.nomor_ktp}"/>
                     <td th:text="${item.nomor_telepon}"/>
                     <td th:text="${item.alamat}"/>
-                    <td><a th:href="@{/delete/manager/{id}(id=${item.id_user})}">Nonaktifkan</a></td>
+                    <div th:if="${item.enabled == true}">
+                        <td><a th:href="@{/delete/owner/{id}(id=${item.id_user})}">Nonaktifkan</a></td>
+                    </div>
+                    <div th:if="${item.enabled == false}">
+                        <td><a th:href="@{/active/owner/{id}(id=${item.id_user})}">Aktifkan</a></td>
+                    </div>
                 </tr>
             </th:block>
         </tbody>
@@ -49,9 +54,9 @@
         <input type="text" name="nama_resto"/><br/>
         Lokasi restoran :<br/>
         <input type="text" name="lokasi_resto"/><br/>
-        Nama manajer :<br/>
+        Nama pemilik :<br/>
         <input type="text" name="nama_lengkap"/><br/>
-        Username manajer :<br/>
+        Username pemilik :<br/>
         <input type="text" name="username"/><br/>
         Password :<br/>
         <input type="text" name="password"/><br/>
@@ -59,8 +64,9 @@
         <input type="text" name="nomor_ktp"/><br/>
         Nomor telepon :<br/>
         <input type="text" name="nomor_telepon"/><br/>
-        Alamat manajer :<br/>
+        Alamat pemilik :<br/>
         <input type="text" name="alamat"/><br/>
+        <button type="submit">SUBMIT</button>
     </form>
 </div>
 </body>

@@ -15,8 +15,8 @@ public class MantaposApplication {
 		RestoranDaoImpl restaurantDao = new RestoranDaoImpl();
 		restaurantDao.CreateTable();
 		Restoran restoran = new Restoran();
-		restoran.setNama_resto("Afui"); restoran.setLokasi_resto("Jakal");
-//		restaurantDao.Insert(restoran);
+		restoran.setNama_resto("ADMIN"); restoran.setLokasi_resto("ADMIN");
+		restaurantDao.Insert(restoran);
 
 		MenuDaoImpl menuDao = new MenuDaoImpl();
 		menuDao.CreateTable();
@@ -41,8 +41,8 @@ public class MantaposApplication {
 		user.setNama_lengkap("Axellageraldinc"); user.setAlamat("Terban");
 		user.setNomor_telepon("08123451234"); user.setNomor_ktp("123123123123123");
 		user.setPassword("axell123"); user.setUsername("axell");
-		user.setRole("manager"); user.setId_resto(1);
-//		userDao.Insert(user);
+		user.setRole("admin"); user.setId_resto(1);
+		userDao.Insert(user);
 	}
 
 }

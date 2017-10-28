@@ -28,7 +28,8 @@ public class RestoranDaoImpl implements RestoranDao {
                 "(" +
                 id + " SERIAL PRIMARY KEY, " +
                 nama_resto + " TEXT NOT NULL, " +
-                lokasi_resto + " TEXT NOT NULL)";
+                lokasi_resto + " TEXT NOT NULL, " +
+                "UNIQUE (" + nama_resto + "))";
         try{
             jdbcTemplate.execute(query);
         } catch (Exception ex){
@@ -71,13 +72,13 @@ public class RestoranDaoImpl implements RestoranDao {
         List<Restoran> restoranList = new ArrayList<>();
         String query = "SELECT" +
                 " restoran.id, restoran.nama_resto, restoran.lokasi_resto, " +
-                " users.id, users.nama_lengkap, users.username, users.nomor_ktp, users.nomor_telepon, users.alamat" +
+                " users.id, users.nama_lengkap, users.username, users.enabled, users.nomor_ktp, users.nomor_telepon, users.alamat" +
                 " FROM restoran, users, user_roles" +
                 " WHERE users.id_resto=restoran.id " +
                 "AND user_roles.id=users.id " +
                 "AND user_roles.role=?::role_type";
         try{
-            List<Map<String, Object>> rows = jdbcTemplate.queryForList(query, new Object[] {"manager"});
+            List<Map<String, Object>> rows = jdbcTemplate.queryForList(query, new Object[] {"owner"});
             for(Map row : rows){
                 Restoran restoran = new Restoran();
                 restoran.setId((Integer) row.get("id"));
@@ -85,6 +86,7 @@ public class RestoranDaoImpl implements RestoranDao {
                 restoran.setLokasi_resto((String) row.get(lokasi_resto));
                 restoran.setId_user((Integer) row.get("id"));
                 restoran.setNama_lengkap((String) row.get("nama_lengkap"));
+                restoran.setEnabled((Boolean) row.get("enabled"));
                 restoran.setUsername((String) row.get("username"));
                 restoran.setNomor_ktp((String) row.get("nomor_ktp"));
                 restoran.setNomor_telepon((String) row.get("nomor_telepon"));
@@ -95,6 +97,14 @@ public class RestoranDaoImpl implements RestoranDao {
             System.out.println("Gagal get restoran list : " + ex.toString());
         }
         return restoranList;
+    }
+
+    @Override
+    public int GetRestoranIdBerdasarkanNamaResto(String nama_restoo) {
+        int id_restoo=0;
+        String query = "SELECT " + id + " FROM " + table_name + " WHERE " + nama_resto + "=?";
+        id_restoo = jdbcTemplate.queryForObject(query, new Object[] {nama_restoo}, Integer.class);
+        return id_restoo;
     }
 
     @Override

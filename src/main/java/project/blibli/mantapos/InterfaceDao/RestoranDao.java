@@ -10,4 +10,5 @@ public interface RestoranDao {
     Restoran GetRestaurantInfo(String username);
     int GetRestoranId(String username);
     List<Restoran> GetRestoranList();
+    int GetRestoranIdBerdasarkanNamaResto(String nama_resto);
 }

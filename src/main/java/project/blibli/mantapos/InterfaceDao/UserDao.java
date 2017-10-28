@@ -10,7 +10,7 @@ public interface UserDao {
     void CreateTableRole();
     void Insert(User user);
     List<User> getAllUser(int id_restoo);
-    int GetLastInsertedUserId();
+    int GetLastInsertedUserId(String username);
     void DeleteCashier(int id);
     void ActivateCashier(int id);
 }

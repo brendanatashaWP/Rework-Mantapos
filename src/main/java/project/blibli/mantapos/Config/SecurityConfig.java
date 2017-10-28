@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //kalau pake hasRole, di database harus ada prefix ROLE_ pada record-nya, contoh ROLE_CASHIER
                 .antMatchers("/cashier/**").access("hasAuthority('cashier')")
                 .antMatchers("/dashboard/**", "/menu/**", "/outcome/**", "/employee/**", "/range/**", "/add-menu/**", "/add-cashier/**", "/outcome-post/**", "/daily/**", "/saldo/**").access("hasAuthority('manager')")
+                .antMatchers("/restaurant/**").access("hasAuthority('admin')")
                 .and()
                 .formLogin().loginPage("/login").failureUrl("/login?error")
                 .defaultSuccessUrl("/")

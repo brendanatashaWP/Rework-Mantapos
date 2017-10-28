@@ -24,6 +24,7 @@ public class UserDaoImpl implements UserDao{
     private static final String id_resto = "id_resto";
 
     private static final String role_type = "role_type";
+    private static final String role_admin = "admin";
     private static final String role_owner = "owner";
     private static final String role_manager = "manager";
     private static final String role_cashier = "cashier";
@@ -41,6 +42,7 @@ public class UserDaoImpl implements UserDao{
     @Override
     public void CreateRole() {
         String query = "CREATE TYPE " + role_type + " AS ENUM " + "(" +
+                "'" + role_admin + "'," +
                 "'" + role_owner + "'," +
                 "'" + role_manager + "'," +
                 "'" + role_cashier + "'" +
@@ -65,6 +67,7 @@ public class UserDaoImpl implements UserDao{
                 nomor_telepon + " TEXT NOT NULL, " +
                 alamat + " TEXT NOT NULL, " +
                 id_resto + " INT NOT NULL, " +
+                "UNIQUE (" + username + ")," +
                 "CONSTRAINT id_restoran_fk FOREIGN KEY (" + id_resto + ") REFERENCES " + ref_table_resto + "(" + id + "))";
         try{
             jdbcTemplate.execute(query);
@@ -120,7 +123,7 @@ public class UserDaoImpl implements UserDao{
                 ")" + " VALUES (?,?,?::" +role_type + ")";
         try {
             jdbcTemplate.update(query2, new Object[]{
-                    GetLastInsertedUserId(), user.getUsername(), user.getRole()
+                    GetLastInsertedUserId(user.getUsername()), user.getUsername(), user.getRole()
             });
         } catch (Exception ex){
             System.out.println("Gagal insert user role : " + ex.toString());
@@ -144,11 +147,12 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public int GetLastInsertedUserId() {
+    public int GetLastInsertedUserId(String usernamee) {
         int last_id=0;
-        String query = "SELECT MAX(" + id + ") FROM " + table_name;
+//        String query = "SELECT MAX(" + id + ") FROM " + table_name;
+        String query = "SELECT " + id + " FROM " + table_name + " WHERE " + username + "=?";
         try{
-            last_id = jdbcTemplate.queryForObject(query, Integer.class);
+            last_id = jdbcTemplate.queryForObject(query, new Object[] {usernamee}, Integer.class);
         } catch (Exception ex){
             System.out.println("Gagal get last inserted user id : " + ex.toString());
         }

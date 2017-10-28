@@ -61,7 +61,7 @@
                                     <a class="menuCard" href="#" th:onclick="'javascript:addToCart(\' '+ ${menu.id} +' \',\' '+ ${menu.nama_menu} +' \',\' '+ ${menu.harga_menu} +' \');'">
                                         <div class="panel panel-default panel-menu">
                                             <div class="panel-body">
-                                                <img th:src="@{${menu.lokasi_gambar_menu}}" class="img-thumbnail" alt="ayam goreng"
+                                                <img th:src="@{${menu.lokasi_gambar_menu}}" class="img-thumbnail"
                                                      width="80" height="80" style="margin-right: 10px"/>
                                                 <h3 th:text="${menu.nama_menu}"/>
                                                 <h4 th:text="'Rp ' + ${menu.harga_menu}"/>
