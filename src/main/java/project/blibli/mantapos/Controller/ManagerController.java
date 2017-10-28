@@ -55,10 +55,21 @@ public class ManagerController {
     }
     @GetMapping(value = "/employee", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView cashierListHtml(Authentication authentication){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("manager-cashier");
+        List<User> userList = new ArrayList<>();
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        List<User> userList = userDao.getAllUser(id_resto);
-        return new ModelAndView("manager-cashier", "userList", userList);
+        if(authentication.getAuthorities().toString().equals("[manager]")){
+            userList = userDao.getAllUser(id_resto, "cashier");
+        } else if(authentication.getAuthorities().toString().equals("[owner]")){
+            userList = userDao.getAllUser(id_resto, "manager&cashier");
+        }
+        String role = authentication.getAuthorities().toString();
+        mav.addObject("userList", userList);
+        mav.addObject("role", role);
+        return mav;
+//        return new ModelAndView("manager-cashier", "userList", userList);
     }
     @GetMapping(value = "/range", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView ledgerChooseRangeHtml(Authentication authentication){
@@ -116,12 +127,16 @@ public class ManagerController {
         }
         return new ModelAndView("redirect:/menu");
     }
-    @PostMapping(value = "/add-cashier", produces = MediaType.TEXT_HTML_VALUE)
+    @PostMapping(value = "/add-user", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addUserHtml(@ModelAttribute("user")User user,
                                     Authentication authentication){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        user.setRole("cashier");
+        if(authentication.getAuthorities().toString().equals("[manager]")){
+            user.setRole("cashier");
+        } else if(authentication.getAuthorities().toString().equals("[owner]")){
+            user.setRole(user.getRole());
+        }
         user.setId_resto(id_resto);
         userDao.Insert(user);
         return new ModelAndView("redirect:/employee");

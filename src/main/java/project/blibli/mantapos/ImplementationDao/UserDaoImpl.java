@@ -131,17 +131,30 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public List<User> getAllUser(int id_restoo) {
+    public List<User> getAllUser(int id_restoo, String role) {
         List<User> userList = new ArrayList<>();
-        String query = "SELECT *,user_roles.role FROM " +
-                table_name + "," + table_role +
-                " WHERE " + id_resto + "=?" +
-                " AND user_roles.username=users.username" +
-                " AND user_roles.role=?::" + role_type;
-        try{
-            userList = jdbcTemplate.query(query, new Object[] {id_restoo, role_cashier}, new UserMapper());
-        } catch (Exception ex){
-            System.out.println("Gagal get all user : " + ex.toString());
+        if(role.equals("manager&cashier")){
+            String query = "SELECT *,user_roles.role FROM " +
+                    table_name + "," + table_role +
+                    " WHERE " + id_resto + "=?" +
+                    " AND user_roles.username=users.username" +
+                    " AND user_roles.role IN (?::" + role_type + ", ?::" + role_type + ")"; //ambil user roles dengan role manager dan cashier
+            try{
+                userList = jdbcTemplate.query(query, new Object[] {id_restoo, "manager", "cashier"}, new UserMapper());
+            } catch (Exception ex){
+                System.out.println("Gagal get all user : " + ex.toString());
+            }
+        } else{
+            String query = "SELECT *,user_roles.role FROM " +
+                    table_name + "," + table_role +
+                    " WHERE " + id_resto + "=?" +
+                    " AND user_roles.username=users.username" +
+                    " AND user_roles.role=?::" + role_type;
+            try{
+                userList = jdbcTemplate.query(query, new Object[] {id_restoo, role}, new UserMapper());
+            } catch (Exception ex){
+                System.out.println("Gagal get all user : " + ex.toString());
+            }
         }
         return userList;
     }

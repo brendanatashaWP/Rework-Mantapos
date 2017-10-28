@@ -16,6 +16,7 @@ public class UserMapper implements RowMapper<User> {
         user.setNomor_ktp(resultSet.getString("nomor_ktp"));
         user.setNomor_telepon(resultSet.getString("nomor_telepon"));
         user.setAlamat(resultSet.getString("alamat"));
+        user.setRole(resultSet.getString("role"));
         user.setEnabled(resultSet.getBoolean("enabled"));
         return user;
     }
