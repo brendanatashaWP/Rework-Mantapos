@@ -83,6 +83,7 @@ public class UserDaoImpl implements UserDao{
                 id + " INT NOT NULL, " +
                 username + " TEXT NOT NULL, " +
                 role + " " + role_type + " NOT NULL, " +
+                "UNIQUE (" + username + "), " +
                 "CONSTRAINT id_user_fk FOREIGN KEY (" + id + ")" + "REFERENCES " + table_name + "(" + id + "))";
         try{
             jdbcTemplate.execute(query);

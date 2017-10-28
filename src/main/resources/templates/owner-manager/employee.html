@@ -42,10 +42,10 @@
                         <td th:text="${user.alamat}"/>
                         <td th:text="${user.role}"/>
                         <div th:if="${user.enabled == true}">
-                            <td><a th:href="@{/delete/cashier/{id}(id=${user.id})}">Nonaktifkan</a></td>
+                            <td><a th:href="@{/delete/user/{id}(id=${user.id})}">Nonaktifkan</a></td>
                         </div>
                         <div th:if="${user.enabled == false}">
-                            <td><a th:href="@{/active/cashier/{id}(id=${user.id})}">Aktifkan</a></td>
+                            <td><a th:href="@{/active/user/{id}(id=${user.id})}">Aktifkan</a></td>
                         </div>
                     </tr>
                 </th:block>

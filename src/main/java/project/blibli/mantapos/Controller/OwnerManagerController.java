@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class ManagerController {
+public class OwnerManagerController {
     private static String UPLOAD_LOCATION=System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
     //Untuk commandName di jsp discount
@@ -37,26 +37,26 @@ public class ManagerController {
 
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView managerDashboardHtml(){
-        return new ModelAndView("manager-dashboard");
+        return new ModelAndView("owner-manager/dashboard");
     }
     @GetMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView menuDashboardHtml(Authentication authentication){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
         List<Menu> menuList = menuDao.getAllMenu(id_resto);
-        return new ModelAndView("manager-menu", "menuList", menuList);
+        return new ModelAndView("owner-manager/menu", "menuList", menuList);
     }
     @GetMapping(value = "/outcome", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView outcomeHtml(Authentication authentication){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
         List<Ledger> outcomeList = ledgerDao.GetDailyKredit(id_resto);
-        return new ModelAndView("manager-outcome", "outcomeList", outcomeList);
+        return new ModelAndView("owner-manager/outcome", "outcomeList", outcomeList);
     }
     @GetMapping(value = "/employee", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView cashierListHtml(Authentication authentication){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("manager-cashier");
+        mav.setViewName("owner-manager/employee");
         List<User> userList = new ArrayList<>();
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
@@ -76,7 +76,7 @@ public class ManagerController {
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
         List<Ledger> monthAndYearList = ledgerDao.GetMonthAndYearList(id_resto);
-        return new ModelAndView("manager-pilih-range-ledger", "monthAndYearList", monthAndYearList);
+        return new ModelAndView("owner-manager/pilih-range-ledger", "monthAndYearList", monthAndYearList);
     }
     @GetMapping(value = "/saldo")
     public ModelAndView addSaldoAwalHtml(Authentication authentication){
@@ -88,7 +88,7 @@ public class ManagerController {
         List<SaldoAwal> saldoAwalList = saldoDao.getSaldoAwalTiapBulan(id_resto);
         mav.addObject("saldoAwalList", saldoAwalList);
         mav.addObject("bulan", bulan);
-        mav.setViewName("manager-saldo-awal");
+        mav.setViewName("owner-manager/saldo-awal");
         return mav;
     }
 
@@ -201,15 +201,15 @@ public class ManagerController {
         mav.addObject("mutasi", mutasi);
         mav.addObject("ledgerList", ledgerList);
         mav.addObject("skala_ledger", skala_ledger);
-        mav.setViewName("manager-ledger");
+        mav.setViewName("owner-manager/ledger");
         return mav;
     }
-    @GetMapping(value = "/delete/cashier/{id}", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/delete/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView deleteCashier(@PathVariable("id") int id){
         userDao.DeleteCashier(id);
         return new ModelAndView("redirect:/employee");
     }
-    @GetMapping(value = "/active/cashier/{id}", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(value = "/active/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView activeCashier(@PathVariable("id") int id){
         userDao.ActivateCashier(id);
         return new ModelAndView("redirect:/employee");

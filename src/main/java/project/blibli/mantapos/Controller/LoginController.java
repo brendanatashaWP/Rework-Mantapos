@@ -31,8 +31,10 @@ public class LoginController {
         ModelAndView mav = new ModelAndView();
         if(authentication.getAuthorities().toString().equals("[cashier]"))
             mav.setViewName("redirect:/cashier");
-        else
+        else if(authentication.getAuthorities().toString().equals("[manager]") || authentication.getAuthorities().toString().equals("[owner]"))
             mav.setViewName("redirect:/dashboard");
+        else
+            mav.setViewName("redirect/restaurant");
         return mav;
     }
 
