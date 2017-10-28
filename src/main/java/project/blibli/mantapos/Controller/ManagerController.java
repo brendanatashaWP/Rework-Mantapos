@@ -164,7 +164,7 @@ public class ManagerController {
             total_debit = ledgerDao.GetTotalDebitBulanan(id_resto, month, year);
             saldo_awal = saldoDao.getSaldoAwal(id_resto, month, year);
             saldo_akhir = saldo_awal+total_debit-total_kredit;
-            mutasi = saldo_awal-saldo_akhir;
+            mutasi = saldo_akhir-saldo_awal;
             if(skala.equals("harian")){
                 ledgerList = ledgerDao.GetDailyLedger(id_resto, month, year);
                 skala_ledger = "HARIAN";
@@ -177,7 +177,7 @@ public class ManagerController {
             total_debit = ledgerDao.GetTotalDebitTahunan(id_resto, year);
             saldo_awal = saldoDao.getSaldoAwal(id_resto, month, year);
             saldo_akhir = saldo_awal+total_debit-total_kredit;
-            mutasi = saldo_awal-saldo_akhir;
+            mutasi = saldo_akhir-saldo_awal;
             ledgerList = ledgerDao.GetMonthlyLedger(id_resto, year);
             skala_ledger = "BULANAN";
         } else{ //tahunan

@@ -92,10 +92,6 @@ public class LedgerDaoImpl implements LedgerDao {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String jam = dtf.format(now);
-        ledger.setWaktu(LocalDate.now().toString());
-        int tanggal = LocalDateTime.now().getDayOfMonth();
-        int week = WeekGenerator.GetWeek(tanggal);
-        ledger.setWeek(week); ledger.setMonth(LocalDate.now().getMonthValue()); ledger.setYear(LocalDate.now().getYear());
         try{
             jdbcTemplate.update(query, new Object[]{
                     id_restoo, ledger.getTipe(), ledger.getBiaya(),
