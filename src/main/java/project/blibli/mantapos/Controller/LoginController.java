@@ -44,7 +44,7 @@ public class LoginController {
         String username = authentication.getName();
         mav.addObject("username", username);
         String role = String.valueOf(authentication.getAuthorities());
-        mav.addObject("authorities", role);
+        mav.addObject("role", role);
         return mav;
     }
 
