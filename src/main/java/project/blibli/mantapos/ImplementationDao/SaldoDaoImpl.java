@@ -32,7 +32,7 @@ public class SaldoDaoImpl implements SaldoDao {
                 saldo_awal + " REAL NOT NULL, " +
                 month + " INT NOT NULL, " +
                 year + " INT NOT NULL, " +
-                "UNIQUE (" + month + "," + year + ") " +
+                "UNIQUE (" + month + "," + year + "), " +
                 "CONSTRAINT id_resto_fk FOREIGN KEY (" + id_resto + ")" + "REFERENCES " + ref_table_resto + "(id))";
         try{
             jdbcTemplate.execute(query);

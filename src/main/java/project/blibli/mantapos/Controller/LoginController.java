@@ -27,9 +27,12 @@ public class LoginController {
 
     //DEFAULT PAGE FOR OWNER, MANAGER, CASHIER
     @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView index(){
+    public ModelAndView index(Authentication authentication){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
+        if(authentication.getAuthorities().toString().equals("[cashier]"))
+            mav.setViewName("redirect:/cashier");
+        else
+            mav.setViewName("redirect:/dashboard");
         return mav;
     }
 
