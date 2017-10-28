@@ -210,4 +210,9 @@ public class ManagerController {
         userDao.ActivateCashier(id);
         return new ModelAndView("redirect:/employee");
     }
+    @GetMapping(value = "/delete/menu/{id}")
+    public ModelAndView deleteMenu(@PathVariable("id") int id){
+        menuDao.DeleteMenu(id);
+        return new ModelAndView("redirect:/menu");
+    }
 }

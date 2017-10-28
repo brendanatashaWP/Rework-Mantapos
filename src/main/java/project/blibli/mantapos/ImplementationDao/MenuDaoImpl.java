@@ -18,6 +18,7 @@ public class MenuDaoImpl implements MenuDao {
     private static final String lokasi_gambar_menu = "lokasi_gambar_menu";
     private static final String kategori_menu = "kategori_menu";
     private static final String id_resto = "id_resto";
+    private static final String enabled = "enabled";
     private static final String ref_table_resto = "restoran";
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -35,6 +36,7 @@ public class MenuDaoImpl implements MenuDao {
                 lokasi_gambar_menu + " TEXT, " +
                 kategori_menu + " TEXT, " +
                 id_resto + " INT NOT NULL, " +
+                enabled + " boolean not null default true, " +
                 "CONSTRAINT id_resto_fk FOREIGN KEY (" + id_resto + ") REFERENCES " + ref_table_resto + "(id))";
         try{
             jdbcTemplate.execute(query);
@@ -69,9 +71,9 @@ public class MenuDaoImpl implements MenuDao {
     @Override
     public List<Menu> getAllMenu(int id_restoo) {
         List<Menu> menuList = new ArrayList<>();
-        String query = "SELECT * FROM " + table_name + " WHERE " + id_resto + "=? ORDER BY " + kategori_menu + " DESC";
+        String query = "SELECT * FROM " + table_name + " WHERE " + id_resto + "=? AND " + enabled + "=?" + " ORDER BY " + kategori_menu + " DESC";
         try{
-            menuList = jdbcTemplate.query(query, new Object[] {id_restoo}, new MenuMapper());
+            menuList = jdbcTemplate.query(query, new Object[] {id_restoo, true}, new MenuMapper());
         } catch (Exception ex){
             System.out.println("Gagal get all menu : " + ex.toString());
         }
@@ -88,5 +90,11 @@ public class MenuDaoImpl implements MenuDao {
             System.out.println("Gagal get last id : " + ex.toString());
         }
         return lastId+1;
+    }
+
+    @Override
+    public void DeleteMenu(int idd) {
+        String query = "UPDATE " + table_name + " SET " + enabled + "=? WHERE " + id + "=?";
+        jdbcTemplate.update(query, new Object[] {false, idd});
     }
 }

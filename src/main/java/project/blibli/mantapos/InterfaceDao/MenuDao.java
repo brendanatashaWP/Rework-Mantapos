@@ -9,4 +9,5 @@ public interface MenuDao {
     void Insert(int id_restoo, Menu menu);
     List<Menu> getAllMenu(int id_restoo);
     int getLastId(int id_restoo);
+    void DeleteMenu(int id);
 }
