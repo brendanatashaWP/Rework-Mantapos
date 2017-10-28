@@ -1,6 +1,7 @@
 package project.blibli.mantapos.Controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,18 @@ public class LoginController {
     public ModelAndView index(){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        return mav;
+    }
+
+    @GetMapping(value = "/privilege", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView privilegePage(Authentication authentication){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("privilege");
+        mav.addObject("privilege", "You don't have permission to access this page");
+        String username = authentication.getName();
+        mav.addObject("username", username);
+        String role = String.valueOf(authentication.getAuthorities());
+        mav.addObject("authorities", role);
         return mav;
     }
 

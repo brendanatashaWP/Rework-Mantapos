@@ -15,12 +15,15 @@
 
             <div>
                 <h1 class="titleMantapos">mantapos</h1>
-                <!--<th:if test="${not empty error}">-->
-                    <!--<div class="alert alert-danger">${error}</div>-->
-                <!--</th:if>-->
-                <!--<th:if test="${not empty logout}">-->
-                    <!--<div class="alert alert-success">${logout}</div>-->
-                <!--</th:if>-->
+                <div th:if="${privilege != null}">
+                    <div class="alert alert-danger" th:text="${privilege}"/>
+                </div>
+                <div th:if="${error != null}">
+                    <div class="alert alert-danger" th:text="${error}"/>
+                </div>
+                <div th:if="${logout != null}">
+                    <div class="alert alert-success" th:text="${logout}"/>
+                </div>
             </div>
             <label><b>Username</b></label>
             <input class="inputLogin" type="text" placeholder="Enter Username" name="username"/>
