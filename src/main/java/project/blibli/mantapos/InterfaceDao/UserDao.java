@@ -11,4 +11,6 @@ public interface UserDao {
     void Insert(User user);
     List<User> getAllUser(int id_restoo);
     int GetLastInsertedUserId();
+    void DeleteCashier(int id);
+    void ActivateCashier(int id);
 }

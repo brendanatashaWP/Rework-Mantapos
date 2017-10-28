@@ -5,6 +5,15 @@ public class User {
     private String username, password, role;
     private String nama_lengkap, nomor_ktp, nomor_telepon, alamat;
     private int id_resto;
+    private boolean enabled;
+
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public int getId() {
         return id;

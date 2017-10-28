@@ -154,4 +154,16 @@ public class UserDaoImpl implements UserDao{
         }
         return last_id;
     }
+
+    @Override
+    public void DeleteCashier(int idd) {
+        String query = "UPDATE " + table_name + " SET " + enabled + "=? WHERE " + id + "=?";
+        jdbcTemplate.update(query, new Object[] {false, idd});
+    }
+
+    @Override
+    public void ActivateCashier(int idd) {
+        String query = "UPDATE " + table_name + " SET " + enabled + "=? WHERE " + id + "=?";
+        jdbcTemplate.update(query, new Object[] {true, idd});
+    }
 }

@@ -200,4 +200,14 @@ public class ManagerController {
 
         return new ModelAndView("redirect:/restaurant");
     }
+    @GetMapping(value = "/delete/cashier/{id}", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView deleteCashier(@PathVariable("id") int id){
+        userDao.DeleteCashier(id);
+        return new ModelAndView("redirect:/employee");
+    }
+    @GetMapping(value = "/active/cashier/{id}", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView activeCashier(@PathVariable("id") int id){
+        userDao.ActivateCashier(id);
+        return new ModelAndView("redirect:/employee");
+    }
 }

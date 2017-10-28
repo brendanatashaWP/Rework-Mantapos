@@ -28,7 +28,7 @@
                     <th>No KTP</th>
                     <th>No Telepon</th>
                     <th>Alamat</th>
-                    <th>Nonaktifkan</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -39,7 +39,12 @@
                         <td th:text="${user.nomor_ktp}"/>
                         <td th:text="${user.nomor_telepon}"/>
                         <td th:text="${user.alamat}"/>
-                        <td><a th:href="@{/delete/cashier/{id}(id=${user.id})}">Nonaktifkan</a></td>
+                        <div th:if="${user.enabled == true}">
+                            <td><a th:href="@{/delete/cashier/{id}(id=${user.id})}">Nonaktifkan</a></td>
+                        </div>
+                        <div th:if="${user.enabled == false}">
+                            <td><a th:href="@{/active/cashier/{id}(id=${user.id})}">Aktifkan</a></td>
+                        </div>
                     </tr>
                 </th:block>
                 </tbody>
