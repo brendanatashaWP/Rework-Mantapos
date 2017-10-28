@@ -174,13 +174,19 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public void DeleteCashier(int idd) {
+    public void DeleteUser(int idd) {
         String query = "UPDATE " + table_name + " SET " + enabled + "=? WHERE " + id + "=?";
         jdbcTemplate.update(query, new Object[] {false, idd});
     }
 
     @Override
-    public void ActivateCashier(int idd) {
+    public void DeleteUserAndDependencies(int id_restoo) {
+        String query = "UPDATE " + table_name + " SET " + enabled + "=? WHERE " + id_resto + "=?";
+        jdbcTemplate.update(query, new Object[] {false, id_restoo});
+    }
+
+    @Override
+    public void ActivateUser(int idd) {
         String query = "UPDATE " + table_name + " SET " + enabled + "=? WHERE " + id + "=?";
         jdbcTemplate.update(query, new Object[] {true, idd});
     }

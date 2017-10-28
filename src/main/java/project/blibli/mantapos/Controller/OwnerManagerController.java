@@ -205,14 +205,24 @@ public class OwnerManagerController {
         return mav;
     }
     @GetMapping(value = "/delete/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView deleteCashier(@PathVariable("id") int id){
-        userDao.DeleteCashier(id);
-        return new ModelAndView("redirect:/employee");
+    public ModelAndView deleteCashier(@PathVariable("id") int id,
+                                      Authentication authentication){
+        if(authentication.getAuthorities().toString().equals("[admin]")){
+            userDao.DeleteUserAndDependencies(id);
+            return new ModelAndView("redirect:/restaurant");
+        } else{
+            userDao.DeleteUser(id);
+            return new ModelAndView("redirect:/employee");
+        }
     }
     @GetMapping(value = "/active/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView activeCashier(@PathVariable("id") int id){
-        userDao.ActivateCashier(id);
-        return new ModelAndView("redirect:/employee");
+    public ModelAndView activeCashier(@PathVariable("id") int id,
+                                      Authentication authentication){
+        userDao.ActivateUser(id);
+        if(authentication.getAuthorities().toString().equals("[admin]"))
+            return new ModelAndView("redirect:/restaurant");
+        else
+            return new ModelAndView("redirect:/employee");
     }
     @GetMapping(value = "/delete/menu/{id}")
     public ModelAndView deleteMenu(@PathVariable("id") int id){

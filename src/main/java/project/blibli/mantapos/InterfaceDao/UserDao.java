@@ -11,6 +11,7 @@ public interface UserDao {
     void Insert(User user);
     List<User> getAllUser(int id_restoo, String role);
     int GetLastInsertedUserId(String username);
-    void DeleteCashier(int id);
-    void ActivateCashier(int id);
+    void DeleteUser(int id);
+    void DeleteUserAndDependencies(int id_restoo);
+    void ActivateUser(int id);
 }

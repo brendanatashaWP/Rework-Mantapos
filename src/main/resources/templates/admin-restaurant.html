@@ -38,10 +38,10 @@
                     <td th:text="${item.nomor_telepon}"/>
                     <td th:text="${item.alamat}"/>
                     <div th:if="${item.enabled == true}">
-                        <td><a th:href="@{/delete/owner/{id}(id=${item.id_user})}">Nonaktifkan</a></td>
+                        <td><a th:href="@{/delete/user/{id}(id=${item.id})}">Nonaktifkan</a></td>
                     </div>
                     <div th:if="${item.enabled == false}">
-                        <td><a th:href="@{/active/owner/{id}(id=${item.id_user})}">Aktifkan</a></td>
+                        <td><a th:href="@{/active/user/{id}(id=${item.id})}">Aktifkan</a></td>
                     </div>
                 </tr>
             </th:block>

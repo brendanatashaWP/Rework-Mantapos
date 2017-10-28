@@ -34,7 +34,7 @@ public class LoginController {
         else if(authentication.getAuthorities().toString().equals("[manager]") || authentication.getAuthorities().toString().equals("[owner]"))
             mav.setViewName("redirect:/dashboard");
         else
-            mav.setViewName("redirect/restaurant");
+            mav.setViewName("redirect:/restaurant");
         return mav;
     }
 
