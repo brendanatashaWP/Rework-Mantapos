@@ -97,7 +97,8 @@ public class OwnerManagerController {
                                          @ModelAttribute("saldoAwal") SaldoAwal saldoAwal){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        saldoDao.AddSaldoAwal(id_resto, saldoAwal.getSaldo_awal());
+        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
+        saldoDao.AddSaldoAwal(id_resto, saldoAwal.getSaldo_awal(), user_id);
         return new ModelAndView("redirect:/saldo");
     }
     @PostMapping(value = "/add-menu", produces = MediaType.TEXT_HTML_VALUE)
@@ -106,6 +107,7 @@ public class OwnerManagerController {
                                            Authentication authentication){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
+        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
 
         try{
             MultipartFile multipartFile = uploadMenuImage.getMultipartFile();
@@ -121,7 +123,7 @@ public class OwnerManagerController {
             stream.flush();
             stream.close();
             menu.setLokasi_gambar_menu("/images/" + filename);
-            menuDao.Insert(id_resto, menu);
+            menuDao.Insert(id_resto, menu, user_id);
         } catch (Exception ex){
             System.out.println("Error add menu : " + ex.toString());
         }
@@ -147,6 +149,7 @@ public class OwnerManagerController {
                                         Authentication authentication){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
+        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
         String[] dateSplit = ledger.getWaktu().split("-");
         int tanggal = Integer.parseInt(dateSplit[2]);
         int week = WeekGenerator.GetWeek(tanggal); ledger.setWeek(week);
@@ -154,7 +157,7 @@ public class OwnerManagerController {
         int year = Integer.parseInt(dateSplit[0]); ledger.setYear(year);
         ledger.setTipe("kredit");
         ledger.setKeperluan(ledger.getKeperluan() + "(" + qty + ")");
-        ledgerDao.Insert(ledger, id_resto);
+        ledgerDao.Insert(ledger, id_resto, user_id);
         return new ModelAndView("redirect:/outcome");
     }
     @PostMapping(value = "/ledger")

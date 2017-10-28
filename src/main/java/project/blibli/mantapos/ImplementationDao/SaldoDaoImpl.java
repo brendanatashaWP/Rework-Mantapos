@@ -16,7 +16,9 @@ public class SaldoDaoImpl implements SaldoDao {
     private static final String saldo_awal = "saldo_awal";
     private static final String month = "month";
     private static final String year = "year";
+    private static final String responsible_user_id = "responsible_user_id";
     private static final String ref_table_resto = "restoran";
+    private static final String ref_table_user = "users";
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
@@ -32,8 +34,10 @@ public class SaldoDaoImpl implements SaldoDao {
                 saldo_awal + " REAL NOT NULL, " +
                 month + " INT NOT NULL, " +
                 year + " INT NOT NULL, " +
+                responsible_user_id + " INT NOT NULL, " +
                 "UNIQUE (" + month + "," + year + "), " +
-                "CONSTRAINT id_resto_fk FOREIGN KEY (" + id_resto + ")" + "REFERENCES " + ref_table_resto + "(id))";
+                "CONSTRAINT id_resto_fk FOREIGN KEY (" + id_resto + ")" + "REFERENCES " + ref_table_resto + "(id), " +
+                "CONSTRAINT responsible_user_id_fk FOREIGN KEY (" + responsible_user_id + ") REFERENCES " + ref_table_user + "(id))";
         try{
             jdbcTemplate.execute(query);
         } catch (Exception ex){
@@ -42,11 +46,11 @@ public class SaldoDaoImpl implements SaldoDao {
     }
 
     @Override
-    public void AddSaldoAwal(int id_restoo, int saldoAwal) {
-        String query = "INSERT INTO " + table_name + "(" + id_resto + "," + saldo_awal + "," + month + "," + year + ")" +
-                "VALUES(?,?,?,?)";
+    public void AddSaldoAwal(int id_restoo, int saldoAwal, int user_id) {
+        String query = "INSERT INTO " + table_name + "(" + id_resto + "," + saldo_awal + "," + month + "," + year + "," + responsible_user_id + ")" +
+                "VALUES(?,?,?,?,?)";
         try{
-            jdbcTemplate.update(query, new Object[] {id_restoo, saldoAwal, LocalDate.now().getMonthValue(), LocalDate.now().getYear()});
+            jdbcTemplate.update(query, new Object[] {id_restoo, saldoAwal, LocalDate.now().getMonthValue(), LocalDate.now().getYear(), user_id});
         } catch (Exception ex){
             System.out.println("Gagal add saldo awal : " + ex.toString());
         }

@@ -10,7 +10,7 @@ public interface UserDao {
     void CreateTableRole();
     void Insert(User user);
     List<User> getAllUser(int id_restoo, String role);
-    int GetLastInsertedUserId(String username);
+    int GetUserIdBerdasarkanUsername(String username);
     void DeleteUser(int id);
     void DeleteUserAndDependencies(int id_restoo);
     void ActivateUser(int id);

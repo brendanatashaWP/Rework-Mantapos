@@ -11,7 +11,6 @@ import project.blibli.mantapos.Mapper.LedgerMingguanMapper;
 import project.blibli.mantapos.MonthNameGenerator;
 import project.blibli.mantapos.WeekGenerator;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,7 +31,9 @@ public class LedgerDaoImpl implements LedgerDao {
     private static final String month = "month";
     private static final String year = "year";
     private static final String id_resto = "id_resto";
+    private static final String responsible_user_id = "responsible_user_id";
     private static final String ref_table_resto = "restoran";
+    private static final String ref_table_user = "users";
 
     private static final String tipe_ledger = "tipe_ledger";
     private static final String tipe_debit = "debit";
@@ -55,7 +56,9 @@ public class LedgerDaoImpl implements LedgerDao {
                 week + " INT NOT NULL, " +
                 month + " INT NOT NULL, " +
                 year + " INT NOT NULL, " +
-                "CONSTRAINT id_resto_fk FOREIGN KEY(" + id_resto + ")" + " REFERENCES " + ref_table_resto + "(id))";
+                responsible_user_id + " INT NOT NULL, " +
+                "CONSTRAINT id_resto_fk FOREIGN KEY(" + id_resto + ")" + " REFERENCES " + ref_table_resto + "(id), " +
+                "CONSTRAINT responsible_user_id_fk FOREIGN KEY(" + responsible_user_id + ") REFERENCES " + ref_table_user + "(id))";
         try{
             jdbcTemplate.execute(query);
         } catch (Exception ex){
@@ -77,7 +80,7 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public void Insert(Ledger ledger, int id_restoo) {
+    public void Insert(Ledger ledger, int id_restoo, int user_id) {
         String query = "INSERT INTO " + table_name +
                 "(" +
                 id_resto + "," +
@@ -87,15 +90,18 @@ public class LedgerDaoImpl implements LedgerDao {
                 waktu + "," +
                 week + "," +
                 month + "," +
-                year + ")" +
-                "VALUES (?,?::" + tipe_ledger + ",?,?,?,?,?,?)";
+                year + "," +
+                responsible_user_id + ")" +
+                "VALUES (?,?::" + tipe_ledger + ",?,?,?,?,?,?,?)";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String jam = dtf.format(now);
         try{
             jdbcTemplate.update(query, new Object[]{
                     id_restoo, ledger.getTipe(), ledger.getBiaya(),
-                    ledger.getKeperluan(), ledger.getWaktu() + "," + jam, ledger.getWeek(), ledger.getMonth(), ledger.getYear()
+                    ledger.getKeperluan(), ledger.getWaktu() + "," + jam,
+                    ledger.getWeek(), ledger.getMonth(), ledger.getYear(),
+                    user_id
             });
         } catch (Exception ex){
             System.out.println("Gagal insert ledger_harian : " + ex.toString());

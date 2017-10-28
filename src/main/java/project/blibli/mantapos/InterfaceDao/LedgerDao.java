@@ -7,7 +7,7 @@ import java.util.List;
 public interface LedgerDao {
     void CreateTable();
     void CreateTipe();
-    void Insert(Ledger ledger, int id_restoo);
+    void Insert(Ledger ledger, int id_restoo, int user_id);
     List<Ledger> GetMonthAndYearList(int id_restoo);
     List<Ledger> GetDailyLedger(int id_restoo, int monthh, int yearr);
     List<Ledger> GetWeeklyLedger(int id_restoo, int monthh, int yearr);

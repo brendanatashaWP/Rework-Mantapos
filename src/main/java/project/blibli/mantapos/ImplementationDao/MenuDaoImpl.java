@@ -19,7 +19,9 @@ public class MenuDaoImpl implements MenuDao {
     private static final String kategori_menu = "kategori_menu";
     private static final String id_resto = "id_resto";
     private static final String enabled = "enabled";
+    private static final String responsible_user_id = "responsible_user_id";
     private static final String ref_table_resto = "restoran";
+    private static final String ref_table_users = "users";
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
@@ -37,7 +39,9 @@ public class MenuDaoImpl implements MenuDao {
                 kategori_menu + " TEXT, " +
                 id_resto + " INT NOT NULL, " +
                 enabled + " boolean not null default true, " +
-                "CONSTRAINT id_resto_fk FOREIGN KEY (" + id_resto + ") REFERENCES " + ref_table_resto + "(id))";
+                responsible_user_id + " INT NOT NULL, " +
+                "CONSTRAINT id_resto_fk FOREIGN KEY (" + id_resto + ") REFERENCES " + ref_table_resto + "(id), " +
+                "CONSTRAINT responsible_user_id_fk FOREIGN KEY (" + responsible_user_id + ") REFERENCES " + ref_table_users + "(id))";
         try{
             jdbcTemplate.execute(query);
         } catch (Exception ex){
@@ -46,22 +50,24 @@ public class MenuDaoImpl implements MenuDao {
     }
 
     @Override
-    public void Insert(int id_restoo, Menu menu) {
+    public void Insert(int id_restoo, Menu menu, int user_id) {
         String query = "INSERT INTO " + table_name +
                 "(" +
                 nama_menu + "," +
                 harga_menu + "," +
                 lokasi_gambar_menu + "," +
                 kategori_menu + "," +
-                id_resto + ")" +
-                "VALUES(?,?,?,?,?)";
+                id_resto + "," +
+                responsible_user_id + ")" +
+                "VALUES(?,?,?,?,?,?)";
         try{
             jdbcTemplate.update(query, new Object[]{
                     menu.getNama_menu(),
                     menu.getHarga_menu(),
                     menu.getLokasi_gambar_menu(),
                     menu.getKategori_menu(),
-                    id_restoo
+                    id_restoo,
+                    user_id
             });
         } catch (Exception ex){
             System.out.println("Gagal insert menu baru : " + ex.toString());

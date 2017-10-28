@@ -8,7 +8,10 @@ import project.blibli.mantapos.Beans_Model.Ledger;
 import project.blibli.mantapos.Beans_Model.Menu;
 import project.blibli.mantapos.Beans_Model.Restoran;
 import project.blibli.mantapos.ImplementationDao.*;
+import project.blibli.mantapos.WeekGenerator;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -18,6 +21,7 @@ public class CashierController {
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
     MenuYangDipesanDaoImpl orderedMenuDao = new MenuYangDipesanDaoImpl();
     RestoranDaoImpl restaurantDao = new RestoranDaoImpl();
+    UserDaoImpl userDao = new UserDaoImpl();
     Restoran restoran;
 
     @GetMapping(value = "/cashier", produces = MediaType.TEXT_HTML_VALUE)
@@ -82,10 +86,17 @@ public class CashierController {
     @PostMapping(value = "/add-order", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addOrderHtml(@ModelAttribute("order") Ledger ledger,
                                      @RequestParam(value = "array_id_order", required = false) String[] array_id_order,
-                                     @RequestParam(value = "array_qty", required = false) String[] array_qty){
+                                     @RequestParam(value = "array_qty", required = false) String[] array_qty,
+                                     Authentication authentication){
         ModelAndView mav = new ModelAndView();
+        String username = authentication.getName();
+        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
         ledger.setTipe("debit"); ledger.setKeperluan("penjualan menu");
-        ledgerDao.Insert(ledger, restoran.getId());
+        ledger.setWaktu(LocalDate.now().toString());
+        ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth()));
+        ledger.setMonth(LocalDateTime.now().getMonthValue());
+        ledger.setYear(LocalDateTime.now().getYear());
+        ledgerDao.Insert(ledger, restoran.getId(), user_id);
         int lastOrderId = ledgerDao.GetLastOrderId();
         for(int i=0; i<array_id_order.length; i++){
             orderedMenuDao.Insert(lastOrderId, Integer.parseInt(array_id_order[i]),

@@ -124,7 +124,7 @@ public class UserDaoImpl implements UserDao{
                 ")" + " VALUES (?,?,?::" +role_type + ")";
         try {
             jdbcTemplate.update(query2, new Object[]{
-                    GetLastInsertedUserId(user.getUsername()), user.getUsername(), user.getRole()
+                    GetUserIdBerdasarkanUsername(user.getUsername()), user.getUsername(), user.getRole()
             });
         } catch (Exception ex){
             System.out.println("Gagal insert user role : " + ex.toString());
@@ -161,7 +161,7 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public int GetLastInsertedUserId(String usernamee) {
+    public int GetUserIdBerdasarkanUsername(String usernamee) {
         int last_id=0;
 //        String query = "SELECT MAX(" + id + ") FROM " + table_name;
         String query = "SELECT " + id + " FROM " + table_name + " WHERE " + username + "=?";
