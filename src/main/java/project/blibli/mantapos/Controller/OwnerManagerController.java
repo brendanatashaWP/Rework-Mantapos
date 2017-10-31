@@ -134,13 +134,14 @@ public class OwnerManagerController {
                                     Authentication authentication){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
+        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
         if(authentication.getAuthorities().toString().equals("[manager]")){
             user.setRole("cashier");
         } else if(authentication.getAuthorities().toString().equals("[owner]")){
             user.setRole(user.getRole());
         }
         user.setId_resto(id_resto);
-        userDao.Insert(user);
+        userDao.Insert(user, user_id);
         return new ModelAndView("redirect:/employee");
     }
     @PostMapping(value = "/outcome-post", produces = MediaType.TEXT_HTML_VALUE)
