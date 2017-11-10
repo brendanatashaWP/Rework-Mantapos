@@ -8,6 +8,7 @@ import project.blibli.mantapos.Mapper.MenuMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MenuDaoImpl implements MenuDao {
 
@@ -34,7 +35,7 @@ public class MenuDaoImpl implements MenuDao {
         String query = "CREATE TABLE IF NOT EXISTS " + table_name +
                 "(" + id + " SERIAL PRIMARY KEY, " +
                 nama_menu + " TEXT, " +
-                harga_menu + " TEXT, " +
+                harga_menu + " REAL, " +
                 lokasi_gambar_menu + " TEXT, " +
                 kategori_menu + " TEXT, " +
                 id_resto + " INT NOT NULL, " +
@@ -102,5 +103,22 @@ public class MenuDaoImpl implements MenuDao {
     public void DeleteMenu(int idd) {
         String query = "UPDATE " + table_name + " SET " + enabled + "=? WHERE " + id + "=?";
         jdbcTemplate.update(query, new Object[] {false, idd});
+    }
+
+    @Override
+    public List<Menu> getMenuById(int id_restoo, int id_menu) {
+        List<Menu> menuList = new ArrayList<>();
+        String query = "SELECT * FROM " + table_name + " WHERE " + id_resto + "=? AND " + id + "=?";
+        try{
+            menuList = jdbcTemplate.query(query, new Object[] {id_restoo, id_menu}, new MenuMapper());
+        } catch (Exception ex){
+            System.out.println("Gagal GetMenuById : " + ex.toString());
+        }
+        return menuList;
+    }
+
+    @Override
+    public void UpdateMenu(int id_restoo, Menu menu, int id_user) {
+
     }
 }

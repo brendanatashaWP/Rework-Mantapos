@@ -27,6 +27,7 @@
                     <th>Price Menu</th>
                     <th>Photo</th>
                     <th>Category</th>
+                    <th>Edit Menu</th>
                     <th>Delete Menu</th>
                 </tr>
                 </thead>
@@ -37,6 +38,7 @@
                             <td th:text="${menu.harga_menu}"/>
                             <td><a target="_blank" th:href="@{${menu.lokasi_gambar_menu}}">Photo</a></td>
                             <td th:text="${menu.kategori_menu}"/>
+                            <td><a th:href="@{/edit/menu/{id}(id=${menu.id})}">Edit</a></td>
                             <td><a th:href="@{/delete/menu/{id}(id=${menu.id})}">Delete</a></td>
                         </tr>
                     </th:block>
@@ -47,7 +49,7 @@
 
         <div class="col-md-2 tablemenu">
             <h4>Entry Menu</h4>
-            <form action="/add-menu" method="post" enctype="multipart/form-data" commandName="multipartFile">
+            <form action="/add-menu" method="post" enctype="multipart/form-data">
                 Menu Name:<br/>
                 <input type="text" name="nama_menu"/><br/>
                 Menu Price:<br/>

@@ -7,6 +7,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+import org.thymeleaf.spring4.view.ThymeleafView;
 
 import java.io.IOException;
 
@@ -32,7 +35,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
 
         //Set the maximum allowed size (in bytes) for each individual file.
-        resolver.setMaxUploadSizePerFile(6242880);//6MB
+        resolver.setMaxUploadSize(6242880);//6MB
+        resolver.setMaxInMemorySize(6242880);
         //You may also set other available properties.
 
         return resolver;

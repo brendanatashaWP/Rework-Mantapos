@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>EDIT MENU</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
+</head>
+<body>
+    <div th:replace="fragments/navbar-top-manager :: header"/>
+    <div>
+        <h3>EDIT MENU</h3>
+        <form action="/edit-menu" method="post" enctype="multipart/form-data" commandName="multipartFile">
+            <th:block th:each="menu : ${menuList}">
+                <input type="hidden" th:value="${menu.id}"/>
+                Menu Name:<br/>
+                <input type="text" th:value="${menu.nama_menu}" name="nama_menu"/><br/>
+                Menu Price:<br/>
+                <input type="text" th:value="${menu.harga_menu}" name="harga_menu"/><br/>
+                Category:<br/>
+                <select name="kategori_menu" class="form-control">
+                    <div th:if="${menu.kategori_menu == 'food'}">
+                        <option selected="selected" value="food">Food</option>
+                        <option value="drink">Drink</option>
+                    </div>
+                    <div th:if="${menu.kategori_menu == 'drink'}">
+                        <option value="food">Food</option>
+                        <option selected="selected" value="drink">Drink</option>
+                    </div>
+                </select>
+                <!--Upload Photo:<br/>-->
+                <!--<input type="file" name="multipartFile"/><br/>-->
+                <button type="submit">OK</button>
+            </th:block>
+        </form>
+    </div>
+</body>
+</html>

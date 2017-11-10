@@ -29,7 +29,7 @@ public class AdminController {
         restoranDao.Insert(restoran);
         user.setRole("owner");
         user.setId_resto(restoranDao.GetRestoranIdBerdasarkanNamaResto(restoran.getNama_resto()));
-        userDao.Insert(user);
+        userDao.Insert(user, 1);
         return new ModelAndView("redirect:/restaurant");
     }
 }

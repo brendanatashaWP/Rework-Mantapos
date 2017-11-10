@@ -2,6 +2,7 @@ package project.blibli.mantapos.Controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,10 +24,10 @@ public class OwnerManagerController {
     private static String UPLOAD_LOCATION=System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
     //Untuk commandName di jsp discount
-    @ModelAttribute("multipartFile")
-    public UploadMenuImage getForm(){
-        return new UploadMenuImage();
-    }
+//    @ModelAttribute("multipartFile")
+//    public UploadMenuImage getForm(){
+//        return new UploadMenuImage();
+//    }
 
     UserDaoImpl userDao = new UserDaoImpl();
     MenuDaoImpl menuDao = new MenuDaoImpl();
@@ -114,14 +115,15 @@ public class OwnerManagerController {
 //            String[] filenameSplit = multipartFile.getOriginalFilename().split(".");
 //            System.out.println("Filename 1 : " + filenameSplit[0] + ", Filename 2 : " + filenameSplit[1]);
 //            String filename = String.valueOf(menuDao.getLastId(restoran.getId_resto())) + "." + filenameSplit[1];
-            String filename = String.valueOf(menuDao.getLastId(id_resto)) + ".jpg";
-//            FileCopyUtils.copy(uploadMenuImage.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename));
-            byte[] bytes = uploadMenuImage.getMultipartFile().getBytes();
-            BufferedOutputStream stream =new BufferedOutputStream(new FileOutputStream(
-                    new File(UPLOAD_LOCATION + filename)));
-            stream.write(bytes);
-            stream.flush();
-            stream.close();
+//            String filename = String.valueOf(menuDao.getLastId(id_resto)) + ".jpg";
+            String filename = multipartFile.getOriginalFilename();
+            FileCopyUtils.copy(uploadMenuImage.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename));
+//            byte[] bytes = uploadMenuImage.getMultipartFile().getBytes();
+//            BufferedOutputStream stream =new BufferedOutputStream(new FileOutputStream(
+//                    new File(UPLOAD_LOCATION + filename)));
+//            stream.write(bytes);
+//            stream.flush();
+//            stream.close();
             menu.setLokasi_gambar_menu("/images/" + filename);
             menuDao.Insert(id_resto, menu, user_id);
         } catch (Exception ex){
@@ -232,5 +234,23 @@ public class OwnerManagerController {
     public ModelAndView deleteMenu(@PathVariable("id") int id){
         menuDao.DeleteMenu(id);
         return new ModelAndView("redirect:/menu");
+    }
+    @GetMapping(value = "/edit/menu/{id}", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView editMenuHtml(@PathVariable("id") int id,
+                                     Authentication authentication){
+        ModelAndView mav = new ModelAndView();
+        String username = authentication.getName();
+        int id_resto = restoranDao.GetRestoranId(username);
+        List<Menu> menuList = menuDao.getMenuById(id_resto, id);
+        mav.addObject("menuList", menuList);
+        mav.setViewName("owner-manager/edit-menu");
+        return mav;
+    }
+    @PostMapping(value = "/edit-menu", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView editMenuPostHtml(@ModelAttribute("menu") Menu menu){
+        ModelAndView mav = new ModelAndView();
+        //UPDATE KE DATABASE DISINI
+        mav.setViewName("redirect:/menu");
+        return mav;
     }
 }
