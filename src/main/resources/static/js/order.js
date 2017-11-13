@@ -208,17 +208,3 @@ function chooseLedgerRange(selector){
         yearselector.style.display = "none";
     }
 }
-
-function validasi_payment(){
-    var cust_name = document.forms["payment_form"]["customer_name"].value;
-    var cash = document.forms["payment_form"]["cash"].value;
-    var table_no = document.forms["payment_form"]["table_no"].value;
-
-    if(cust_name == ""){
-        alert("Isi nama customer!");
-    } else if(cash == ""){
-        alert("Isi jumlah pembayaran!");
-    } else if(table_no == ""){
-        alert("Isi nomor meja!");
-    }
-}

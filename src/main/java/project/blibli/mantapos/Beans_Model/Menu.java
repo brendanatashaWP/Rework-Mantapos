@@ -1,8 +1,12 @@
 package project.blibli.mantapos.Beans_Model;
 
+import javax.validation.constraints.NotNull;
+
 public class Menu {
     private int id;
-    private String nama_menu, lokasi_gambar_menu, kategori_menu;
+    private String nama_menu;
+    private String lokasi_gambar_menu;
+    private String kategori_menu;
     private int harga_menu;
 
     public int getId() {

@@ -49,18 +49,18 @@
 
         <div class="col-md-2 tablemenu">
             <h4>Entry Menu</h4>
-            <form action="/add-menu" method="post" enctype="multipart/form-data">
+            <form name="menu_form" action="/add-menu" method="post" enctype="multipart/form-data">
                 Menu Name:<br/>
-                <input type="text" name="nama_menu"/><br/>
+                <input type="text" name="nama_menu" id="input_nama_menu"/><br/>
                 Menu Price:<br/>
-                <input type="text" name="harga_menu"/><br/>
+                <input type="text" name="harga_menu" id="input_price_menu"/><br/>
                 Category:<br/>
                 <select name="kategori_menu" class="form-control">
                     <option value="food">Food</option>
                     <option value="drink">Drink</option>
                 </select>
                 Upload Photo:<br/>
-                <input type="file" name="multipartFile"/><br/>
+                <input type="file" name="multipartFile" id="input_photo_menu"/><br/>
                 <button type="submit">OK</button>
             </form>
         </div>

@@ -5,7 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 
 public class UploadMenuImage {
-    @NotNull
     private MultipartFile multipartFile;
 
     public MultipartFile getMultipartFile() {
