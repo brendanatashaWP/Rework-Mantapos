@@ -165,13 +165,13 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="custName">Name: </label>
-                            <input type="text" class="form-control" id="custName"/>
+                            <input type="text" class="form-control" id="custName" name="customer_name"/>
 
                             <label for="cash">Cash: </label>
-                            <input type="currency" class="form-control" id="cash"/>
+                            <input type="currency" class="form-control" id="cash" name="cash"/>
 
                             <label for="table_no">Table No: </label>
-                            <input type="text" class="form-control" id="table_no"/>
+                            <input type="text" class="form-control" id="table_no" name="table_no"/>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -182,7 +182,7 @@
                         <input type="hidden" name="biaya" id="inputPriceTotal"/>
                         <!--<%&#45;&#45;<input type="hidden" name="array_id_order" id="array_id_order">&#45;&#45;%>-->
                         <!--<%&#45;&#45;<input type="hidden" name="array_qty" id="array_qty">&#45;&#45;%>-->
-                        <button type="button" class="submit" data-toggle="modal" data-target="#changeModal" onclick="passToChangeModal()">OK</button>
+                        <button type="button" class="submit" data-toggle="modal" onclick="passToChangeModal()">OK</button>
                     </div>
                 </div>
             </div>

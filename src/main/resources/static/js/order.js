@@ -22,6 +22,7 @@ var CashReceipt = document.getElementById("CashReceipt");
 var ChangeReceipt = document.getElementById("ChangeReceipt");
 
 function startTime() {
+    $('#changeModal').modal({ show: false});
     var today = new Date();
     var date = today.getDate();
     var month = today.getMonth();
@@ -144,9 +145,18 @@ function passToChangeModal() {
     //Passing inputan dari input di modal paymentModal ke input di changeModal (untuk nantinya di
     //insert ke database
     inputCustNameChange.value = CustNameModal.value;
-
     inputTableNoChange.value = TableNoModal.value;
-
+    if(inputCustNameChange.value==""){
+        alert("Isi nama customer!");
+    } else if(CashModal.value==""){
+        alert("Isi jumlah pembayaran!")
+    } else if(CashModal.value<priceTotal){
+        alert("Jumlah pembayaran terlalu kecil!");
+    } else if(inputTableNoChange.value==""){
+        alert("Isi nomor meja!");
+    } else if(cust_name!="" && cash!="" && table_no!=""){
+        $('#changeModal').modal('show');
+    }
     kembalian = CashModal.value - priceTotal;
     txtKembalian.innerHTML = "Rp " + kembalian; //set text kembalian
 
@@ -196,5 +206,19 @@ function chooseLedgerRange(selector){
     } else {
         monthSelector.style.display = "none";
         yearselector.style.display = "none";
+    }
+}
+
+function validasi_payment(){
+    var cust_name = document.forms["payment_form"]["customer_name"].value;
+    var cash = document.forms["payment_form"]["cash"].value;
+    var table_no = document.forms["payment_form"]["table_no"].value;
+
+    if(cust_name == ""){
+        alert("Isi nama customer!");
+    } else if(cash == ""){
+        alert("Isi jumlah pembayaran!");
+    } else if(table_no == ""){
+        alert("Isi nomor meja!");
     }
 }

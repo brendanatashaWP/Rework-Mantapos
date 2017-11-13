@@ -123,7 +123,6 @@ public class CashierController {
 //            mav.setViewName("redirect:/cashier"); //show error disini, redirect ke page 404 kek.
         return mav;
     }
-
 //    @PostMapping(value = "/receipt", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public Map<String, String> receiptPostJson(@ModelAttribute("restoran")Restoran restoran,
 //                                           @ModelAttribute("receipt") Receipt receipt,
