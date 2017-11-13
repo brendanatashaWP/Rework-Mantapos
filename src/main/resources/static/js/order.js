@@ -182,3 +182,19 @@ function setReceiptData() {
         cellTotalPrice.innerHTML = tableCart.rows[i+1].cells[3].innerHTML;
     }
 }
+
+function chooseLedgerRange(selector){
+    var monthSelector = document.getElementById("monthselector");
+    var yearselector = document.getElementById("yearselector");
+    if(selector==0){
+        monthSelector.style.display = "inline";
+        yearselector.style.display = "inline";
+    }
+    else if(selector==1){
+        monthSelector.style.display = "none";
+        yearselector.style.display = "inline";
+    } else {
+        monthSelector.style.display = "none";
+        yearselector.style.display = "none";
+    }
+}

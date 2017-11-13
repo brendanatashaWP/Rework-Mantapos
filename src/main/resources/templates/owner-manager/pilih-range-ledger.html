@@ -18,10 +18,10 @@
         <div class="col-md-10">
             <form action="/ledger" method="post">
                 <div class="row">
-                    <input checked="checked" type="radio" name="Skala" value="harian"/>Harian<br/>
-                    <input type="radio" name="Skala" value="mingguan"/>Mingguan<br/>
-                    <input type="radio" name="Skala" value="bulanan"/>Bulanan<br/>
-                    <input type="radio" name="Skala" value="tahunan"/>Tahunan<br/>
+                    <input checked="checked" type="radio" name="Skala" value="harian" th:onclick="'javascript:chooseLedgerRange(\'0\');'"/>Harian<br/>
+                    <input type="radio" name="Skala" value="mingguan" th:onclick="'javascript:chooseLedgerRange(\'0\');'"/>Mingguan<br/>
+                    <input type="radio" name="Skala" value="bulanan" th:onclick="'javascript:chooseLedgerRange(\'1\');'"/>Bulanan<br/>
+                    <input type="radio" name="Skala" value="tahunan" th:onclick="'javascript:chooseLedgerRange(\'2\');'"/>Tahunan<br/>
                 </div>
                 <select name="month" id="monthselector">
                     <th:block th:each="item : ${monthAndYearList}">
@@ -38,5 +38,9 @@
                 </div>
             </form>
         </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/order.js}"></script>
 </body>
 </html>

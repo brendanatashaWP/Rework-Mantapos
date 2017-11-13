@@ -19,6 +19,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO : DISCOUNT belum dibuat sama sekali
+
 @RestController
 public class OwnerManagerController {
     private static String UPLOAD_LOCATION=System.getProperty("user.dir") + "/src/main/resources/static/images/";
@@ -188,15 +190,16 @@ public class OwnerManagerController {
                 ledgerList = ledgerDao.GetWeeklyLedger(id_resto, month, year);
                 skala_ledger = "MINGGUAN";
             }
-        } else if(skala.equals("bulanan")){ //bulanan
+        } else if(skala.equals("bulanan")){ //bulanan //TODO : saldo awal enaknya gimana? saldo awal total dalam tahun yang dipilih? atau saldo awal di awal bulannya tiap tahun(kayaknya bagus yg ini)
             total_kredit = ledgerDao.GetTotalKreditTahunan(id_resto, year);
             total_debit = ledgerDao.GetTotalDebitTahunan(id_resto, year);
+            //jadi saldo awalnya bagusnya dilihatkan jumlah saldo awalnya dalam setahun itu
             saldo_awal = saldoDao.getSaldoAwal(id_resto, month, year);
             saldo_akhir = saldo_awal+total_debit-total_kredit;
             mutasi = saldo_akhir-saldo_awal;
             ledgerList = ledgerDao.GetMonthlyLedger(id_resto, year);
             skala_ledger = "BULANAN";
-        } else{ //tahunan
+        } else{ //tahunan //TODO : Ledger tahunan
 
         }
 

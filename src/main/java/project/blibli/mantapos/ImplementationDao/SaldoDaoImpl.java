@@ -76,6 +76,7 @@ public class SaldoDaoImpl implements SaldoDao {
             saldo_awall = jdbcTemplate.queryForObject(query, new Object[] {id_restoo, monthh, yearr}, Integer.class);
         } catch (Exception ex){
             System.out.println("Gagal get saldo awal : " + ex.toString());
+            saldo_awall = 0;
         }
         return saldo_awall;
     }
