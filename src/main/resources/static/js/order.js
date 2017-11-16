@@ -154,7 +154,7 @@ function passToChangeModal() {
         alert("Jumlah pembayaran terlalu kecil!");
     } else if(inputTableNoChange.value==""){
         alert("Isi nomor meja!");
-    } else if(cust_name!="" && cash!="" && table_no!=""){
+    } else if(inputCustNameChange.value!="" && CashModal.value!="" && inputTableNoChange.value!=""){
         $('#changeModal').modal('show');
     }
     kembalian = CashModal.value - priceTotal;

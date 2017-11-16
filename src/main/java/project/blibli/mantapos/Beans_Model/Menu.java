@@ -1,13 +1,30 @@
 package project.blibli.mantapos.Beans_Model;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class Menu {
     private int id;
+    @NotBlank
     private String nama_menu;
     private String lokasi_gambar_menu;
+    @NotBlank
     private String kategori_menu;
+    @NotNull
+    @Min(0)
     private int harga_menu;
+    private MultipartFile multipartFile;
+
+    public MultipartFile getMultipartFile() {
+        return multipartFile;
+    }
+
+    public void setMultipartFile(MultipartFile multipartFile) {
+        this.multipartFile = multipartFile;
+    }
 
     public int getId() {
         return id;

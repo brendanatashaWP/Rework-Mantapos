@@ -49,18 +49,20 @@
 
         <div class="col-md-2 tablemenu">
             <h4>Entry Menu</h4>
-            <form name="menu_form" action="/add-menu" method="post" enctype="multipart/form-data">
+            <form th:object="${menu}" action="/menu" method="post" enctype="multipart/form-data">
                 Menu Name:<br/>
-                <input type="text" name="nama_menu" id="input_nama_menu"/><br/>
+                <input type="text" th:field="*{nama_menu}" id="input_nama_menu"/><br/>
+                <div th:if="${#fields.hasErrors('nama_menu')}" th:errors="*{nama_menu}"><h6>Error nama</h6></div>
                 Menu Price:<br/>
-                <input type="text" name="harga_menu" id="input_price_menu"/><br/>
+                <input type="number" th:field="*{harga_menu}" id="input_price_menu"/><br/>
+                <div th:if="${#fields.hasErrors('harga_menu')}" th:errors="*{harga_menu}"><h6>Error harga menu</h6></div>
                 Category:<br/>
-                <select name="kategori_menu" class="form-control">
+                <select th:field="*{kategori_menu}" class="form-control">
                     <option value="food">Food</option>
                     <option value="drink">Drink</option>
                 </select>
                 Upload Photo:<br/>
-                <input type="file" name="multipartFile" id="input_photo_menu"/><br/>
+                <input type="file" th:field="*{multipartFile}" id="input_photo_menu"/><br/>
                 <button type="submit">OK</button>
             </form>
         </div>

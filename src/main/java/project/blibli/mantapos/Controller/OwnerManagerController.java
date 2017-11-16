@@ -3,6 +3,7 @@ package project.blibli.mantapos.Controller;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,12 +26,6 @@ import java.util.List;
 public class OwnerManagerController {
     private static String UPLOAD_LOCATION=System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
-    //Untuk commandName di jsp discount
-//    @ModelAttribute("multipartFile")
-//    public UploadMenuImage getForm(){
-//        return new UploadMenuImage();
-//    }
-
     UserDaoImpl userDao = new UserDaoImpl();
     MenuDaoImpl menuDao = new MenuDaoImpl();
     private LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
@@ -43,7 +38,8 @@ public class OwnerManagerController {
         return new ModelAndView("owner-manager/dashboard");
     }
     @GetMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView menuDashboardHtml(Authentication authentication){
+    public ModelAndView menuDashboardHtml(Menu menu,
+            Authentication authentication){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
         List<Menu> menuList = menuDao.getAllMenu(id_resto);
@@ -104,34 +100,27 @@ public class OwnerManagerController {
         saldoDao.AddSaldoAwal(id_resto, saldoAwal.getSaldo_awal(), user_id);
         return new ModelAndView("redirect:/saldo");
     }
-    @PostMapping(value = "/add-menu", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView addMenuJson(@ModelAttribute("menu")Menu menu,
-                                           @ModelAttribute("uploadFile") @Valid UploadMenuImage uploadMenuImage,
-                                           Authentication authentication){
+    @PostMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView addMenuJson(@ModelAttribute("menu") @Valid Menu menu,
+                                    Authentication authentication,
+                                    BindingResult bindingResult){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
         int user_id = userDao.GetUserIdBerdasarkanUsername(username);
-
-        try{
-            MultipartFile multipartFile = uploadMenuImage.getMultipartFile();
-//            String[] filenameSplit = multipartFile.getOriginalFilename().split(".");
-//            System.out.println("Filename 1 : " + filenameSplit[0] + ", Filename 2 : " + filenameSplit[1]);
-//            String filename = String.valueOf(menuDao.getLastId(restoran.getId_resto())) + "." + filenameSplit[1];
-//            String filename = String.valueOf(menuDao.getLastId(id_resto)) + ".jpg";
-            String filename = multipartFile.getOriginalFilename();
-            FileCopyUtils.copy(uploadMenuImage.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename));
-//            byte[] bytes = uploadMenuImage.getMultipartFile().getBytes();
-//            BufferedOutputStream stream =new BufferedOutputStream(new FileOutputStream(
-//                    new File(UPLOAD_LOCATION + filename)));
-//            stream.write(bytes);
-//            stream.flush();
-//            stream.close();
-            menu.setLokasi_gambar_menu("/images/" + filename);
-            menuDao.Insert(id_resto, menu, user_id);
-        } catch (Exception ex){
-            System.out.println("Error add menu : " + ex.toString());
+        if(bindingResult.hasErrors()){
+            return new ModelAndView("owner-manager/menu");
+        } else{
+            try{
+                MultipartFile multipartFile = menu.getMultipartFile();
+                String filename = multipartFile.getOriginalFilename();
+                FileCopyUtils.copy(menu.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename));
+                menu.setLokasi_gambar_menu("/images/" + filename);
+                menuDao.Insert(id_resto, menu, user_id);
+            } catch (Exception ex){
+                System.out.println("Error add menu : " + ex.toString());
+            }
+            return new ModelAndView("redirect:/menu");
         }
-        return new ModelAndView("redirect:/menu");
     }
     @PostMapping(value = "/add-user", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addUserHtml(@ModelAttribute("user")User user,
