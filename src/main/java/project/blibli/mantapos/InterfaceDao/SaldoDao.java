@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SaldoDao {
     void CreateTable();
-    void AddSaldoAwal(int id_restoo, int saldoAwal, int user_id);
+    void AddSaldoAwal(int id_restoo, double saldoAwal);
     List<SaldoAwal> getSaldoAwalTiapBulan(int id_restoo);
     int getSaldoAwal(int id_restoo, int monthh, int yearr);
 }

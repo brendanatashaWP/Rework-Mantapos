@@ -21,7 +21,6 @@ public class CashierController {
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
     MenuYangDipesanDaoImpl orderedMenuDao = new MenuYangDipesanDaoImpl();
     RestoranDaoImpl restaurantDao = new RestoranDaoImpl();
-    UserDaoImpl userDao = new UserDaoImpl();
     Restoran restoran;
 
     @GetMapping(value = "/cashier", produces = MediaType.TEXT_HTML_VALUE)
@@ -89,14 +88,12 @@ public class CashierController {
                                      @RequestParam(value = "array_qty", required = false) String[] array_qty,
                                      Authentication authentication){
         ModelAndView mav = new ModelAndView();
-        String username = authentication.getName();
-        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
         ledger.setTipe("debit"); ledger.setKeperluan("penjualan menu");
         ledger.setWaktu(LocalDate.now().toString());
         ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth()));
         ledger.setMonth(LocalDateTime.now().getMonthValue());
         ledger.setYear(LocalDateTime.now().getYear());
-        ledgerDao.Insert(ledger, restoran.getId(), user_id);
+        ledgerDao.Insert(ledger, restoran.getId());
         int lastOrderId = ledgerDao.GetLastOrderId();
         for(int i=0; i<array_id_order.length; i++){
             orderedMenuDao.Insert(lastOrderId, Integer.parseInt(array_id_order[i]),

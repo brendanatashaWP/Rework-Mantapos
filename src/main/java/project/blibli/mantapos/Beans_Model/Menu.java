@@ -15,7 +15,7 @@ public class Menu {
     private String kategori_menu;
     @NotNull
     @Min(0)
-    private int harga_menu;
+    private double harga_menu;
     private MultipartFile multipartFile;
 
     public MultipartFile getMultipartFile() {
@@ -50,11 +50,11 @@ public class Menu {
         this.lokasi_gambar_menu = lokasi_gambar_menu;
     }
 
-    public int getHarga_menu() {
+    public double getHarga_menu() {
         return harga_menu;
     }
 
-    public void setHarga_menu(int harga_menu) {
+    public void setHarga_menu(double harga_menu) {
         this.harga_menu = harga_menu;
     }
 

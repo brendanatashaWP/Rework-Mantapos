@@ -28,7 +28,7 @@ public class MantaposApplication {
 		user.setNomor_telepon("08123451234"); user.setNomor_ktp("123123123123123");
 		user.setPassword("axell123"); user.setUsername("axell");
 		user.setRole("admin"); user.setId_resto(1);
-		userDao.Insert(user, 0);
+		userDao.Insert(user);
 
 		MenuDaoImpl menuDao = new MenuDaoImpl();
 		menuDao.CreateTable();

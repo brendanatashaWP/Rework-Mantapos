@@ -12,7 +12,7 @@ public class MenuMapper implements RowMapper<Menu>{
         Menu menu = new Menu();
         menu.setId(resultSet.getInt("id"));
         menu.setNama_menu(resultSet.getString("nama_menu"));
-        menu.setHarga_menu(resultSet.getInt("harga_menu"));
+        menu.setHarga_menu(resultSet.getDouble("harga_menu"));
         menu.setLokasi_gambar_menu(resultSet.getString("lokasi_gambar_menu"));
         menu.setKategori_menu(resultSet.getString("kategori_menu"));
         return menu;

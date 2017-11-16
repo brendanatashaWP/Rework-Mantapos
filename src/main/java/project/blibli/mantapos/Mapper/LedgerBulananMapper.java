@@ -12,7 +12,7 @@ public class LedgerBulananMapper implements RowMapper<Ledger> {
         Ledger ledger = new Ledger();
         ledger.setMonth(resultSet.getInt("month"));
         ledger.setTipe(resultSet.getString("tipe"));
-        ledger.setBiaya(resultSet.getInt("sum"));
+        ledger.setBiaya(resultSet.getDouble("sum"));
         return ledger;
     }
 }

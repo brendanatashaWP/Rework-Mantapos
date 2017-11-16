@@ -1,7 +1,8 @@
 package project.blibli.mantapos.Beans_Model;
 
 public class SaldoAwal {
-    private int id_resto, saldo_awal, month, year;
+    private int id_resto, month, year;
+    private double saldo_awal;
 
     public int getId_resto() {
         return id_resto;
@@ -11,11 +12,11 @@ public class SaldoAwal {
         this.id_resto = id_resto;
     }
 
-    public int getSaldo_awal() {
+    public double getSaldo_awal() {
         return saldo_awal;
     }
 
-    public void setSaldo_awal(int saldo_awal) {
+    public void setSaldo_awal(double saldo_awal) {
         this.saldo_awal = saldo_awal;
     }
 

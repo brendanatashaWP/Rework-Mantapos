@@ -31,9 +31,7 @@ public class UserDaoImpl implements UserDao{
 
     private static final String table_role = "user_roles";
 
-    private static final String responsible_user_id = "responsible_user_id";
     private static final String ref_table_resto = "restoran";
-    private static final String ref_table_users = "users";
 
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
@@ -69,9 +67,7 @@ public class UserDaoImpl implements UserDao{
                 nomor_telepon + " TEXT NOT NULL, " +
                 alamat + " TEXT NOT NULL, " +
                 id_resto + " INT NOT NULL, " +
-                responsible_user_id + " INT NOT NULL, " +
                 "UNIQUE (" + username + ")," +
-                "CONSTRAINT responsible_user_id_fk FOREIGN KEY (" + responsible_user_id + ") REFERENCES " + ref_table_users + "(id), " +
                 "CONSTRAINT id_restoran_fk FOREIGN KEY (" + id_resto + ") REFERENCES " + ref_table_resto + "(" + id + "))";
         try{
             jdbcTemplate.execute(query);
@@ -97,7 +93,7 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public void Insert(User user, int responsible_user) {
+    public void Insert(User user) {
         String query = "INSERT INTO " + table_name +
                 "(" +
                 username + "," +
@@ -107,16 +103,15 @@ public class UserDaoImpl implements UserDao{
                 nomor_ktp + "," +
                 nomor_telepon + "," +
                 alamat + "," +
-                id_resto + "," +
-                responsible_user_id +
-                ")" + " VALUES (?,?,TRUE,?,?,?,?,?,?)";
+                id_resto +
+                ")" + " VALUES (?,?,TRUE,?,?,?,?,?)";
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         try{
             jdbcTemplate.update(query, new Object[]{
                     user.getUsername(), hashedPassword, user.getNama_lengkap(),
                     user.getNomor_ktp(), user.getNomor_telepon(), user.getAlamat(),
-                    user.getId_resto(), responsible_user
+                    user.getId_resto()
             });
         } catch (Exception ex){
             System.out.println("Gagal insert user : " + ex.toString());

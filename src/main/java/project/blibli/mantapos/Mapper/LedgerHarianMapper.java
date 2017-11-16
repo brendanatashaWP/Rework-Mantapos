@@ -12,7 +12,7 @@ public class LedgerHarianMapper implements RowMapper<Ledger> {
         Ledger ledger = new Ledger();
         ledger.setKeperluan(resultSet.getString("keperluan"));
         ledger.setTipe(resultSet.getString("tipe"));
-        ledger.setBiaya(resultSet.getInt("biaya"));
+        ledger.setBiaya(resultSet.getDouble("biaya"));
         ledger.setWaktu(resultSet.getString("waktu"));
         return ledger;
     }

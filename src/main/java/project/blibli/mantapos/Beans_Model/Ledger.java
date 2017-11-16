@@ -1,7 +1,8 @@
 package project.blibli.mantapos.Beans_Model;
 
 public class Ledger {
-    private int id, week, month, year, biaya, id_resto;
+    private int id, week, month, year, id_resto;
+    private double biaya;
     private String waktu, keperluan, tipe;
 
     public int getId() {
@@ -60,11 +61,11 @@ public class Ledger {
         this.year = year;
     }
 
-    public int getBiaya() {
+    public double getBiaya() {
         return biaya;
     }
 
-    public void setBiaya(int biaya) {
+    public void setBiaya(double biaya) {
         this.biaya = biaya;
     }
 

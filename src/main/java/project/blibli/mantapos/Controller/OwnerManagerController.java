@@ -68,7 +68,6 @@ public class OwnerManagerController {
         mav.addObject("userList", userList);
         mav.addObject("role", role);
         return mav;
-//        return new ModelAndView("manager-cashier", "userList", userList);
     }
     @GetMapping(value = "/range", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView ledgerChooseRangeHtml(Authentication authentication){
@@ -96,8 +95,7 @@ public class OwnerManagerController {
                                          @ModelAttribute("saldoAwal") SaldoAwal saldoAwal){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
-        saldoDao.AddSaldoAwal(id_resto, saldoAwal.getSaldo_awal(), user_id);
+        saldoDao.AddSaldoAwal(id_resto, saldoAwal.getSaldo_awal());
         return new ModelAndView("redirect:/saldo");
     }
     @PostMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
@@ -106,16 +104,16 @@ public class OwnerManagerController {
                                     BindingResult bindingResult){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
         if(bindingResult.hasErrors()){
             return new ModelAndView("owner-manager/menu");
         } else{
             try{
-                MultipartFile multipartFile = menu.getMultipartFile();
-                String filename = multipartFile.getOriginalFilename();
+//                MultipartFile multipartFile = menu.getMultipartFile();
+                String filename = String.valueOf(menuDao.getLastId(id_resto) + 1) + ".jpg";
+//                String filename = multipartFile.getOriginalFilename();
                 FileCopyUtils.copy(menu.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename));
                 menu.setLokasi_gambar_menu("/images/" + filename);
-                menuDao.Insert(id_resto, menu, user_id);
+                menuDao.Insert(id_resto, menu);
             } catch (Exception ex){
                 System.out.println("Error add menu : " + ex.toString());
             }
@@ -127,14 +125,13 @@ public class OwnerManagerController {
                                     Authentication authentication){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
         if(authentication.getAuthorities().toString().equals("[manager]")){
             user.setRole("cashier");
         } else if(authentication.getAuthorities().toString().equals("[owner]")){
             user.setRole(user.getRole());
         }
         user.setId_resto(id_resto);
-        userDao.Insert(user, user_id);
+        userDao.Insert(user);
         return new ModelAndView("redirect:/employee");
     }
     @PostMapping(value = "/outcome-post", produces = MediaType.TEXT_HTML_VALUE)
@@ -143,7 +140,6 @@ public class OwnerManagerController {
                                         Authentication authentication){
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        int user_id = userDao.GetUserIdBerdasarkanUsername(username);
         String[] dateSplit = ledger.getWaktu().split("-");
         int tanggal = Integer.parseInt(dateSplit[2]);
         int week = WeekGenerator.GetWeek(tanggal); ledger.setWeek(week);
@@ -151,7 +147,7 @@ public class OwnerManagerController {
         int year = Integer.parseInt(dateSplit[0]); ledger.setYear(year);
         ledger.setTipe("kredit");
         ledger.setKeperluan(ledger.getKeperluan() + "(" + qty + ")");
-        ledgerDao.Insert(ledger, id_resto, user_id);
+        ledgerDao.Insert(ledger, id_resto);
         return new ModelAndView("redirect:/outcome");
     }
     @PostMapping(value = "/ledger")
@@ -164,7 +160,7 @@ public class OwnerManagerController {
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
         List<Ledger> ledgerList = new ArrayList<>();
-        int saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
+        double saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
         String skala_ledger=""; //skala ledger bisa harian, mingguan, bulanan, atau tahunan
         if(skala.equals("harian") || skala.equals("mingguan")){ //harian atau mingguan
             total_kredit = ledgerDao.GetTotalKreditBulanan(id_resto, month, year);

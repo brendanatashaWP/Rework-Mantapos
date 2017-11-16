@@ -8,7 +8,7 @@ public interface UserDao {
     void CreateRole();
     void CreateTableUser();
     void CreateTableRole();
-    void Insert(User user, int responsible_user);
+    void Insert(User user);
     List<User> getAllUser(int id_restoo, String role);
     int GetUserIdBerdasarkanUsername(String username);
     void DeleteUser(int id);

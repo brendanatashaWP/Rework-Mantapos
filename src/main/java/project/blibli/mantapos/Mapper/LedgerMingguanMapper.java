@@ -12,7 +12,7 @@ public class LedgerMingguanMapper implements RowMapper<Ledger> {
         Ledger ledger = new Ledger();
         ledger.setWeek(resultSet.getInt("week"));
         ledger.setTipe(resultSet.getString("tipe"));
-        ledger.setBiaya(resultSet.getInt("sum"));
+        ledger.setBiaya(resultSet.getDouble("sum"));
         return ledger;
     }
 }

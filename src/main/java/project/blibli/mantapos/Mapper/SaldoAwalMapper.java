@@ -13,7 +13,7 @@ public class SaldoAwalMapper implements RowMapper<SaldoAwal> {
         saldoAwal.setId_resto(resultSet.getInt("id_resto"));
         saldoAwal.setMonth(resultSet.getInt("month"));
         saldoAwal.setYear(resultSet.getInt("year"));
-        saldoAwal.setSaldo_awal(resultSet.getInt("saldo_awal"));
+        saldoAwal.setSaldo_awal(resultSet.getDouble("saldo_awal"));
         return saldoAwal;
     }
 }
