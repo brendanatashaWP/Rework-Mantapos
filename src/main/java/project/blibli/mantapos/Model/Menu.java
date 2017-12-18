@@ -8,13 +8,9 @@ import javax.validation.constraints.NotNull;
 
 public class Menu {
     private int id;
-    @NotBlank
     private String nama_menu;
     private String lokasi_gambar_menu;
-    @NotBlank
     private String kategori_menu;
-    @NotNull
-    @Min(0)
     private double harga_menu;
     private MultipartFile multipartFile;
 

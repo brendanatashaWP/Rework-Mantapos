@@ -13,6 +13,7 @@ import project.blibli.mantapos.WeekGenerator;
 
 import javax.validation.Valid;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +97,7 @@ public class OwnerManagerController {
         return new ModelAndView("redirect:/saldo");
     }
     @PostMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView addMenuJson(@ModelAttribute("menu") @Valid Menu menu,
+    public ModelAndView addMenuJson(@ModelAttribute("menu") Menu menu,
                                     Authentication authentication,
                                     BindingResult bindingResult){
         String username = authentication.getName();
@@ -105,9 +106,7 @@ public class OwnerManagerController {
             return new ModelAndView("owner-manager/menu");
         } else{
             try{
-//                MultipartFile multipartFile = menu.getMultipartFile();
                 String filename = String.valueOf(menuDao.getLastId(id_resto) + 1) + ".jpg";
-//                String filename = multipartFile.getOriginalFilename();
                 FileCopyUtils.copy(menu.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename));
                 menu.setLokasi_gambar_menu("/images/" + filename);
                 menuDao.Insert(id_resto, menu);
@@ -237,7 +236,18 @@ public class OwnerManagerController {
         ModelAndView mav = new ModelAndView();
         int id_resto = restoranDao.GetRestoranId(authentication.getName());
         //UPDATE KE DATABASE DISINI
-        menuDao.UpdateMenu(id_resto, menu);
+        try {
+            if(!menu.getMultipartFile().isEmpty()){ //user upload foto baru, masih salah
+                String filename = String.valueOf(menu.getId() + 1) + ".jpg";
+                FileCopyUtils.copy(menu.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename));
+                menu.setLokasi_gambar_menu("/images/" + filename);
+            } else{
+                menu.setLokasi_gambar_menu(menu.getLokasi_gambar_menu());
+            }
+            menuDao.UpdateMenu(id_resto, menu);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mav.setViewName("redirect:/menu");
         return mav;
     }

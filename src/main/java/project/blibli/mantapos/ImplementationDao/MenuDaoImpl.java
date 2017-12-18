@@ -112,10 +112,10 @@ public class MenuDaoImpl implements MenuDao {
 
     @Override
     public void UpdateMenu(int id_restoo, Menu menu) {
-        String query = "UPDATE " + table_name + " SET " + nama_menu + "=?, " + harga_menu + "=?, " + kategori_menu + "=?" +
-                "WHERE " + id + "=? AND " + id_resto + "=?";
+        String query = "UPDATE " + table_name + " SET " + nama_menu + "=?, " + harga_menu + "=?, " + kategori_menu + "=?, " + lokasi_gambar_menu + "=?" +
+                " WHERE " + id + "=? AND " + id_resto + "=?";
         jdbcTemplate.update(query, new Object[] {
-                menu.getNama_menu(), menu.getHarga_menu(), menu.getKategori_menu(), menu.getId(), id_restoo
+                menu.getNama_menu(), menu.getHarga_menu(), menu.getKategori_menu(), menu.getLokasi_gambar_menu(), menu.getId(), id_restoo
         });
     }
 }
