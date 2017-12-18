@@ -1,4 +1,4 @@
-package project.blibli.mantapos.Beans_Model;
+package project.blibli.mantapos.Model;
 
 public class SaldoAwal {
     private int id_resto, month, year;

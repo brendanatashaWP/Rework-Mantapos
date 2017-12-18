@@ -2,6 +2,42 @@ body{
     background: whitesmoke;
 }
 
+.box {
+    position: relative;
+    border-radius: 3px;
+    background: #ffffff;
+    border-top: 3px solid #ce0a48;
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.box-header {
+    color: #444;
+    display: block;
+    padding: 10px;
+    position: relative;
+}
+.box-header.with-border {
+    border-bottom: 1px solid #f4f4f4;
+}
+.box-body {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    padding: 10px;
+}
+.box-footer {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top: 1px solid #f4f4f4;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
 .loginForm{
     padding: 100px;
 }
@@ -165,4 +201,12 @@ h5#custNameReceipt, h5#priceTotalReceipt, h5#CashReceipt, h5#ChangeReceipt{
 
 .topModal{
     font-size: 30pt;
+}
+
+nav li a {
+    color: white;
+}
+nav .navbar-nav li a:hover, nav .navbar-nav li a:focus{
+    color: whitesmoke;
+    background-color: #920733;
 }

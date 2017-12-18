@@ -1,29 +1,18 @@
-package project.blibli.mantapos.Beans_Model;
+package project.blibli.mantapos.Model;
 
-import javax.validation.constraints.NotNull;
-
-public class Restoran {
+public class User {
     private int id;
-    private String nama_resto, lokasi_resto;
-    private String username, password;
+    private String username, password, role;
     private String nama_lengkap, nomor_ktp, nomor_telepon, alamat;
-    private int id_user;
+    private int id_resto;
     private boolean enabled;
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public int getId_user() {
-        return id_user;
-    }
-
-    public void setId_user(int id_user) {
-        this.id_user = id_user;
     }
 
     public int getId() {
@@ -32,22 +21,6 @@ public class Restoran {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getNama_resto() {
-        return nama_resto;
-    }
-
-    public void setNama_resto(String nama_resto) {
-        this.nama_resto = nama_resto;
-    }
-
-    public String getLokasi_resto() {
-        return lokasi_resto;
-    }
-
-    public void setLokasi_resto(String lokasi_resto) {
-        this.lokasi_resto = lokasi_resto;
     }
 
     public String getUsername() {
@@ -64,6 +37,14 @@ public class Restoran {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getNama_lengkap() {
@@ -96,5 +77,13 @@ public class Restoran {
 
     public void setAlamat(String alamat) {
         this.alamat = alamat;
+    }
+
+    public int getId_resto() {
+        return id_resto;
+    }
+
+    public void setId_resto(int id_resto) {
+        this.id_resto = id_resto;
     }
 }

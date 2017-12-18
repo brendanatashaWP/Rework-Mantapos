@@ -4,9 +4,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import project.blibli.mantapos.Beans_Model.Ledger;
-import project.blibli.mantapos.Beans_Model.Menu;
-import project.blibli.mantapos.Beans_Model.Restoran;
+import project.blibli.mantapos.Model.Ledger;
+import project.blibli.mantapos.Model.Menu;
+import project.blibli.mantapos.Model.Restoran;
 import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.WeekGenerator;
 

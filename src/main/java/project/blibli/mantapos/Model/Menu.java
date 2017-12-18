@@ -1,4 +1,4 @@
-package project.blibli.mantapos.Beans_Model;
+package project.blibli.mantapos.Model;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;

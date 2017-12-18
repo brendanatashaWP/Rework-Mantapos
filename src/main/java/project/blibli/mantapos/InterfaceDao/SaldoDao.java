@@ -1,6 +1,6 @@
 package project.blibli.mantapos.InterfaceDao;
 
-import project.blibli.mantapos.Beans_Model.SaldoAwal;
+import project.blibli.mantapos.Model.SaldoAwal;
 
 import java.util.List;
 

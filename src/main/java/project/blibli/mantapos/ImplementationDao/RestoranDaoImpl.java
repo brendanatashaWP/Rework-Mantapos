@@ -1,7 +1,7 @@
 package project.blibli.mantapos.ImplementationDao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import project.blibli.mantapos.Beans_Model.Restoran;
+import project.blibli.mantapos.Model.Restoran;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.RestoranDao;
 import project.blibli.mantapos.Mapper.RestaurantMapper;

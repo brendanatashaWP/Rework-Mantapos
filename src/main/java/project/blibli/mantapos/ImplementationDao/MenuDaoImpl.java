@@ -1,14 +1,13 @@
 package project.blibli.mantapos.ImplementationDao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import project.blibli.mantapos.Beans_Model.Menu;
+import project.blibli.mantapos.Model.Menu;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.MenuDao;
 import project.blibli.mantapos.Mapper.MenuMapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class MenuDaoImpl implements MenuDao {
 
@@ -113,6 +112,10 @@ public class MenuDaoImpl implements MenuDao {
 
     @Override
     public void UpdateMenu(int id_restoo, Menu menu) {
-
+        String query = "UPDATE " + table_name + " SET " + nama_menu + "=?, " + harga_menu + "=?, " + kategori_menu + "=?" +
+                "WHERE " + id + "=? AND " + id_resto + "=?";
+        jdbcTemplate.update(query, new Object[] {
+                menu.getNama_menu(), menu.getHarga_menu(), menu.getKategori_menu(), menu.getId(), id_restoo
+        });
     }
 }

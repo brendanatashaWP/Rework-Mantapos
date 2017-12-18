@@ -5,17 +5,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import project.blibli.mantapos.Beans_Model.*;
+import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.MonthNameGenerator;
 import project.blibli.mantapos.WeekGenerator;
 
 import javax.validation.Valid;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -235,10 +232,34 @@ public class OwnerManagerController {
         return mav;
     }
     @PostMapping(value = "/edit-menu", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView editMenuPostHtml(@ModelAttribute("menu") Menu menu){
+    public ModelAndView editMenuPostHtml(@ModelAttribute("menu") Menu menu,
+                                         Authentication authentication){
         ModelAndView mav = new ModelAndView();
+        int id_resto = restoranDao.GetRestoranId(authentication.getName());
         //UPDATE KE DATABASE DISINI
+        menuDao.UpdateMenu(id_resto, menu);
         mav.setViewName("redirect:/menu");
+        return mav;
+    }
+    @GetMapping(value = "/edit/user/{id}")
+    public ModelAndView editUserHtml(@PathVariable("id") int id,
+                                     Authentication authentication){
+        int id_resto = restoranDao.GetRestoranId(authentication.getName());
+        List<User> userList = userDao.GetUserById(id_resto, id);
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("owner-manager/edit-user");
+        String role = authentication.getAuthorities().toString();
+        mav.addObject("role", role);
+        mav.addObject("userList", userList);
+        return mav;
+    }
+    @PostMapping(value = "/edit-user")
+    public ModelAndView editUserPostHtml(@ModelAttribute("user") User user,
+                                         Authentication authentication){
+        ModelAndView mav = new ModelAndView();
+        int id_resto = restoranDao.GetRestoranId(authentication.getName());
+        userDao.UpdateUser(id_resto, user);
+        mav.setViewName("redirect:/employee");
         return mav;
     }
 }

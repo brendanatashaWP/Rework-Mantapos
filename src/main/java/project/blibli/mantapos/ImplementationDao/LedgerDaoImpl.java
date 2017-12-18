@@ -1,7 +1,7 @@
 package project.blibli.mantapos.ImplementationDao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import project.blibli.mantapos.Beans_Model.Ledger;
+import project.blibli.mantapos.Model.Ledger;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.LedgerDao;
 import project.blibli.mantapos.Mapper.KreditMapper;
@@ -9,7 +9,6 @@ import project.blibli.mantapos.Mapper.LedgerBulananMapper;
 import project.blibli.mantapos.Mapper.LedgerHarianMapper;
 import project.blibli.mantapos.Mapper.LedgerMingguanMapper;
 import project.blibli.mantapos.MonthNameGenerator;
-import project.blibli.mantapos.WeekGenerator;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

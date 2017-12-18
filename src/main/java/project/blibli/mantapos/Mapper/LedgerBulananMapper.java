@@ -1,7 +1,7 @@
 package project.blibli.mantapos.Mapper;
 
 import org.springframework.jdbc.core.RowMapper;
-import project.blibli.mantapos.Beans_Model.Ledger;
+import project.blibli.mantapos.Model.Ledger;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

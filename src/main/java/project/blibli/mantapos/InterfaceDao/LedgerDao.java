@@ -1,6 +1,6 @@
 package project.blibli.mantapos.InterfaceDao;
 
-import project.blibli.mantapos.Beans_Model.Ledger;
+import project.blibli.mantapos.Model.Ledger;
 
 import java.util.List;
 

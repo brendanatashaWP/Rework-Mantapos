@@ -1,6 +1,6 @@
 package project.blibli.mantapos.InterfaceDao;
 
-import project.blibli.mantapos.Beans_Model.Restoran;
+import project.blibli.mantapos.Model.Restoran;
 
 import java.util.List;
 

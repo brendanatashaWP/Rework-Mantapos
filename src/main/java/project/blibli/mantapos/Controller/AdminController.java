@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import project.blibli.mantapos.Beans_Model.Restoran;
-import project.blibli.mantapos.Beans_Model.User;
+import project.blibli.mantapos.Model.Restoran;
+import project.blibli.mantapos.Model.User;
 import project.blibli.mantapos.ImplementationDao.RestoranDaoImpl;
 import project.blibli.mantapos.ImplementationDao.UserDaoImpl;
 

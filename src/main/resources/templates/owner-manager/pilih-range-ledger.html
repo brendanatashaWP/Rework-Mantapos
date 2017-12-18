@@ -8,39 +8,82 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
 <body>
-    <div th:replace="fragments/navbar-top-manager :: header"/>
-    <div th:replace="fragments/navbar-side-manager :: sidebar"/>
-        <div class="col-md-10">
-            <h3>Selamat datang di halaman Buku Besar!</h3>
-            <h4>Pilih jangka waktunya</h4>
-            <hr/>
+<nav class="navbar navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">mantapos</a>
         </div>
-        <div class="col-md-10">
-            <form action="/ledger" method="post">
-                <div class="row">
-                    <input checked="checked" type="radio" name="Skala" value="harian" th:onclick="'javascript:chooseLedgerRange(\'0\');'"/>Harian<br/>
-                    <input type="radio" name="Skala" value="mingguan" th:onclick="'javascript:chooseLedgerRange(\'0\');'"/>Mingguan<br/>
-                    <input type="radio" name="Skala" value="bulanan" th:onclick="'javascript:chooseLedgerRange(\'1\');'"/>Bulanan<br/>
-                    <input type="radio" name="Skala" value="tahunan" th:onclick="'javascript:chooseLedgerRange(\'2\');'"/>Tahunan<br/>
-                </div>
-                <select name="month" id="monthselector">
-                    <th:block th:each="item : ${monthAndYearList}">
-                        <option th:value="${item.month}" th:text="${item.keperluan}"/>
-                    </th:block>
-                </select>
-                <select name="year" id="yearselector">
-                    <th:block th:each="item : ${monthAndYearList}">
-                        <option th:value="${item.year}" th:text="${item.year}"/>
-                    </th:block>
-                </select>
-                <div>
-                    <button type="submit">OK</button>
-                </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/menu">Menu</a></li>
+            <li><a href="#">Discount</a></li>
+            <li><a href="/employee">Employee</a></li>
+            <li><a href="/saldo">Saldo</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Keuangan
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/outcome">Outcome</a></li>
+                    <li><a href="/range">General Ledger</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <form action="/logout" method="post" id="logoutForm">
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}" />
+                <li><a onclick="document.getElementById('logoutForm').submit()" href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
             </form>
-        </div>
+        </ul>
+    </div>
+</nav>
+<div class="container" style="margin-top: 50px;">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Pilih jangka waktu
+                <small>Jangka waktu melihat pemasukkan</small>
+            </h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">EMPLOYEE</h3>
+                </div>
+                <div class="box-body">
+                    <form action="/ledger" method="post" class="form-group">
+                            <input class="form-control" checked="checked" type="radio" name="Skala" value="harian" th:onclick="'javascript:chooseLedgerRange(\'0\');'"/>Harian<br/>
+                            <input class="form-control" type="radio" name="Skala" value="mingguan" th:onclick="'javascript:chooseLedgerRange(\'0\');'"/>Mingguan<br/>
+                            <input class="form-control" type="radio" name="Skala" value="bulanan" th:onclick="'javascript:chooseLedgerRange(\'1\');'"/>Bulanan<br/>
+                            <input class="form-control" type="radio" name="Skala" value="tahunan" th:onclick="'javascript:chooseLedgerRange(\'2\');'"/>Tahunan<br/>
+                        <select name="month" id="monthselector" class="form-control">
+                            <th:block th:each="item : ${monthAndYearList}">
+                                <option th:value="${item.month}" th:text="${item.keperluan}"/>
+                            </th:block>
+                        </select>
+                        <select name="year" id="yearselector" class="form-control">
+                            <th:block th:each="item : ${monthAndYearList}">
+                                <option th:value="${item.year}" th:text="${item.year}"/>
+                            </th:block>
+                        </select>
+                            <button class="form-control btn btn-primary" type="submit">OK</button>
+                    </form>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+        </section>
+
+    </div>
+    <!-- /.content -->
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script th:src="@{/js/order.js}"></script>
 </body>
 </html>

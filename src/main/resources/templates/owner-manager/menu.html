@@ -8,64 +8,138 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
 <body>
-<div th:replace="fragments/navbar-top-manager :: header"/>
-<div th:replace="fragments/navbar-side-manager :: sidebar"/>
-    <div class="container">
-        <div class="col-md-6">
-            <h3>Menu</h3>
-            <hr/>
+<nav class="navbar navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">mantapos</a>
         </div>
-        <div class="col-md-3">
-
-        </div>
-        <div class="col-md-6 tablemenu">
-            <h4>Menu List</h4>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Price Menu</th>
-                    <th>Photo</th>
-                    <th>Category</th>
-                    <th>Edit Menu</th>
-                    <th>Delete Menu</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <th:block th:each="menu:${menuList}">
-                        <tr>
-                            <td th:text="${menu.nama_menu}"/>
-                            <td th:text="${menu.harga_menu}"/>
-                            <td><a target="_blank" th:href="@{${menu.lokasi_gambar_menu}}">Photo</a></td>
-                            <td th:text="${menu.kategori_menu}"/>
-                            <td><a th:href="@{/edit/menu/{id}(id=${menu.id})}">Edit</a></td>
-                            <td><a th:href="@{/delete/menu/{id}(id=${menu.id})}">Delete</a></td>
-                        </tr>
-                    </th:block>
-                </tbody>
-            </table>
-            <hr/>
-        </div>
-
-        <div class="col-md-2 tablemenu">
-            <h4>Entry Menu</h4>
-            <form th:object="${menu}" action="/menu" method="post" enctype="multipart/form-data">
-                Menu Name:<br/>
-                <input type="text" th:field="*{nama_menu}" id="input_nama_menu"/><br/>
-                <div th:if="${#fields.hasErrors('nama_menu')}" th:errors="*{nama_menu}"><h6>Error nama</h6></div>
-                Menu Price:<br/>
-                <input type="number" th:field="*{harga_menu}" id="input_price_menu"/><br/>
-                <div th:if="${#fields.hasErrors('harga_menu')}" th:errors="*{harga_menu}"><h6>Error harga menu</h6></div>
-                Category:<br/>
-                <select th:field="*{kategori_menu}" class="form-control">
-                    <option value="food">Food</option>
-                    <option value="drink">Drink</option>
-                </select>
-                Upload Photo:<br/>
-                <input type="file" th:field="*{multipartFile}" id="input_photo_menu"/><br/>
-                <button type="submit">OK</button>
+        <ul class="nav navbar-nav">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/menu">Menu</a></li>
+            <li><a href="#">Discount</a></li>
+            <li><a href="/employee">Employee</a></li>
+            <li><a href="/saldo">Saldo</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Keuangan
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/outcome">Outcome</a></li>
+                    <li><a href="/range">General Ledger</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <form action="/logout" method="post" id="logoutForm">
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}" />
+                <li><a onclick="document.getElementById('logoutForm').submit()" href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
             </form>
-        </div>
+        </ul>
     </div>
+</nav>
+<!--<div th:replace="fragments/navbar-top-manager :: header"/>-->
+<!--<div th:replace="fragments/navbar-side-manager :: sidebar"/>-->
+    <div class="container" style="margin-top: 50px;">
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Daftar Menu
+                    <small>Daftar menu-menu yang ada</small>
+                </h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <!-- Default box -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Menu</h3>
+                    </div>
+                    <div class="box-body">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price Menu</th>
+                                    <th>Photo</th>
+                                    <th>Category</th>
+                                    <th>Edit Menu</th>
+                                    <th>Delete Menu</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <th:block th:each="menu:${menuList}">
+                                    <tr>
+                                        <td th:text="${menu.nama_menu}"/>
+                                        <td th:text="${menu.harga_menu}"/>
+                                        <td><a target="_blank" th:href="@{${menu.lokasi_gambar_menu}}">Photo</a></td>
+                                        <td th:text="${menu.kategori_menu}"/>
+                                        <td><a th:href="@{/edit/menu/{id}(id=${menu.id})}">Edit</a></td>
+                                        <td><a th:href="@{/delete/menu/{id}(id=${menu.id})}">Delete</a></td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
+            </section>
+            <!-- /.content -->
+            <!-- Main content -->
+            <section class="content">
+
+                <!-- Default box -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Tambah Menu</h3>
+                    </div>
+                    <div class="box-body">
+                        <form th:object="${menu}" action="/menu" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                Menu Name:<br/>
+                                <div th:if="${#fields.hasErrors('nama_menu')}" th:errors="*{nama_menu}"><h6>Error nama</h6></div>
+                                <input class="form-control" type="text" th:field="*{nama_menu}" id="input_nama_menu"/>
+                            </div>
+                            <div class="form-group">
+                                Menu Price:<br/>
+                                <div th:if="${#fields.hasErrors('harga_menu')}" th:errors="*{harga_menu}"><h6>Error harga menu</h6></div>
+                                <input class="form-control" type="number" th:field="*{harga_menu}" id="input_price_menu"/>
+                            </div>
+                            <div class="form-group">
+                                Category:<br/>
+                                <select th:field="*{kategori_menu}" class="form-control">
+                                    <option value="food">Food</option>
+                                    <option value="drink">Drink</option>
+                                </select>
+                            </div>
+                            Upload Photo:<br/>
+                            <input type="file" th:field="*{multipartFile}" id="input_photo_menu"/><br/>
+                            <button class="form-control btn btn-primary" type="submit">OK</button>
+                        </form>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
+            </section>
+            <!--content-->
+        </div>
+        <!-- /.content-wrapper -->
+        <!--<div class="row">-->
+            <!--<div class="col-md-2">-->
+
+            <!--</div>-->
+            <!--<div class="col-md-6">-->
+                <!--<h4>Entry Menu</h4>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

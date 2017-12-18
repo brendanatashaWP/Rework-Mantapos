@@ -2,8 +2,8 @@ package project.blibli.mantapos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import project.blibli.mantapos.Beans_Model.Restoran;
-import project.blibli.mantapos.Beans_Model.User;
+import project.blibli.mantapos.Model.Restoran;
+import project.blibli.mantapos.Model.User;
 import project.blibli.mantapos.ImplementationDao.*;
 
 @SpringBootApplication

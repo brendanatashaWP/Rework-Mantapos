@@ -1,4 +1,4 @@
-package project.blibli.mantapos.Beans_Model;
+package project.blibli.mantapos.Model;
 
 public class Ledger {
     private int id, week, month, year, id_resto;

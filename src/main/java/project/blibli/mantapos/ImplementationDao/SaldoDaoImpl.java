@@ -1,7 +1,7 @@
 package project.blibli.mantapos.ImplementationDao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import project.blibli.mantapos.Beans_Model.SaldoAwal;
+import project.blibli.mantapos.Model.SaldoAwal;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.SaldoDao;
 import project.blibli.mantapos.Mapper.SaldoAwalMapper;

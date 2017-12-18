@@ -2,7 +2,7 @@ package project.blibli.mantapos.ImplementationDao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import project.blibli.mantapos.Beans_Model.User;
+import project.blibli.mantapos.Model.User;
 import project.blibli.mantapos.Config.DataSourceConfig;
 import project.blibli.mantapos.InterfaceDao.UserDao;
 import project.blibli.mantapos.Mapper.UserMapper;
@@ -145,7 +145,7 @@ public class UserDaoImpl implements UserDao{
             } catch (Exception ex){
                 System.out.println("Gagal get all user : " + ex.toString());
             }
-        } else{
+        } else {
             String query = "SELECT *,user_roles.role FROM " +
                     table_name + "," + table_role +
                     " WHERE " + id_resto + "=?" +
@@ -189,5 +189,51 @@ public class UserDaoImpl implements UserDao{
     public void ActivateUser(int idd) {
         String query = "UPDATE " + table_name + " SET " + enabled + "=? WHERE " + id + "=?";
         jdbcTemplate.update(query, new Object[] {true, idd});
+    }
+
+    @Override
+    public List<User> GetUserById(int id_restoo, int userId) {
+        List<User> userList = new ArrayList<>();
+            String query = "SELECT *, user_roles.role FROM " + table_name + "," + table_role +
+                    " WHERE " + id_resto + "=?" + " AND users.id=?" + " AND user_roles.id=users.id";
+            try{
+                userList = jdbcTemplate.query(query, new Object[] {id_restoo, userId}, new UserMapper());
+            } catch (Exception ex){
+                System.out.println("Gagal get all user : " + ex.toString());
+            }
+        return userList;
+    }
+
+    @Override
+    public void UpdateUser(int id_restoo, User user) {
+        String query1, query2;
+        if(user.getPassword().equals("")){
+            query1 = "UPDATE " + table_name + " SET " + nama_lengkap + "=?" +
+                    "," + username + "=?" +
+                    "," + nomor_telepon + "=?" +
+                    "," + nomor_ktp + "=?" +
+                    "," + alamat + "=?" +
+            " WHERE " + id + "=? AND " + id_resto + "=?";
+            jdbcTemplate.update(query1, new Object[] {
+                    user.getNama_lengkap(), user.getUsername(), user.getNomor_telepon(), user.getNomor_ktp(), user.getAlamat(),
+                    user.getId(), id_restoo
+            });
+        } else if(!user.getPassword().equals("")){
+            query1 = "UPDATE " + table_name + " SET " + nama_lengkap + "=?" +
+                    "," + username + "=?" +
+                    "," + nomor_telepon + "=?" +
+                    "," + nomor_ktp + "=?" +
+                    "," + alamat + "=?" +
+                    "," + password + "=?" +
+                    " WHERE " + id + "=? AND " + id_resto + "=?";
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            String hashed = bCryptPasswordEncoder.encode(user.getPassword());
+            jdbcTemplate.update(query1, new Object[] {
+                    user.getNama_lengkap(), user.getUsername(), user.getNomor_telepon(), user.getNomor_ktp(), user.getAlamat(), hashed,
+                    user.getId(), id_restoo
+            });
+        }
+        query2 = "UPDATE " + table_role + " SET " + username + "=?, " + role + "=?::" + role_type + " WHERE " + id + "=?";
+        jdbcTemplate.update(query2, new Object[] {user.getUsername(), user.getRole(), user.getId()});
     }
 }

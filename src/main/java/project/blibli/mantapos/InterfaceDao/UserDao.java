@@ -1,6 +1,6 @@
 package project.blibli.mantapos.InterfaceDao;
 
-import project.blibli.mantapos.Beans_Model.User;
+import project.blibli.mantapos.Model.User;
 
 import java.util.List;
 
@@ -14,4 +14,6 @@ public interface UserDao {
     void DeleteUser(int id);
     void DeleteUserAndDependencies(int id_restoo);
     void ActivateUser(int id);
+    List<User> GetUserById(int id_restoo, int userId);
+    void UpdateUser(int id_restoo, User user);
 }

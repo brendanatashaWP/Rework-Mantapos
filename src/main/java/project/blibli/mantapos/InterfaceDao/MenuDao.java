@@ -1,6 +1,6 @@
 package project.blibli.mantapos.InterfaceDao;
 
-import project.blibli.mantapos.Beans_Model.Menu;
+import project.blibli.mantapos.Model.Menu;
 
 import java.util.List;
 
