@@ -8,124 +8,182 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
 <body>
-<div th:replace="fragments/navbar-top-manager :: header"/>
-<div th:replace="fragments/navbar-side-manager :: sidebar"/>
-        <div class="col-md-10">
-            <h3 class="judul">Buku Besar</h3>
-            <h4 th:text="${skala_ledger}"/>
-            <hr/>
+<nav class="navbar navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">mantapos</a>
         </div>
-        <div class="col-md-3">
+        <ul class="nav navbar-nav">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/menu">Menu</a></li>
+            <li><a href="#">Discount</a></li>
+            <li><a href="/employee">Employee</a></li>
+            <li><a href="/saldo">Saldo</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Keuangan
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/outcome">Outcome</a></li>
+                    <li><a href="/range">General Ledger</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <form action="/logout" method="post" id="logoutForm">
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}" />
+                <li><a onclick="document.getElementById('logoutForm').submit()" href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+            </form>
+        </ul>
+    </div>
+</nav>
+<div class="container" style="margin-top: 50px;">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Buku Besar
+                <small th:text="${skala_ledger}"/>
+            </h1>
+        </section>
 
-        </div>
-        <div class="col-md-10 tablemenu">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>KAS</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <div th:if="${skala_ledger == 'HARIAN'}">
-                        <th>Tanggal,Jam</th>
-                    </div>
-                    <div th:if="${skala_ledger == 'MINGGUAN'}">
-                        <th>Minggu ke-</th>
-                    </div>
-                    <div th:if="${skala_ledger == 'BULANAN'}">
-                        <th>Bulan ke-</th>
-                    </div>
-                    <th>Keperluan</th>
-                    <th></th>
-                    <th>Debit</th>
-                    <th>Kredit</th>
-                </tr>
-                </thead>
-                <tbody>
-                <th:block th:each="ledger : ${ledgerList}">
-                    <div th:if="${skala_ledger == 'HARIAN'}">
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Buku Besar</h3>
+                </div>
+                <div class="box-body">
+                    <table class="table table-hover">
+                        <thead>
                         <tr>
-                            <td th:text="${ledger.waktu}"/>
-                            <div th:if="${ledger.tipe == 'debit'}">
-                                <td>Penjualan menu</td>
-                            </div>
-                            <div th:if="${ledger.tipe == 'kredit'}">
-                                <td th:text="${ledger.keperluan}"/>
-                            </div>
-                            <td></td>
-                            <div th:if="${ledger.tipe == 'debit'}">
-                                <td th:text="${ledger.biaya}"/>
-                                <td></td>
-                            </div>
-                            <div th:if="${ledger.tipe == 'kredit'}">
-                                <td></td>
-                                <td th:text="${ledger.biaya}"/>
-                            </div>
+                            <th>KAS</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
-                    </div>
-                    <div th:if="${skala_ledger == 'MINGGUAN'}">
                         <tr>
-                            <td th:text="${ledger.week}"/>
-                            <div th:if="${ledger.tipe == 'debit'}">
-                                <td>Pemasukkan</td>
+                            <div th:if="${skala_ledger == 'HARIAN'}">
+                                <th>Tanggal,Jam</th>
                             </div>
-                            <div th:if="${ledger.tipe == 'kredit'}">
-                                <td>Pengeluaran</td>
+                            <div th:if="${skala_ledger == 'MINGGUAN'}">
+                                <th>Minggu ke-</th>
                             </div>
-                            <td></td>
-                            <div th:if="${ledger.tipe == 'debit'}">
-                                <td th:text="${ledger.biaya}"/>
-                                <td></td>
+                            <div th:if="${skala_ledger == 'BULANAN'}">
+                                <th>Bulan ke-</th>
                             </div>
-                            <div th:if="${ledger.tipe == 'kredit'}">
-                                <td></td>
-                                <td th:text="${ledger.biaya}"/>
-                            </div>
+                            <th>Keperluan</th>
+                            <th></th>
+                            <th>Debit</th>
+                            <th>Kredit</th>
                         </tr>
-                    </div>
-                    <div th:if="${skala_ledger == 'BULANAN'}">
+                        </thead>
+                        <tbody>
+                        <th:block th:each="ledger : ${ledgerList}">
+                            <div th:if="${skala_ledger == 'HARIAN'}">
+                                <tr>
+                                    <td th:text="${ledger.waktu}"/>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td>Penjualan menu</td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td th:text="${ledger.keperluan}"/>
+                                    </div>
+                                    <td></td>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td th:text="${ledger.biaya}"/>
+                                        <td></td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td></td>
+                                        <td th:text="${ledger.biaya}"/>
+                                    </div>
+                                </tr>
+                            </div>
+                            <div th:if="${skala_ledger == 'MINGGUAN'}">
+                                <tr>
+                                    <td th:text="${ledger.week}"/>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td>Pemasukkan</td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td>Pengeluaran</td>
+                                    </div>
+                                    <td></td>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td th:text="${ledger.biaya}"/>
+                                        <td></td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td></td>
+                                        <td th:text="${ledger.biaya}"/>
+                                    </div>
+                                </tr>
+                            </div>
+                            <div th:if="${skala_ledger == 'BULANAN'}">
+                                <tr>
+                                    <td th:text="${ledger.month}"/>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td>Pemasukkan</td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td>Pengeluaran</td>
+                                    </div>
+                                    <td></td>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td th:text="${ledger.biaya}"/>
+                                        <td></td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td></td>
+                                        <td th:text="${ledger.biaya}"/>
+                                    </div>
+                                </tr>
+                            </div>
+                        </th:block>
+                        </tbody>
+                        <thead>
                         <tr>
-                            <td th:text="${ledger.month}"/>
-                            <div th:if="${ledger.tipe == 'debit'}">
-                                <td>Pemasukkan</td>
-                            </div>
-                            <div th:if="${ledger.tipe == 'kredit'}">
-                                <td>Pengeluaran</td>
-                            </div>
-                            <td></td>
-                            <div th:if="${ledger.tipe == 'debit'}">
-                                <td th:text="${ledger.biaya}"/>
-                                <td></td>
-                            </div>
-                            <div th:if="${ledger.tipe == 'kredit'}">
-                                <td></td>
-                                <td th:text="${ledger.biaya}"/>
-                            </div>
+                            <th>Saldo Awal:</th>
+                            <th th:text="${saldo_awal}"/>
+                            <th>Total:</th>
+                            <th th:text="${total_debit}"/>
+                            <th th:text="${total_kredit}"/>
                         </tr>
-                    </div>
-                </th:block>
-                </tbody>
-                <thead>
-                <tr>
-                    <th>Saldo Awal:</th>
-                    <th th:text="${saldo_awal}"/>
-                    <th>Total:</th>
-                    <th th:text="${total_debit}"/>
-                    <th th:text="${total_kredit}"/>
-                </tr>
-                <tr>
-                    <th>Saldo Akhir:</th>
-                    <th th:text="${saldo_akhir}"/>
-                    <th>Mutasi:</th>
-                    <th th:text="${mutasi}"/>
-                    <th></th>
-                </tr>
-                </thead>
-            </table>
-            <hr/>
-        </div>
+                        <tr>
+                            <th>Saldo Akhir:</th>
+                            <th th:text="${saldo_akhir}"/>
+                            <th>Mutasi:</th>
+                            <th th:text="${mutasi}"/>
+                            <th></th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+        </section>
+        <!-- /.content -->
+        <!-- Main content -->
+        <!--content-->
+    </div>
+    <!-- /.content-wrapper -->
+    <!--<div class="row">-->
+    <!--<div class="col-md-2">-->
+
+    <!--</div>-->
+    <!--<div class="col-md-6">-->
+    <!--<h4>Entry Menu</h4>-->
+    <!--</div>-->
+    <!--</div>-->
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>
