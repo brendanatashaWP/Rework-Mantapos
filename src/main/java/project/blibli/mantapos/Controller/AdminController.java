@@ -1,10 +1,7 @@
 package project.blibli.mantapos.Controller;
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.Restoran;
 import project.blibli.mantapos.Model.User;
