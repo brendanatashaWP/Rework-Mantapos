@@ -28,13 +28,13 @@
                 </ul>
             </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
+        <div class="navbar-header navbar-right">
             <form action="/logout" method="post" id="logoutForm">
                 <input type="hidden" name="${_csrf.parameterName}"
                        value="${_csrf.token}" />
-                <li><a onclick="document.getElementById('logoutForm').submit()" href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+                <a onclick="document.getElementById('logoutForm').submit()" href="#" id="#btnLogOut" class="navbar-brand"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
             </form>
-        </ul>
+        </div>
     </div>
 </nav>
     <div class="container" style="margin-top: 50px;">
