@@ -210,3 +210,7 @@ nav .navbar-nav li a:hover, nav .navbar-nav li a:focus{
     color: whitesmoke;
     background-color: #920733;
 }
+
+.glyphicon-log-out{
+    font-size:18px;
+}
