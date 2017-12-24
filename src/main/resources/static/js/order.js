@@ -208,3 +208,18 @@ function chooseLedgerRange(selector){
         yearselector.style.display = "none";
     }
 }
+
+function checkboxKirimEmailReceipt(){
+    var isChecked = document.getElementById("checkboxKirimEmailReceipt").checked;
+    var inputEmailKirimReceipt = document.getElementById("inputEmailKirimReceipt");
+    // var emailKirimReceipt = document.getElementById("emailKirimReceipt");
+    var is_kirim_email_receipt = document.getElementById("is_kirim_email_receipt");
+    if(isChecked == true){
+        inputEmailKirimReceipt.style.display = "inline";
+        is_kirim_email_receipt.value = "yes"
+        // emailKirimReceipt.value = inputEmailKirimReceipt.value;
+    } else {
+        inputEmailKirimReceipt.style.display = "none";
+        is_kirim_email_receipt.value = "no"
+    }
+}

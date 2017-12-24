@@ -1,0 +1,66 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
+</head>
+<body>
+<div class="col-md-6 col-md-offset-3" style="background-color: #e2e2e2; padding: 15px">
+	<table align="center" cellpadding="0" cellspacing="0" width="100%">
+		<tr>
+			<td bgcolor="#ce0a48" style="height: 60px; color: #ffffff; font-family: 'Rouge Script', cursive !important; font-size: 40px; padding: 10px 0 10px 10px">mantapos</td>
+		</tr>
+		<tr>
+			<td bgcolor="#ffffff" style="padding: 10px 10px 10px 10px;">
+				<table bgcolor="#ffffff" cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+						<td>Hi, <a th:text="${nama_customer}" style="font-weight: 600; color: #000000"></a></td>
+					</tr>
+					<tr>
+						<td style="font-weight: 500; font-size: 14px; padding-top: 10px">Terimakasih sudah melakukan transaksi di <a th:text="${nama_resto}"></a> </td>
+					</tr>
+					<tr>
+						<td style="padding: 30px 0 5px 0; font-weight: 500; font-size: 14px">Detail Pesanan</td>
+					</tr>
+					<tr>
+						<td th:text="${tanggal}">
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-top: 10px">
+							<table width="100%">
+								<thead align="center">
+								<tr>
+									<th>Menu</th>
+									<th>Qty</th>
+									<th>Total Price</th>
+								</tr>
+								</thead>
+								<tbody align="center">
+								<th:block th:each="menu : ${ordered_menu_list}">
+									<tr>
+										<td th:text="${menu.nama}"></td>
+										<td th:text="${menu.qty}"></td>
+										<td th:text="${menu.price}"></td>
+									</tr>
+								</th:block>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-top: 30px">
+							<table width="100%" bgcolor="#ffffff">
+								<tr valign="center">
+									<td style="font-size: 12px">TOTAL HARGA</td>
+									<td align="right" style="font-weight: 600">Rp <a style="font-weight: 600" th:text="${total_harga}"></a></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>

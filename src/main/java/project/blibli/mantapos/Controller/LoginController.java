@@ -5,20 +5,25 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import project.blibli.mantapos.Config.Mail;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 public class LoginController {
 
-    Mail mail = new Mail();
+
 
     @GetMapping(value = "/login", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView loginHtml(@RequestParam(value = "error", required = false) String error,
@@ -42,13 +47,6 @@ public class LoginController {
             mav.setViewName("redirect:/dashboard");
         else
             mav.setViewName("redirect:/restaurant");
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("mantapos@axella.online");
-        message.setTo("axella.gerald@gmail.com");
-        message.setSubject("TEST");
-        message.setText("HALLO COK");
-        mail.send().send(message);
         return mav;
     }
 

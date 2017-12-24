@@ -1,17 +1,26 @@
 package project.blibli.mantapos.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import project.blibli.mantapos.Config.Mail;
 import project.blibli.mantapos.Model.Ledger;
 import project.blibli.mantapos.Model.Menu;
+import project.blibli.mantapos.Model.OrderedMenu;
 import project.blibli.mantapos.Model.Restoran;
 import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.WeekGenerator;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,6 +31,10 @@ public class CashierController {
     MenuYangDipesanDaoImpl orderedMenuDao = new MenuYangDipesanDaoImpl();
     RestoranDaoImpl restaurantDao = new RestoranDaoImpl();
     Restoran restoran;
+
+    Mail mail = new Mail();
+    @Autowired
+    TemplateEngine templateEngine;
 
     @GetMapping(value = "/cashier", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView cashierHtml(Authentication authentication){
@@ -86,8 +99,18 @@ public class CashierController {
     public ModelAndView addOrderHtml(@ModelAttribute("order") Ledger ledger,
                                      @RequestParam(value = "array_id_order", required = false) String[] array_id_order,
                                      @RequestParam(value = "array_qty", required = false) String[] array_qty,
+                                     @RequestParam(value = "is_kirim_email_receipt", required = false) String is_kirim_email_receipt,
+                                     @RequestParam(value = "email_kirim_receipt", required = false) String email_kirim_receipt,
+                                     @RequestParam("nama_resto") String nama_resto,
+                                     @RequestParam("customer_name") String nama_customer,
                                      Authentication authentication){
         ModelAndView mav = new ModelAndView();
+
+        //Ambil username yang sedang login, untuk nantinya diambil ID restoran-nya
+        String loggedInUsername = authentication.getName();
+        restoran = restaurantDao.GetRestaurantInfo(loggedInUsername);
+        int id_resto = restoran.getId();
+
         ledger.setTipe("debit"); ledger.setKeperluan("penjualan menu");
         ledger.setWaktu(LocalDate.now().toString());
         ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth()));
@@ -99,6 +122,39 @@ public class CashierController {
             orderedMenuDao.Insert(lastOrderId, Integer.parseInt(array_id_order[i]),
                     Integer.parseInt(array_qty[i]));
         }
+
+        if(is_kirim_email_receipt.equals("yes")){
+            MimeMessage maill = mail.send().createMimeMessage();
+            try {
+                MimeMessageHelper helper = new MimeMessageHelper(maill, true);
+                Context context = new Context();
+                helper.setFrom("mantapos@axella.online");
+                helper.setTo(email_kirim_receipt);
+                helper.setSubject("RECEIPT PEMBELIAN DI " + nama_resto);
+                context.setVariable("nama_customer", nama_customer);
+                context.setVariable("nama_resto", nama_resto);
+                context.setVariable("tanggal", LocalDate.now().toString());
+                context.setVariable("total_harga", ledger.getBiaya());
+                List<OrderedMenu> ordered_menu_list = new ArrayList<>();
+                for (int i=0; i<array_id_order.length; i++){
+                    List<Menu> menuList = menuDao.getMenuById(id_resto, Integer.parseInt(array_id_order[i]));
+                    for (Menu menu:menuList
+                         ) {
+                        ordered_menu_list.add(new OrderedMenu(
+                                menu.getNama_menu(),
+                                String.valueOf(menu.getHarga_menu() * Integer.parseInt(array_qty[i])),
+                                Integer.parseInt(array_qty[i])));
+                    }
+                }
+                context.setVariable("ordered_menu_list", ordered_menu_list);
+                String body = templateEngine.process("email", context);
+                helper.setText(body, true);
+                mail.send().send(maill);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+
 //        int tanggal = LocalDateTime.now().getDayOfMonth();
 //        int week = WeekGenerator.GetWeek(tanggal);
 
