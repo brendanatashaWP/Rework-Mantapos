@@ -16,24 +16,28 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">mantapos</a>
             </div>
-            <ul class="nav navbar-nav">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Menu</a></li>
-                <li><a href="#">Discount</a></li>
-                <li><a href="#">Employee</a></li>
-                <li><a href="#">Saldo</a></li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Keuangan
-                        <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Outcome</a></li>
-                        <li><a href="#">General Ledger</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
-            </ul>
+            <!--<ul class="nav navbar-nav">-->
+                <!--<li><a href="#">Dashboard</a></li>-->
+                <!--<li><a href="#">Menu</a></li>-->
+                <!--<li><a href="#">Discount</a></li>-->
+                <!--<li><a href="#">Employee</a></li>-->
+                <!--<li><a href="#">Saldo</a></li>-->
+                <!--<li class="dropdown">-->
+                    <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">Keuangan-->
+                        <!--<span class="caret"></span></a>-->
+                    <!--<ul class="dropdown-menu">-->
+                        <!--<li><a href="#">Outcome</a></li>-->
+                        <!--<li><a href="#">General Ledger</a></li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+            <!--</ul>-->
+            <div class="navbar-header navbar-right">
+                <form action="/logout" method="post" id="logoutForm">
+                    <input type="hidden" name="${_csrf.parameterName}"
+                           value="${_csrf.token}" />
+                <a onclick="document.getElementById('logoutForm').submit()" href="#" id="#btnLogOut" class="navbar-brand"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                </form>
+            </div>
         </div>
     </nav>
     <!--<nav class="navbar" style="margin-bottom: 0px">-->
