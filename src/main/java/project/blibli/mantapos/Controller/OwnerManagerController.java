@@ -29,19 +29,53 @@ public class OwnerManagerController {
     private LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
     private SaldoDaoImpl saldoDao = new SaldoDaoImpl();
     private RestoranDaoImpl restoranDao = new RestoranDaoImpl();
-    int id_resto;
+    int id_resto, itemPerPage=5;
 
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView managerDashboardHtml(){
         return new ModelAndView("owner-manager/dashboard");
     }
-    @GetMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView menuDashboardHtml(Menu menu,
+//    @GetMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
+//    public ModelAndView menuDashboardHtml(Menu menu,
+//            Authentication authentication){
+//        ModelAndView mav = new ModelAndView();
+//        String username = authentication.getName();
+//        id_resto = restoranDao.GetRestoranId(username);
+//        List<Menu> menuList = menuDao.getAllMenu(id_resto, itemPerPage, 0);
+//        mav.setViewName("owner-manager/menu");
+//        mav.addObject("menuList", menuList);
+//        double jumlahMenu = menuDao.jumlahMenu(id_resto);
+//        System.out.println("jumlah Menu : " + jumlahMenu);
+//        double jumlahPage = Math.ceil(jumlahMenu/itemPerPage);
+//        System.out.println("jumlah page : " + jumlahPage);
+//        List<Integer> pageList = new ArrayList<>();
+//        for (int i=1; i<=jumlahPage; i++){
+//            pageList.add(i);
+//        }
+//        mav.addObject("pageList", pageList);
+//        return mav;
+//    }
+    @GetMapping(value = "/menu/{page}")
+    public ModelAndView menuPaginated(Menu menu,
+                                      @PathVariable("page") int page,
             Authentication authentication){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("owner-manager/menu");
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        List<Menu> menuList = menuDao.getAllMenu(id_resto);
-        return new ModelAndView("owner-manager/menu", "menuList", menuList);
+        List<Menu> menuList = menuDao.getAllMenu(id_resto, itemPerPage, page);
+        mav.setViewName("owner-manager/menu");
+        mav.addObject("menuList", menuList);
+        double jumlahMenu = menuDao.jumlahMenu(id_resto);
+        System.out.println("jumlah Menu : " + jumlahMenu);
+        double jumlahPage = Math.ceil(jumlahMenu/itemPerPage);
+        System.out.println("jumlah page : " + jumlahPage);
+        List<Integer> pageList = new ArrayList<>();
+        for (int i=1; i<=jumlahPage; i++){
+            pageList.add(i);
+        }
+        mav.addObject("pageList", pageList);
+        return mav;
     }
     @GetMapping(value = "/outcome", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView outcomeHtml(Authentication authentication){

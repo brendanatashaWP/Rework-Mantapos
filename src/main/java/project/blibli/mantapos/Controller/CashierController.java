@@ -47,7 +47,7 @@ public class CashierController {
         restoran = restaurantDao.GetRestaurantInfo(loggedInUsername);
         mav.addObject("restoran", restoran);
 
-        List<Menu> menuList = menuDao.getAllMenu(restoran.getId());
+        List<Menu> menuList = menuDao.getAllMenu(restoran.getId(), 0, 0);
         mav.setViewName("cashier");
         mav.addObject("menuList", menuList);
         return mav;

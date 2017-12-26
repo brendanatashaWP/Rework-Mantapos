@@ -83,6 +83,11 @@
                                 </th:block>
                                 </tbody>
                             </table>
+                        <ul class="pagination">
+                            <th:block th:each="page : ${pageList}">
+                                <li><a th:href="@{/menu/{page}(page=${page})}" th:text="${page}"></a></li>
+                            </th:block>
+                        </ul>
                     </div>
                     <!-- /.box-body -->
                 </div>

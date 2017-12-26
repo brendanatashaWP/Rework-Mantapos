@@ -69,13 +69,39 @@ public class MenuDaoImpl implements MenuDao {
     }
 
     @Override
-    public List<Menu> getAllMenu(int id_restoo) {
+    public List<Menu> getAllMenu(int id_restoo, int itemPerPage, int page) {
         List<Menu> menuList = new ArrayList<>();
-        String query = "SELECT * FROM " + table_name + " WHERE " + id_resto + "=? AND " + enabled + "=?" + " ORDER BY " + kategori_menu + " DESC";
-        try{
-            menuList = jdbcTemplate.query(query, new Object[] {id_restoo, true}, new MenuMapper());
-        } catch (Exception ex){
-            System.out.println("Gagal get all menu : " + ex.toString());
+        String query = null;
+        if (itemPerPage==0 && page == 0){
+            query = "SELECT * FROM " + table_name + " WHERE " +
+                    id_resto + "=? AND " +
+                    enabled + "=?" + " " +
+                    "ORDER BY " + kategori_menu + " DESC";
+            try{
+                menuList = jdbcTemplate.query(query, new Object[] {id_restoo, true}, new MenuMapper());
+            } catch (Exception ex){
+                System.out.println("Gagal get all menu : " + ex.toString());
+            }
+        } else if(page==0) {
+            query = "SELECT * FROM " + table_name + " WHERE " +
+                    id_resto + "=? AND " +
+                    enabled + "=?" + " " +
+                    "ORDER BY " + kategori_menu + " DESC LIMIT ? OFFSET ?";
+            try{
+                menuList = jdbcTemplate.query(query, new Object[] {id_restoo, true, itemPerPage, (page-1)*itemPerPage}, new MenuMapper());
+            } catch (Exception ex){
+                System.out.println("Gagal get all menu : " + ex.toString());
+            }
+        } else {
+            query = "SELECT * FROM " + table_name + " WHERE " +
+                    id_resto + "=? AND " +
+                    enabled + "=?" + " " +
+                    "ORDER BY " + kategori_menu + " DESC LIMIT ? OFFSET ?";
+            try{
+                menuList = jdbcTemplate.query(query, new Object[] {id_restoo, true, itemPerPage, (page-1)*itemPerPage}, new MenuMapper());
+            } catch (Exception ex){
+                System.out.println("Gagal get all menu : " + ex.toString());
+            }
         }
         return menuList;
     }
@@ -117,5 +143,19 @@ public class MenuDaoImpl implements MenuDao {
         jdbcTemplate.update(query, new Object[] {
                 menu.getNama_menu(), menu.getHarga_menu(), menu.getKategori_menu(), menu.getLokasi_gambar_menu(), menu.getId(), id_restoo
         });
+    }
+
+    @Override
+    public int jumlahMenu(int id_restoo) {
+        int jumlahMenu=0;
+        try{
+            String query = "SELECT COUNT(*) FROM " + table_name + " WHERE " + id_resto + "=?";
+            jumlahMenu = jdbcTemplate.queryForObject(query, new Object[]{
+                    id_restoo
+            }, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal get jumlah menu : " + ex.toString());
+        }
+        return jumlahMenu;
     }
 }
