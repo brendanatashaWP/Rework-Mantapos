@@ -74,6 +74,7 @@ public class OwnerManagerController {
         for (int i=1; i<=jumlahPage; i++){
             pageList.add(i);
         }
+        mav.addObject("pageNo", page);
         mav.addObject("pageList", pageList);
         return mav;
     }
