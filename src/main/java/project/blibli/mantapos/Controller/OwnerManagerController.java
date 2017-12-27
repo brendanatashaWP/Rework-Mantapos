@@ -30,31 +30,12 @@ public class OwnerManagerController {
     private SaldoDaoImpl saldoDao = new SaldoDaoImpl();
     private RestoranDaoImpl restoranDao = new RestoranDaoImpl();
     int id_resto, itemPerPage=5;
+    List<Integer> pageList = new ArrayList<>();
 
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView managerDashboardHtml(){
         return new ModelAndView("owner-manager/dashboard");
     }
-//    @GetMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
-//    public ModelAndView menuDashboardHtml(Menu menu,
-//            Authentication authentication){
-//        ModelAndView mav = new ModelAndView();
-//        String username = authentication.getName();
-//        id_resto = restoranDao.GetRestoranId(username);
-//        List<Menu> menuList = menuDao.getAllMenu(id_resto, itemPerPage, 0);
-//        mav.setViewName("owner-manager/menu");
-//        mav.addObject("menuList", menuList);
-//        double jumlahMenu = menuDao.jumlahMenu(id_resto);
-//        System.out.println("jumlah Menu : " + jumlahMenu);
-//        double jumlahPage = Math.ceil(jumlahMenu/itemPerPage);
-//        System.out.println("jumlah page : " + jumlahPage);
-//        List<Integer> pageList = new ArrayList<>();
-//        for (int i=1; i<=jumlahPage; i++){
-//            pageList.add(i);
-//        }
-//        mav.addObject("pageList", pageList);
-//        return mav;
-//    }
     @GetMapping(value = "/menu/{page}")
     public ModelAndView menuPaginated(Menu menu,
                                       @PathVariable("page") int page,
@@ -67,10 +48,7 @@ public class OwnerManagerController {
         mav.setViewName("owner-manager/menu");
         mav.addObject("menuList", menuList);
         double jumlahMenu = menuDao.jumlahMenu(id_resto);
-        System.out.println("jumlah Menu : " + jumlahMenu);
         double jumlahPage = Math.ceil(jumlahMenu/itemPerPage);
-        System.out.println("jumlah page : " + jumlahPage);
-        List<Integer> pageList = new ArrayList<>();
         for (int i=1; i<=jumlahPage; i++){
             pageList.add(i);
         }
@@ -85,19 +63,27 @@ public class OwnerManagerController {
         List<Ledger> outcomeList = ledgerDao.GetDailyKredit(id_resto);
         return new ModelAndView("owner-manager/outcome", "outcomeList", outcomeList);
     }
-    @GetMapping(value = "/employee", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView cashierListHtml(Authentication authentication){
+    @GetMapping(value = "/employee/{page}", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView cashierListHtml(@PathVariable("page") int page,
+            Authentication authentication){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/employee");
         List<User> userList = new ArrayList<>();
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
+        double jumlahEmployee = userDao.jumlahEmployee(id_resto);
+        double jumlahPage = Math.ceil(jumlahEmployee/itemPerPage);
+        for (int i=1; i<=jumlahPage; i++){
+            pageList.add(i);
+        }
         if(authentication.getAuthorities().toString().equals("[manager]")){
-            userList = userDao.getAllUser(id_resto, "cashier");
+            userList = userDao.getAllUser(id_resto, "cashier", itemPerPage, page);
         } else if(authentication.getAuthorities().toString().equals("[owner]")){
-            userList = userDao.getAllUser(id_resto, "manager&cashier");
+            userList = userDao.getAllUser(id_resto, "manager&cashier", itemPerPage, page);
         }
         String role = authentication.getAuthorities().toString();
+        mav.addObject("pageNo", page);
+        mav.addObject("pageList", pageList);
         mav.addObject("userList", userList);
         mav.addObject("role", role);
         return mav;

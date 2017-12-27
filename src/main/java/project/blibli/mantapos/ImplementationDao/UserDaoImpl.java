@@ -132,7 +132,7 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public List<User> getAllUser(int id_restoo, String role) {
+    public List<User> getAllUser(int id_restoo, String role, int itemPerPage, int page) {
         List<User> userList = new ArrayList<>();
         if(role.equals("manager&cashier")){
             String query = "SELECT *,user_roles.role FROM " +
@@ -235,5 +235,19 @@ public class UserDaoImpl implements UserDao{
         }
         query2 = "UPDATE " + table_role + " SET " + username + "=?, " + role + "=?::" + role_type + " WHERE " + id + "=?";
         jdbcTemplate.update(query2, new Object[] {user.getUsername(), user.getRole(), user.getId()});
+    }
+
+    @Override
+    public int jumlahEmployee(int id_restoo) {
+        int jumlahEmployee=0;
+        String query = "SELECT COUNT(*) FROM " + table_name + " WHERE " + id_resto + "=?";
+        try{
+            jumlahEmployee = jdbcTemplate.queryForObject(query, new Object[]{
+                    id_restoo
+            }, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal get jumlahEmployee : " + ex.toString());
+        }
+        return jumlahEmployee;
     }
 }
