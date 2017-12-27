@@ -4,71 +4,68 @@
     <meta charset="UTF-8"/>
     <title>Title</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
 <body>
 <div th:replace="fragments/navbar-top-manager :: header"/>
-<!--<nav class="navbar navbar-fixed-top">-->
-    <!--<div class="container-fluid">-->
-        <!--<div class="navbar-header">-->
-            <!--<a class="navbar-brand" href="#">mantapos</a>-->
-        <!--</div>-->
-        <!--<ul class="nav navbar-nav">-->
-            <!--<li><a href="/dashboard">Dashboard</a></li>-->
-            <!--<li><a href="/menu">Menu</a></li>-->
-            <!--<li><a href="#">Discount</a></li>-->
-            <!--<li><a href="/employee">Employee</a></li>-->
-            <!--<li><a href="/saldo">Saldo</a></li>-->
-            <!--<li class="dropdown">-->
-                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">Keuangan-->
-                    <!--<span class="caret"></span></a>-->
-                <!--<ul class="dropdown-menu">-->
-                    <!--<li><a href="/outcome">Outcome</a></li>-->
-                    <!--<li><a href="/range">General Ledger</a></li>-->
-                <!--</ul>-->
-            <!--</li>-->
-        <!--</ul>-->
-        <!--<div class="navbar-header navbar-right">-->
-            <!--<form action="/logout" method="post" id="logoutForm">-->
-                <!--<input type="hidden" name="${_csrf.parameterName}"-->
-                       <!--value="${_csrf.token}" />-->
-                <!--<a onclick="document.getElementById('logoutForm').submit()" href="#" id="#btnLogOut" class="navbar-brand"><span class="glyphicon glyphicon-log-out"></span> Logout</a>-->
-            <!--</form>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</nav>-->
 <div class="container containerLogin" style="margin-top: 100px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Edit Pegawai
+            <small>Edit informasi pegawai</small>
+        </h1>
+    </section>
     <section class="content">
-
         <!-- Default box -->
         <div class="box">
             <div class="box-body">
                 <form action="/edit-user" method="post">
                     <th:block th:each="user : ${userList}">
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input class="form-control" type="text" name="nama_lengkap" th:value="${user.nama_lengkap}"/><br/>
+                                </div>
+                                <br/>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                                    <input class="form-control" type="text" name="nomor_ktp" th:value="${user.nomor_ktp}"/><br/>
+                                </div>
+                                <br/>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                                    <input class="form-control" type="text" name="nomor_telepon" th:value="${user.nomor_telepon}"/>
+                                </div>
+                                <br/>
                                 <input type="hidden" name="id" th:value="${user.id}"/>
-                                Nama lengkap:<br/>
-                                <input class="form-control" type="text" name="nama_lengkap" th:value="${user.nama_lengkap}"/><br/>
-                                No KTP:<br/>
-                                <input class="form-control" type="text" name="nomor_ktp" th:value="${user.nomor_ktp}"/><br/>
-                                Telepon:<br/>
-                                <input class="form-control" type="text" name="nomor_telepon" th:value="${user.nomor_telepon}"/>
                             </div>
-                            <div class="form-group col-md-6">
-                                Alamat:<br/>
-                                <input class="form-control" type="text" name="alamat" th:value="${user.alamat}"/><br/>
-                                Username:<br/>
-                                <input class="form-control" type="text" name="username" th:value="${user.username}"/><br/>
-                                New Password:<br/>
-                                <input class="form-control" type="password" name="password" placeholder="Kosongkan jika tidak ingin ganti password"/><br/>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-home"></i></span>
+                                    <input class="form-control" type="text" name="alamat" th:value="${user.alamat}"/><br/>
+                                </div>
+                                <br/>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
+                                    <input class="form-control" type="text" name="username" th:value="${user.username}"/><br/>
+                                </div>
+                                <br/>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                    <input class="form-control" type="password" name="password" placeholder="Kosongkan jika tidak ingin ganti password"/><br/>
+                                </div>
+                                <br/>
                             </div>
                         </div>
                         <div>
                         </div>
                         <div th:if="${role == '[owner]'}" class="form-group">
-                            Role:<br/>
+                            <strong>Role:<br/></strong>
                             <select name="role" class="form-control">
                                 <div th:if="${user.role == 'cashier'}">
                                     <option th:value="manager" th:text="Manager"/>
