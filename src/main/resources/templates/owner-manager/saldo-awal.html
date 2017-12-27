@@ -4,41 +4,13 @@
     <meta charset="UTF-8"/>
     <title>Tambah Saldo Awal</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
 <body>
 <div th:replace="fragments/navbar-top-manager :: header"/>
-<!--<nav class="navbar navbar-fixed-top">-->
-    <!--<div class="container-fluid">-->
-        <!--<div class="navbar-header">-->
-            <!--<a class="navbar-brand" href="#">mantapos</a>-->
-        <!--</div>-->
-        <!--<ul class="nav navbar-nav">-->
-            <!--<li><a href="/dashboard">Dashboard</a></li>-->
-            <!--<li><a href="/menu">Menu</a></li>-->
-            <!--<li><a href="#">Discount</a></li>-->
-            <!--<li><a href="/employee">Employee</a></li>-->
-            <!--<li><a href="/saldo">Saldo</a></li>-->
-            <!--<li class="dropdown">-->
-                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">Keuangan-->
-                    <!--<span class="caret"></span></a>-->
-                <!--<ul class="dropdown-menu">-->
-                    <!--<li><a href="/outcome">Outcome</a></li>-->
-                    <!--<li><a href="/range">General Ledger</a></li>-->
-                <!--</ul>-->
-            <!--</li>-->
-        <!--</ul>-->
-        <!--<div class="navbar-header navbar-right">-->
-            <!--<form action="/logout" method="post" id="logoutForm">-->
-                <!--<input type="hidden" name="${_csrf.parameterName}"-->
-                       <!--value="${_csrf.token}" />-->
-                <!--<a onclick="document.getElementById('logoutForm').submit()" href="#" id="#btnLogOut" class="navbar-brand"><span class="glyphicon glyphicon-log-out"></span> Logout</a>-->
-            <!--</form>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</nav>-->
-
 <div class="container" style="margin-top: 50px;">
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -54,7 +26,7 @@
             <!-- Default box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">EMPLOYEE</h3>
+                    <h3 class="box-title">SALDO AWAL</h3>
                 </div>
                 <div class="box-body">
                     <table class="table table-hover">
@@ -95,12 +67,15 @@
             <!-- Default box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">EMPLOYEE</h3>
+                    <h3 class="box-title">SALDO AWAL</h3>
                 </div>
                 <div class="box-body">
                     <form action="/saldo-post" method="post" class="form-group">
-                        Nominal saldo awal (Rp) :<br/>
-                        <input class="form-control" type="number" name="saldo_awal"/><br/>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-money" /></span>
+                            <input class="form-control" type="number" name="saldo_awal" placeholder="Nominal Saldo Awal"/><br/>
+                        </div>
+                        <br/>
                         <button class="form-control btn btn-primary" type="submit">OK</button>
                     </form>
                 </div>
