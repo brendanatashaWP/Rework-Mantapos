@@ -55,9 +55,9 @@ public class SaldoDaoImpl implements SaldoDao {
     @Override
     public List<SaldoAwal> getSaldoAwalTiapBulan(int id_restoo, int itemPerPage, int page) {
         List<SaldoAwal> saldoAwalList = new ArrayList<>();
-        String query = "SELECT *" + " FROM " + table_name + " WHERE " + id_resto + "=?";
+        String query = "SELECT *" + " FROM " + table_name + " WHERE " + id_resto + "=? LIMIT ? OFFSET ?";
         try{
-            saldoAwalList = jdbcTemplate.query(query, new Object[] {id_restoo}, new SaldoAwalMapper());
+            saldoAwalList = jdbcTemplate.query(query, new Object[] {id_restoo, itemPerPage, (page-1)*itemPerPage}, new SaldoAwalMapper());
         } catch (Exception ex){
             System.out.println("Gagal get saldo awal tiap bulan : " + ex.toString());
         }
