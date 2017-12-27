@@ -113,6 +113,7 @@ public class CashierController {
 
         ledger.setTipe("debit"); ledger.setKeperluan("penjualan menu");
         ledger.setWaktu(LocalDate.now().toString());
+        ledger.setTanggal(LocalDate.now().getDayOfMonth());
         ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth()));
         ledger.setMonth(LocalDateTime.now().getMonthValue());
         ledger.setYear(LocalDateTime.now().getYear());

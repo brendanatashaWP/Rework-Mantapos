@@ -26,6 +26,7 @@ public class LedgerDaoImpl implements LedgerDao {
     private static final String keperluan = "keperluan";
     private static final String biaya = "biaya";
     private static final String waktu = "waktu";
+    private static final String tanggal = "tanggal";
     private static final String week = "week";
     private static final String month = "month";
     private static final String year = "year";
@@ -50,6 +51,7 @@ public class LedgerDaoImpl implements LedgerDao {
                 biaya + " INT NOT NULL, " +
                 keperluan + " TEXT NOT NULL, " +
                 waktu + " TEXT NOT NULL, " +
+                tanggal + " INT NOT NULL, " +
                 week + " INT NOT NULL, " +
                 month + " INT NOT NULL, " +
                 year + " INT NOT NULL, " +
@@ -83,17 +85,18 @@ public class LedgerDaoImpl implements LedgerDao {
                 biaya + "," +
                 keperluan + "," +
                 waktu + "," +
+                tanggal + "," +
                 week + "," +
                 month + "," +
                 year + ")" +
-                "VALUES (?,?::" + tipe_ledger + ",?,?,?,?,?,?)";
+                "VALUES (?,?::" + tipe_ledger + ",?,?,?,?,?,?,?)";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String jam = dtf.format(now);
         try{
             jdbcTemplate.update(query, new Object[]{
                     id_restoo, ledger.getTipe(), ledger.getBiaya(),
-                    ledger.getKeperluan(), ledger.getWaktu() + "," + jam,
+                    ledger.getKeperluan(), ledger.getWaktu() + "," + jam, ledger.getTanggal(),
                     ledger.getWeek(), ledger.getMonth(), ledger.getYear()
             });
         } catch (Exception ex){
@@ -165,13 +168,13 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public List<Ledger> getCustomLedger(int id_restoo, int month1, int year1, int month2, int year2) {
+    public List<Ledger> getCustomLedger(int id_restoo, int tanggal1, int month1, int year1, int tanggal2, int month2, int year2) {
         List<Ledger> ledgerList = new ArrayList<>();
         String query = "SELECT *" + " FROM " + table_name +
-                " WHERE " + id_resto + "=? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ?" +
+                " WHERE " + id_resto + "=? AND " + tanggal + " BETWEEN ? AND ? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ?" +
                 " ORDER BY " + waktu + " ASC";
         try{
-            ledgerList = jdbcTemplate.query(query, new Object[] {id_restoo, month1, month2, year1, year2}, new LedgerHarianMapper());
+            ledgerList = jdbcTemplate.query(query, new Object[] {id_restoo, tanggal1, tanggal2, month1, month2, year1, year2}, new LedgerHarianMapper());
         } catch (Exception ex){
             System.out.println("Gagal ambil daily ledger : " + ex.toString());
         }
@@ -224,14 +227,14 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public int getTotalDebitCustom(int id_restoo, int month1, int year1, int month2, int year2) {
+    public int getTotalDebitCustom(int id_restoo, int tanggal1, int month1, int year1, int tanggal2, int month2, int year2) {
         int totalDebit=0;
         String query = "SELECT SUM(" + biaya + ") FROM " + table_name +
-                " WHERE " + id_resto + "=? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ? AND " +
+                " WHERE " + id_resto + "=? AND " + tanggal + " BETWEEN ? AND ? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ? AND " +
                 tipe + "=?::" + tipe_ledger;
         try{
             totalDebit = jdbcTemplate.queryForObject(query, new Object[]{
-                    id_restoo, month1, month2, year1, year2, tipe_debit
+                    id_restoo, tanggal1, tanggal2, month1, month2, year1, year2, tipe_debit
             }, Integer.class);
         } catch (Exception ex){
             System.out.println("Gagal get total debit custom : " + ex.toString());
@@ -272,14 +275,14 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public int getTotalKreditCustom(int id_restoo, int month1, int year1, int month2, int year2) {
+    public int getTotalKreditCustom(int id_restoo, int tanggal1, int month1, int year1, int tanggal2, int month2, int year2) {
         int totalKredit=0;
         String query = "SELECT SUM(" + biaya + ") FROM " + table_name +
-                " WHERE " + id_resto + "=? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ? AND " +
+                " WHERE " + id_resto + "=? AND " + tanggal + " BETWEEN ? AND ? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ? AND " +
                 tipe + "=?::" + tipe_ledger;
         try{
             totalKredit = jdbcTemplate.queryForObject(query, new Object[]{
-                    id_restoo, month1, month2, year1, year2, tipe_kredit
+                    id_restoo, tanggal1, tanggal2, month1, month2, year1, year2, tipe_kredit
             }, Integer.class);
         } catch (Exception ex){
             System.out.println("Gagal get total kredit custom : " + ex.toString());

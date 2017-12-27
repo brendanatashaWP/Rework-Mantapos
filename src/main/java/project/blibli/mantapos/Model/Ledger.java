@@ -1,7 +1,7 @@
 package project.blibli.mantapos.Model;
 
 public class Ledger {
-    private int id, week, month, year, id_resto;
+    private int id, tanggal, week, month, year, id_resto;
     private double biaya;
     private String waktu, keperluan, tipe;
 
@@ -11,6 +11,14 @@ public class Ledger {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getTanggal() {
+        return tanggal;
+    }
+
+    public void setTanggal(int tanggal) {
+        this.tanggal = tanggal;
     }
 
     public String getTipe() {

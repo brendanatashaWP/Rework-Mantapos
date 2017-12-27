@@ -228,17 +228,19 @@ public class OwnerManagerController {
 
         } else { //custom ledger range
             String[] dateAwalSplit = ledger_custom_awal.split("-");
+            int tanggalAwal = Integer.parseInt(dateAwalSplit[2]);
             int monthAwal = Integer.parseInt(dateAwalSplit[1]);
             int yearAwal = Integer.parseInt(dateAwalSplit[0]);
             String[] dateAkhirSplit = ledger_custom_akhir.split("-");
+            int tanggalAkhir = Integer.parseInt(dateAkhirSplit[2]);
             int monthAkhir = Integer.parseInt(dateAkhirSplit[1]);
             int yearAkhir = Integer.parseInt(dateAkhirSplit[0]);
-            total_kredit = ledgerDao.getTotalKreditCustom(id_resto, monthAwal, yearAwal, monthAkhir, yearAkhir);
-            total_debit = ledgerDao.getTotalDebitCustom(id_resto, monthAwal, yearAwal, monthAkhir, yearAkhir);
-            saldo_awal = saldoDao.getSaldoAwalCustom(id_resto, monthAwal, yearAwal);
+            total_kredit = ledgerDao.getTotalKreditCustom(id_resto, tanggalAwal, monthAwal, yearAwal, tanggalAkhir,  monthAkhir, yearAkhir);
+            total_debit = ledgerDao.getTotalDebitCustom(id_resto, tanggalAwal, monthAwal, yearAwal, tanggalAkhir,  monthAkhir, yearAkhir);
+            saldo_awal = saldoDao.getSaldoAwalCustom(id_resto, tanggalAwal, monthAwal, yearAwal);
             saldo_akhir = saldo_awal+total_debit-total_kredit;
             mutasi = saldo_akhir-saldo_awal;
-            ledgerList = ledgerDao.getCustomLedger(id_resto, monthAwal, yearAwal, monthAkhir, yearAkhir);
+            ledgerList = ledgerDao.getCustomLedger(id_resto, tanggalAwal, monthAwal, yearAwal, tanggalAkhir,  monthAkhir, yearAkhir);
             skala_ledger = "CUSTOM";
         }
 

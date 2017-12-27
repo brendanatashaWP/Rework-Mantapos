@@ -10,5 +10,5 @@ public interface SaldoDao {
     List<SaldoAwal> getSaldoAwalTiapBulan(int id_restoo, int itemPerPage, int page);
     int getSaldoAwal(int id_restoo, int monthh, int yearr);
     int jumlahBanyakSaldo(int id_restoo);
-    int getSaldoAwalCustom(int id_restoo, int month1, int year1);
+    int getSaldoAwalCustom(int id_restoo, int tanggal1, int month1, int year1);
 }

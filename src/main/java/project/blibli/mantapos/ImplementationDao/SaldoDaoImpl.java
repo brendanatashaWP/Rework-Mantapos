@@ -14,6 +14,7 @@ public class SaldoDaoImpl implements SaldoDao {
     private static final String table_name = "saldo_awal";
     private static final String id_resto = "id_resto";
     private static final String saldo_awal = "saldo_awal";
+    private static final String tanggal = "tanggal";
     private static final String month = "month";
     private static final String year = "year";
     private static final String ref_table_resto = "restoran";
@@ -30,6 +31,7 @@ public class SaldoDaoImpl implements SaldoDao {
                 "(" +
                 id_resto + " INT NOT NULL, " +
                 saldo_awal + " REAL NOT NULL, " +
+                tanggal + " INT NOT NULL, " +
                 month + " INT NOT NULL, " +
                 year + " INT NOT NULL, " +
                 "UNIQUE (" + month + "," + year + "), " +
@@ -43,10 +45,10 @@ public class SaldoDaoImpl implements SaldoDao {
 
     @Override
     public void AddSaldoAwal(int id_restoo, double saldoAwal) {
-        String query = "INSERT INTO " + table_name + "(" + id_resto + "," + saldo_awal + "," + month + "," + year + ")" +
-                "VALUES(?,?,?,?)";
+        String query = "INSERT INTO " + table_name + "(" + id_resto + "," + saldo_awal + "," + tanggal + "," + month + "," + year + ")" +
+                "VALUES(?,?,?,?,?)";
         try{
-            jdbcTemplate.update(query, new Object[] {id_restoo, saldoAwal, LocalDate.now().getMonthValue(), LocalDate.now().getYear()});
+            jdbcTemplate.update(query, new Object[] {id_restoo, saldoAwal, LocalDate.now().getDayOfMonth(), LocalDate.now().getMonthValue(), LocalDate.now().getYear()});
         } catch (Exception ex){
             System.out.println("Gagal add saldo awal : " + ex.toString());
         }
@@ -92,12 +94,13 @@ public class SaldoDaoImpl implements SaldoDao {
     }
 
     @Override
-    public int getSaldoAwalCustom(int id_restoo, int month1, int year1) {
+    public int getSaldoAwalCustom(int id_restoo, int tanggal1, int month1, int year1) {
         int saldo_awall=0;
-        String query = "SELECT SUM (" + saldo_awal + ") FROM " + table_name + " WHERE " + id_resto + "=? AND " +
+        String query = "SELECT SUM (" + saldo_awal + ") FROM " + table_name + " WHERE " + id_resto + "=? " +
+                "AND " + tanggal + "=? AND " +
                 month + "=? AND " + year + "=?";
         try{
-            saldo_awall = jdbcTemplate.queryForObject(query, new Object[] {id_restoo, month1, year1}, Integer.class);
+            saldo_awall = jdbcTemplate.queryForObject(query, new Object[] {id_restoo, tanggal1, month1, year1}, Integer.class);
         } catch (Exception ex){
             System.out.println("Gagal get saldo awal custom : " + ex.toString());
             saldo_awall = 0;
