@@ -77,6 +77,9 @@
                             <div th:if="${skala_ledger == 'BULANAN'}">
                                 <th>Bulan ke-</th>
                             </div>
+                            <div th:if="${skala_ledger == 'CUSTOM'}">
+                                <th>Tanggal</th>
+                            </div>
                             <th>Keperluan</th>
                             <th></th>
                             <th>Debit</th>
@@ -133,6 +136,26 @@
                                     </div>
                                     <div th:if="${ledger.tipe == 'kredit'}">
                                         <td>Pengeluaran</td>
+                                    </div>
+                                    <td></td>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td th:text="${ledger.biaya}"/>
+                                        <td></td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td></td>
+                                        <td th:text="${ledger.biaya}"/>
+                                    </div>
+                                </tr>
+                            </div>
+                            <div th:if="${skala_ledger == 'CUSTOM'}">
+                                <tr>
+                                    <td th:text="${ledger.waktu}"/>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td>Penjualan menu</td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td th:text="${ledger.keperluan}"/>
                                     </div>
                                     <td></td>
                                     <div th:if="${ledger.tipe == 'debit'}">

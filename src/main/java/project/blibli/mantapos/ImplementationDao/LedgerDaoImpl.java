@@ -165,6 +165,20 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
+    public List<Ledger> getCustomLedger(int id_restoo, int month1, int year1, int month2, int year2) {
+        List<Ledger> ledgerList = new ArrayList<>();
+        String query = "SELECT *" + " FROM " + table_name +
+                " WHERE " + id_resto + "=? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ?" +
+                " ORDER BY " + waktu + " ASC";
+        try{
+            ledgerList = jdbcTemplate.query(query, new Object[] {id_restoo, month1, month2, year1, year2}, new LedgerHarianMapper());
+        } catch (Exception ex){
+            System.out.println("Gagal ambil daily ledger : " + ex.toString());
+        }
+        return ledgerList;
+    }
+
+    @Override
     public List<Ledger> GetDailyKredit(int id_restoo, int itemPerPage, int page) {
         List<Ledger> ledgerList = new ArrayList<>();
         String query = "SELECT *" + " FROM " + table_name + " WHERE " + tipe + "=?::" + tipe_ledger +
@@ -210,6 +224,22 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
+    public int getTotalDebitCustom(int id_restoo, int month1, int year1, int month2, int year2) {
+        int totalDebit=0;
+        String query = "SELECT SUM(" + biaya + ") FROM " + table_name +
+                " WHERE " + id_resto + "=? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ? AND " +
+                tipe + "=?::" + tipe_ledger;
+        try{
+            totalDebit = jdbcTemplate.queryForObject(query, new Object[]{
+                    id_restoo, month1, month2, year1, year2, tipe_debit
+            }, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal get total debit custom : " + ex.toString());
+        }
+        return totalDebit;
+    }
+
+    @Override
     public int GetTotalKreditBulanan(int id_restoo, int monthh, int yearr) {
         int TotalKredit=0;
         String query = "SELECT SUM(" + biaya + ") FROM " + table_name +
@@ -239,6 +269,22 @@ public class LedgerDaoImpl implements LedgerDao {
             System.out.println("Gagal get total kredit tahunan : " + ex.toString());
         }
         return TotalKredit;
+    }
+
+    @Override
+    public int getTotalKreditCustom(int id_restoo, int month1, int year1, int month2, int year2) {
+        int totalKredit=0;
+        String query = "SELECT SUM(" + biaya + ") FROM " + table_name +
+                " WHERE " + id_resto + "=? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ? AND " +
+                tipe + "=?::" + tipe_ledger;
+        try{
+            totalKredit = jdbcTemplate.queryForObject(query, new Object[]{
+                    id_restoo, month1, month2, year1, year2, tipe_kredit
+            }, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal get total kredit custom : " + ex.toString());
+        }
+        return totalKredit;
     }
 
     @Override

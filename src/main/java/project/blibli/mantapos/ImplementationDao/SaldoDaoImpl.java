@@ -90,4 +90,18 @@ public class SaldoDaoImpl implements SaldoDao {
         }
         return jumlahBanyakSaldo;
     }
+
+    @Override
+    public int getSaldoAwalCustom(int id_restoo, int month1, int year1) {
+        int saldo_awall=0;
+        String query = "SELECT SUM (" + saldo_awal + ") FROM " + table_name + " WHERE " + id_resto + "=? AND " +
+                month + "=? AND " + year + "=?";
+        try{
+            saldo_awall = jdbcTemplate.queryForObject(query, new Object[] {id_restoo, month1, year1}, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal get saldo awal custom : " + ex.toString());
+            saldo_awall = 0;
+        }
+        return saldo_awall;
+    }
 }

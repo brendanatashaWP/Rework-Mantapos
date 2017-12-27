@@ -196,16 +196,29 @@ function setReceiptData() {
 function chooseLedgerRange(selector){
     var monthSelector = document.getElementById("monthselector");
     var yearselector = document.getElementById("yearselector");
+    var date_picker_awal = document.getElementById("date_picker_awal");
+    var date_picker_akhir = document.getElementById("date_picker_akhir");
     if(selector==0){
         monthSelector.style.display = "inline";
         yearselector.style.display = "inline";
+        date_picker_awal.style.display = "none";
+        date_picker_akhir.style.display = "none";
     }
     else if(selector==1){
         monthSelector.style.display = "none";
         yearselector.style.display = "inline";
+        date_picker_awal.style.display = "none";
+        date_picker_akhir.style.display = "none";
+    } else if(selector==2) {
+        monthSelector.style.display = "none";
+        yearselector.style.display = "none";
+        date_picker_awal.style.display = "none";
+        date_picker_akhir.style.display = "none";
     } else {
         monthSelector.style.display = "none";
         yearselector.style.display = "none";
+        date_picker_awal.style.display = "inline";
+        date_picker_akhir.style.display = "inline";
     }
 }
 

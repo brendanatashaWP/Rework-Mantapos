@@ -193,6 +193,8 @@ public class OwnerManagerController {
     public ModelAndView Ledger(@RequestParam(value = "Skala", required = false) String skala,
                                @RequestParam(value = "month", required = false) Integer month,
                                @RequestParam(value = "year", required = false) Integer year,
+                               @RequestParam(value = "ledger_custom_awal", required = false)  String ledger_custom_awal,
+                               @RequestParam(value = "ledger_custom_akhir", required = false)  String ledger_custom_akhir,
                                Authentication authentication){
         ModelAndView mav = new ModelAndView();
         String username = authentication.getName();
@@ -222,8 +224,22 @@ public class OwnerManagerController {
             mutasi = saldo_akhir-saldo_awal;
             ledgerList = ledgerDao.GetMonthlyLedger(id_resto, year);
             skala_ledger = "BULANAN";
-        } else{ //tahunan //TODO : Ledger tahunan
+        } else if(skala.equals("tahunan")){ //tahunan //TODO : Ledger tahunan
 
+        } else { //custom ledger range
+            String[] dateAwalSplit = ledger_custom_awal.split("-");
+            int monthAwal = Integer.parseInt(dateAwalSplit[1]);
+            int yearAwal = Integer.parseInt(dateAwalSplit[0]);
+            String[] dateAkhirSplit = ledger_custom_akhir.split("-");
+            int monthAkhir = Integer.parseInt(dateAkhirSplit[1]);
+            int yearAkhir = Integer.parseInt(dateAkhirSplit[0]);
+            total_kredit = ledgerDao.getTotalKreditCustom(id_resto, monthAwal, yearAwal, monthAkhir, yearAkhir);
+            total_debit = ledgerDao.getTotalDebitCustom(id_resto, monthAwal, yearAwal, monthAkhir, yearAkhir);
+            saldo_awal = saldoDao.getSaldoAwalCustom(id_resto, monthAwal, yearAwal);
+            saldo_akhir = saldo_awal+total_debit-total_kredit;
+            mutasi = saldo_akhir-saldo_awal;
+            ledgerList = ledgerDao.getCustomLedger(id_resto, monthAwal, yearAwal, monthAkhir, yearAkhir);
+            skala_ledger = "CUSTOM";
         }
 
         mav.addObject("saldo_awal", saldo_awal);
