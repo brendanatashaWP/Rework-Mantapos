@@ -53,7 +53,7 @@ public class SaldoDaoImpl implements SaldoDao {
     }
 
     @Override
-    public List<SaldoAwal> getSaldoAwalTiapBulan(int id_restoo) {
+    public List<SaldoAwal> getSaldoAwalTiapBulan(int id_restoo, int itemPerPage, int page) {
         List<SaldoAwal> saldoAwalList = new ArrayList<>();
         String query = "SELECT *" + " FROM " + table_name + " WHERE " + id_resto + "=?";
         try{
@@ -75,5 +75,19 @@ public class SaldoDaoImpl implements SaldoDao {
             saldo_awall = 0;
         }
         return saldo_awall;
+    }
+
+    @Override
+    public int jumlahBanyakSaldo(int id_restoo) {
+        int jumlahBanyakSaldo=0;
+        String query = "SELECT COUNT(*) FROM " + table_name + " WHERE " + id_resto + "=?";
+        try{
+            jumlahBanyakSaldo = jdbcTemplate.queryForObject(query, new Object[]{
+                    id_restoo
+            }, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal get jumlah banyak saldo : " + ex.toString());
+        }
+        return jumlahBanyakSaldo;
     }
 }

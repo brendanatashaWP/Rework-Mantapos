@@ -75,6 +75,13 @@
                         </th:block>
                         </tbody>
                     </table>
+                    <ul class="pagination">
+                        <th:block th:each="page : ${pageList}">
+                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/menu/{page}(page=${page})}" th:text="${page}"></a></li>
+                            <li th:if="${page} != ${pageNo}"><a th:href="@{/menu/{page}(page=${page})}" th:text="${page}"></a></li>
+                            <!--<li th:unless="${page} != ${pageNo}"><a th:href="@{/menu/{page}(page=${page})}" th:text="${page}"></a></li>-->
+                        </th:block>
+                    </ul>
                 </div>
                 <!-- /.box-body -->
             </div>

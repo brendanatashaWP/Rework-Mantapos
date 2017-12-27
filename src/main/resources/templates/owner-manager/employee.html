@@ -9,35 +9,6 @@
 </head>
 <body>
 <div th:replace="fragments/navbar-top-manager :: header"/>
-    <!--<nav class="navbar navbar-fixed-top">-->
-    <!--<div class="container-fluid">-->
-        <!--<div class="navbar-header">-->
-            <!--<a class="navbar-brand" href="#">mantapos</a>-->
-        <!--</div>-->
-        <!--<ul class="nav navbar-nav">-->
-            <!--<li><a href="/dashboard">Dashboard</a></li>-->
-            <!--<li><a href="/menu">Menu</a></li>-->
-            <!--<li><a href="#">Discount</a></li>-->
-            <!--<li><a href="/employee">Employee</a></li>-->
-            <!--<li><a href="/saldo">Saldo</a></li>-->
-            <!--<li class="dropdown">-->
-                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">Keuangan-->
-                    <!--<span class="caret"></span></a>-->
-                <!--<ul class="dropdown-menu">-->
-                    <!--<li><a href="/outcome">Outcome</a></li>-->
-                    <!--<li><a href="/range">General Ledger</a></li>-->
-                <!--</ul>-->
-            <!--</li>-->
-        <!--</ul>-->
-        <!--<div class="navbar-header navbar-right">-->
-            <!--<form action="/logout" method="post" id="logoutForm">-->
-                <!--<input type="hidden" name="${_csrf.parameterName}"-->
-                       <!--value="${_csrf.token}" />-->
-                <!--<a onclick="document.getElementById('logoutForm').submit()" href="#" id="#btnLogOut" class="navbar-brand"><span class="glyphicon glyphicon-log-out"></span> Logout</a>-->
-            <!--</form>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</nav>-->
     <div class="container" style="margin-top: 50px;">
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -89,6 +60,13 @@
                         </th:block>
                         </tbody>
                     </table>
+                    <ul class="pagination">
+                        <th:block th:each="page : ${pageList}">
+                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/menu/{page}(page=${page})}" th:text="${page}"></a></li>
+                            <li th:if="${page} != ${pageNo}"><a th:href="@{/menu/{page}(page=${page})}" th:text="${page}"></a></li>
+                            <!--<li th:unless="${page} != ${pageNo}"><a th:href="@{/menu/{page}(page=${page})}" th:text="${page}"></a></li>-->
+                        </th:block>
+                    </ul>
                 </div>
                 <!-- /.box-body -->
             </div>

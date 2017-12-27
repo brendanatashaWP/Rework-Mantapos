@@ -30,7 +30,6 @@ public class OwnerManagerController {
     private SaldoDaoImpl saldoDao = new SaldoDaoImpl();
     private RestoranDaoImpl restoranDao = new RestoranDaoImpl();
     int id_resto, itemPerPage=5;
-    List<Integer> pageList = new ArrayList<>();
 
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView managerDashboardHtml(){
@@ -49,6 +48,7 @@ public class OwnerManagerController {
         mav.addObject("menuList", menuList);
         double jumlahMenu = menuDao.jumlahMenu(id_resto);
         double jumlahPage = Math.ceil(jumlahMenu/itemPerPage);
+        List<Integer> pageList = new ArrayList<>();
         for (int i=1; i<=jumlahPage; i++){
             pageList.add(i);
         }
@@ -73,6 +73,7 @@ public class OwnerManagerController {
         id_resto = restoranDao.GetRestoranId(username);
         double jumlahEmployee = userDao.jumlahEmployee(id_resto);
         double jumlahPage = Math.ceil(jumlahEmployee/itemPerPage);
+        List<Integer> pageList = new ArrayList<>();
         for (int i=1; i<=jumlahPage; i++){
             pageList.add(i);
         }
@@ -95,14 +96,23 @@ public class OwnerManagerController {
         List<Ledger> monthAndYearList = ledgerDao.GetMonthAndYearList(id_resto);
         return new ModelAndView("owner-manager/pilih-range-ledger", "monthAndYearList", monthAndYearList);
     }
-    @GetMapping(value = "/saldo")
-    public ModelAndView addSaldoAwalHtml(Authentication authentication){
+    @GetMapping(value = "/saldo/{page}")
+    public ModelAndView addSaldoAwalHtml(@PathVariable("page") int page,
+            Authentication authentication){
         ModelAndView mav = new ModelAndView();
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
         int intBulan = LocalDate.now().getMonthValue();
         String bulan = MonthNameGenerator.MonthNameGenerator(intBulan);
-        List<SaldoAwal> saldoAwalList = saldoDao.getSaldoAwalTiapBulan(id_resto);
+        List<SaldoAwal> saldoAwalList = saldoDao.getSaldoAwalTiapBulan(id_resto, itemPerPage, page);
+        double jumlahBanyakSaldo = saldoDao.jumlahBanyakSaldo(id_resto);
+        double jumlahPage = Math.ceil(jumlahBanyakSaldo/itemPerPage);
+        List<Integer> pageList = new ArrayList<>();
+        for (int i=1; i<=jumlahPage; i++){
+            pageList.add(i);
+        }
+        mav.addObject("pageNo", page);
+        mav.addObject("pageList", pageList);
         mav.addObject("saldoAwalList", saldoAwalList);
         mav.addObject("bulan", bulan);
         mav.setViewName("owner-manager/saldo-awal");
