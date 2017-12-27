@@ -4,6 +4,8 @@
     <meta charset="UTF-8"/>
     <title>MENU</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
@@ -20,7 +22,7 @@
                 </h1>
             </section>
 
-            <!-- Main content -->
+            <!-- List Menu content -->
             <section class="content">
 
                 <!-- Default box -->
@@ -45,10 +47,10 @@
                                     <tr>
                                         <td th:text="${menu.nama_menu}"/>
                                         <td th:text="${menu.harga_menu}"/>
-                                        <td><a target="_blank" th:href="@{${menu.lokasi_gambar_menu}}">Photo</a></td>
+                                        <td><i class="fa fa-camera text-primary"></i><a target="_blank" th:href="@{${menu.lokasi_gambar_menu}}">Photo</a></td>
                                         <td th:text="${menu.kategori_menu}"/>
-                                        <td><a th:href="@{/edit/menu/{id}(id=${menu.id})}">Edit</a></td>
-                                        <td><a th:href="@{/delete/menu/{id}(id=${menu.id})}">Delete</a></td>
+                                        <td><i class="fa fa-pencil text-primary"></i><a th:href="@{/edit/menu/{id}(id=${menu.id})}">Edit</a></td>
+                                        <td><i class="fa fa-trash text-primary"></i><a th:href="@{/delete/menu/{id}(id=${menu.id})}">Delete</a></td>
                                     </tr>
                                 </th:block>
                                 </tbody>
@@ -67,7 +69,7 @@
 
             </section>
             <!-- /.content -->
-            <!-- Main content -->
+            <!-- Form Add Menu content -->
             <section class="content">
 
                 <!-- Default box -->
@@ -77,24 +79,24 @@
                     </div>
                     <div class="box-body">
                         <form th:object="${menu}" action="/menu" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                Menu Name:<br/>
-                                <div th:if="${#fields.hasErrors('nama_menu')}" th:errors="*{nama_menu}"><h6>Error nama</h6></div>
-                                <input class="form-control" type="text" th:field="*{nama_menu}" id="input_nama_menu"/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-leaf"></i></span>
+                                <input class="form-control" type="text" th:field="*{nama_menu}" id="input_nama_menu" placeholder="Nama Menu"/>
                             </div>
-                            <div class="form-group">
-                                Menu Price:<br/>
-                                <div th:if="${#fields.hasErrors('harga_menu')}" th:errors="*{harga_menu}"><h6>Error harga menu</h6></div>
-                                <input class="form-control" type="number" th:field="*{harga_menu}" id="input_price_menu"/>
+                            <br/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                                <input class="form-control" type="number" th:field="*{harga_menu}" id="input_price_menu" placeholder="Harga Menu"/>
                             </div>
+                            <br/>
                             <div class="form-group">
-                                Category:<br/>
+                                <strong>Category:<br/></strong>
                                 <select th:field="*{kategori_menu}" class="form-control">
                                     <option value="food">Food</option>
                                     <option value="drink">Drink</option>
                                 </select>
                             </div>
-                            Upload Photo:<br/>
+                            <strong>Upload Photo:<br/></strong>
                             <input type="file" th:field="*{multipartFile}" id="input_photo_menu"/><br/>
                             <button class="form-control btn btn-primary" type="submit">OK</button>
                         </form>
@@ -106,15 +108,6 @@
             </section>
             <!--content-->
         </div>
-        <!-- /.content-wrapper -->
-        <!--<div class="row">-->
-            <!--<div class="col-md-2">-->
-
-            <!--</div>-->
-            <!--<div class="col-md-6">-->
-                <!--<h4>Entry Menu</h4>-->
-            <!--</div>-->
-        <!--</div>-->
     </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
