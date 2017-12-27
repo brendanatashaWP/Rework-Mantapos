@@ -9,6 +9,7 @@ public interface RestoranDao {
     void Insert(Restoran restoran);
     Restoran GetRestaurantInfo(String username);
     int GetRestoranId(String username);
-    List<Restoran> GetRestoranList();
+    List<Restoran> GetRestoranList(int itemPerPage, int page);
     int GetRestoranIdBerdasarkanNamaResto(String nama_resto);
+    int jumlahRestoran();
 }

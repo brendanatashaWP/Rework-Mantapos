@@ -64,8 +64,8 @@ public class OwnerManagerController {
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
         List<Ledger> outcomeList = ledgerDao.GetDailyKredit(id_resto, itemPerPage, page);
-        double jumlahBanyakSaldo = saldoDao.jumlahBanyakSaldo(id_resto);
-        double jumlahPage = Math.ceil(jumlahBanyakSaldo/itemPerPage);
+        double jumlahBanyakOutcome = saldoDao.jumlahBanyakSaldo(id_resto);
+        double jumlahPage = Math.ceil(jumlahBanyakOutcome/itemPerPage);
         List<Integer> pageList = new ArrayList<>();
         for (int i=1; i<=jumlahPage; i++){
             pageList.add(i);
@@ -137,7 +137,7 @@ public class OwnerManagerController {
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
         saldoDao.AddSaldoAwal(id_resto, saldoAwal.getSaldo_awal());
-        return new ModelAndView("redirect:/saldo");
+        return new ModelAndView("redirect:/saldo/1");
     }
     @PostMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addMenuJson(@ModelAttribute("menu") Menu menu,
@@ -156,7 +156,7 @@ public class OwnerManagerController {
             } catch (Exception ex){
                 System.out.println("Error add menu : " + ex.toString());
             }
-            return new ModelAndView("redirect:/menu");
+            return new ModelAndView("redirect:/menu/1");
         }
     }
     @PostMapping(value = "/add-user", produces = MediaType.TEXT_HTML_VALUE)
@@ -171,7 +171,7 @@ public class OwnerManagerController {
         }
         user.setId_resto(id_resto);
         userDao.Insert(user);
-        return new ModelAndView("redirect:/employee");
+        return new ModelAndView("redirect:/employee/1");
     }
     @PostMapping(value = "/outcome-post", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView outcomeHtmlPost(@ModelAttribute("ledger") Ledger ledger,
@@ -187,7 +187,7 @@ public class OwnerManagerController {
         ledger.setTipe("kredit");
         ledger.setKeperluan(ledger.getKeperluan() + "(" + qty + ")");
         ledgerDao.Insert(ledger, id_resto);
-        return new ModelAndView("redirect:/outcome");
+        return new ModelAndView("redirect:/outcome/1");
     }
     @PostMapping(value = "/ledger")
     public ModelAndView Ledger(@RequestParam(value = "Skala", required = false) String skala,
@@ -244,7 +244,7 @@ public class OwnerManagerController {
             return new ModelAndView("redirect:/restaurant");
         } else{
             userDao.DeleteUser(id);
-            return new ModelAndView("redirect:/employee");
+            return new ModelAndView("redirect:/employee/1");
         }
     }
     @GetMapping(value = "/active/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
@@ -254,12 +254,12 @@ public class OwnerManagerController {
         if(authentication.getAuthorities().toString().equals("[admin]"))
             return new ModelAndView("redirect:/restaurant");
         else
-            return new ModelAndView("redirect:/employee");
+            return new ModelAndView("redirect:/employee/1");
     }
     @GetMapping(value = "/delete/menu/{id}")
     public ModelAndView deleteMenu(@PathVariable("id") int id){
         menuDao.DeleteMenu(id);
-        return new ModelAndView("redirect:/menu");
+        return new ModelAndView("redirect:/menu/1");
     }
     @GetMapping(value = "/edit/menu/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView editMenuHtml(@PathVariable("id") int id,
@@ -290,7 +290,7 @@ public class OwnerManagerController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mav.setViewName("redirect:/menu");
+        mav.setViewName("redirect:/menu/1");
         return mav;
     }
     @GetMapping(value = "/edit/user/{id}")
@@ -311,7 +311,7 @@ public class OwnerManagerController {
         ModelAndView mav = new ModelAndView();
         int id_resto = restoranDao.GetRestoranId(authentication.getName());
         userDao.UpdateUser(id_resto, user);
-        mav.setViewName("redirect:/employee");
+        mav.setViewName("redirect:/employee/1");
         return mav;
     }
 }

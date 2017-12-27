@@ -68,7 +68,7 @@ public class RestoranDaoImpl implements RestoranDao {
     }
 
     @Override
-    public List<Restoran> GetRestoranList() {
+    public List<Restoran> GetRestoranList(int itemPerPage, int page) {
         List<Restoran> restoranList = new ArrayList<>();
         String query = "SELECT" +
                 " restoran.id, restoran.nama_resto, restoran.lokasi_resto, " +
@@ -105,6 +105,18 @@ public class RestoranDaoImpl implements RestoranDao {
         String query = "SELECT " + id + " FROM " + table_name + " WHERE " + nama_resto + "=?";
         id_restoo = jdbcTemplate.queryForObject(query, new Object[] {nama_restoo}, Integer.class);
         return id_restoo;
+    }
+
+    @Override
+    public int jumlahRestoran() {
+        int jumlahRestoran=0;
+        String query = "SELECT COUNT(*) FROM " + table_name;
+        try{
+            jumlahRestoran = jdbcTemplate.queryForObject(query, Integer.class);
+        } catch (Exception ex){
+            System.out.println("Gagal jumlah restoran : " + ex.toString());
+        }
+        return jumlahRestoran;
     }
 
     @Override
