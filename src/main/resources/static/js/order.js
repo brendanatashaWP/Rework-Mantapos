@@ -44,6 +44,7 @@ function checkTime(i) {
 }
 
 function addToCart(id, name, price){
+
     //variabel2 untuk cell dari table order nya..
     var row = tableCart.insertRow(-1);
     var cellName = row.insertCell(0);
@@ -77,6 +78,7 @@ function addToCart(id, name, price){
     //set nilai totalBayar
     totalBayar.innerHTML = "Rp " + priceTotal;
     inputPriceTotal.value = priceTotal;
+    this.document.getElementById(id).disabled= true;
 }
 
 function updatePrice(x){
