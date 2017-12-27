@@ -182,7 +182,6 @@ public class OwnerManagerController {
         return new ModelAndView("redirect:/outcome");
     }
     @PostMapping(value = "/ledger")
-    //get bulan yang dikehendaki di tahun LocalDate.now().getYear()
     public ModelAndView Ledger(@RequestParam(value = "Skala", required = false) String skala,
                                @RequestParam(value = "month", required = false) Integer month,
                                @RequestParam(value = "year", required = false) Integer year,
