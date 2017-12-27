@@ -12,7 +12,7 @@ public interface LedgerDao {
     List<Ledger> GetDailyLedger(int id_restoo, int monthh, int yearr);
     List<Ledger> GetWeeklyLedger(int id_restoo, int monthh, int yearr);
     List<Ledger> GetMonthlyLedger(int id_restoo, int yearr);
-    List<Ledger> GetDailyKredit(int id_restoo);
+    List<Ledger> GetDailyKredit(int id_restoo, int itemPerPage, int page);
     int GetTotalDebitBulanan(int id_restoo, int monthh, int yearr);
     int GetTotalDebitTahunan(int id_restoo, int yearr);
     int GetTotalKreditBulanan(int id_restoo, int monthh, int yearr);

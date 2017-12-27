@@ -165,12 +165,12 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public List<Ledger> GetDailyKredit(int id_restoo) {
+    public List<Ledger> GetDailyKredit(int id_restoo, int itemPerPage, int page) {
         List<Ledger> ledgerList = new ArrayList<>();
         String query = "SELECT *" + " FROM " + table_name + " WHERE " + tipe + "=?::" + tipe_ledger +
-                " AND " + id_resto + "=?";
+                " AND " + id_resto + "=? LIMIT ? OFFSET ?";
         try{
-            ledgerList = jdbcTemplate.query(query, new Object[] {tipe_kredit, id_restoo}, new KreditMapper());
+            ledgerList = jdbcTemplate.query(query, new Object[] {tipe_kredit, id_restoo, itemPerPage, (page-1)*itemPerPage}, new KreditMapper());
         } catch (Exception ex){
             System.out.println("Gagal get daily kredit : " + ex.toString());
         }

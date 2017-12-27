@@ -56,12 +56,24 @@ public class OwnerManagerController {
         mav.addObject("pageList", pageList);
         return mav;
     }
-    @GetMapping(value = "/outcome", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView outcomeHtml(Authentication authentication){
+    @GetMapping(value = "/outcome/{page}", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView outcomeHtml(@PathVariable("page") int page,
+            Authentication authentication){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("owner-manager/outcome");
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        List<Ledger> outcomeList = ledgerDao.GetDailyKredit(id_resto);
-        return new ModelAndView("owner-manager/outcome", "outcomeList", outcomeList);
+        List<Ledger> outcomeList = ledgerDao.GetDailyKredit(id_resto, itemPerPage, page);
+        double jumlahBanyakSaldo = saldoDao.jumlahBanyakSaldo(id_resto);
+        double jumlahPage = Math.ceil(jumlahBanyakSaldo/itemPerPage);
+        List<Integer> pageList = new ArrayList<>();
+        for (int i=1; i<=jumlahPage; i++){
+            pageList.add(i);
+        }
+        mav.addObject("outcomeList", outcomeList);
+        mav.addObject("pageNo", page);
+        mav.addObject("pageList", pageList);
+        return mav;
     }
     @GetMapping(value = "/employee/{page}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView cashierListHtml(@PathVariable("page") int page,
