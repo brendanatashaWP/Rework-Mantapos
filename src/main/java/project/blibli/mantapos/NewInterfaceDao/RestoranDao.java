@@ -6,7 +6,7 @@ import project.blibli.mantapos.NewImplementationDao.BasicDao;
 import java.util.List;
 
 public interface RestoranDao extends BasicDao<Restoran, Integer, Integer, Integer, Integer> {
-    int readIdResto(String namaResto);
+    int readIdResto(String usernameUser);
     List<Restoran> readAllRestoran(String role);
     int countRestoran();
 }

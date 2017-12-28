@@ -29,7 +29,7 @@ public class RestoranDaoImpl implements RestoranDao {
     private static final String alamatUser = "alamat";
 
     Restoran restoran = new Restoran();
-    int idRestoran=0, count=0;
+    int count=0;
 
     @Override
     public void createTable(){
@@ -99,9 +99,9 @@ public class RestoranDaoImpl implements RestoranDao {
             preparedStatement.setInt(1, idData);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                restoran.setId(resultSet.getInt(idData));
+                restoran.setId(resultSet.getInt(idResto));
                 restoran.setNamaResto(resultSet.getString(namaResto));
-                restoran.setAlamat(resultSet.getString(alamatResto));
+                restoran.setLokasiResto(resultSet.getString(alamatResto));
             }
         } catch (Exception ex){
             System.out.println("Gagal get restoran dengan id " + idData + " : " + ex.toString());
@@ -138,22 +138,24 @@ public class RestoranDaoImpl implements RestoranDao {
 
     //Mengambil id restoran berdasarkan nama restoran
     @Override
-    public int readIdResto(String namaResto) {
+    public int readIdResto(String usernameUser) {
+        int idRestoran=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
-                    "SELECT " + idResto + " FROM " + tableRestoran + " WHERE " + this.namaResto + "=?"
+                    "SELECT users.id_resto" +
+                            " FROM users, restoran WHERE users.id_resto=restoran.id AND users.username=?"
             );
-            preparedStatement.setString(1, namaResto);
+            preparedStatement.setString(1, usernameUser);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                idRestoran = resultSet.getInt(idResto);
+                idRestoran = resultSet.getInt("id_resto");
             }
         } catch (Exception ex){
-            System.out.println("Gagal read id resto berdasarkan nama restoran " + namaResto + " : " + ex.toString());
+            System.out.println("Gagal read id resto berdasarkan nama restoran " + usernameUser + " : " + ex.toString());
         } finally {
             DbConnection.closeResultSet(resultSet);
             DbConnection.closePreparedStatement(preparedStatement);
@@ -218,7 +220,7 @@ public class RestoranDaoImpl implements RestoranDao {
             );
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                count = resultSet.getInt("sum");
+                count = resultSet.getInt(1);
             }
         } catch (Exception ex){
             System.out.println("Gagal count restoran : " + ex.toString());

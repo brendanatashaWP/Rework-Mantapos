@@ -209,17 +209,17 @@
                             <label><input type="checkbox" id="checkboxKirimEmailReceipt" th:onclick="'javascript:checkboxKirimEmailReceipt();'"/>Kirim receipt melalui email?</label>
                         </div>
                         <form action="/add-order" method="post">
-                            <input type="hidden" name="namaResto" id="inputRestaurantName" th:value="${restoran.namaResto}"/>
-                            <input type="hidden" name="lokasiResto" id="inputRestaurantAddress" th:value="${restoran.lokasiResto}"/>
-                            <input type="hidden" name="customer_name" id="inputCustNameChange"/>
-                            <input type="hidden" name="table_no" id="inputTableNoChange"/>
-                            <input type="hidden" name="notes" id="inputNotesChange"/>
-                            <input type="hidden" name="biaya" id="inputPriceTotalChange"/>
-                            <input type="hidden" name="cash_paid" id="inputCashPaid"/>
-                            <input type="hidden" name="cash_change" id="inputCashChange"/>
-                            <input type="hidden" name="array_id_order" id="array_id_orderChange"/>
-                            <input type="hidden" name="array_qty" id="array_qtyChange"/>
-                            <input type="hidden" name="is_kirim_email_receipt" id="is_kirim_email_receipt"/>
+                            <input type="text" name="namaResto" id="inputRestaurantName" th:value="${restoran.namaResto}"/>
+                            <input type="text" name="lokasiResto" id="inputRestaurantAddress" th:value="${restoran.lokasiResto}"/>
+                            <input type="text" name="customer_name" id="inputCustNameChange"/>
+                            <input type="text" name="table_no" id="inputTableNoChange"/>
+                            <input type="text" name="notes" id="inputNotesChange"/>
+                            <input type="text" name="biaya" id="inputPriceTotalChange"/>
+                            <input type="text" name="cash_paid" id="inputCashPaid"/>
+                            <input type="text" name="cash_change" id="inputCashChange"/>
+                            <input type="text" name="array_id_order" id="array_id_orderChange"/>
+                            <input type="text" name="array_qty" id="array_qtyChange"/>
+                            <input type="text" name="is_kirim_email_receipt" id="is_kirim_email_receipt"/>
                             <input style="display: none;" name="email_kirim_receipt" placeholder="Masukkan email" type="text" id="inputEmailKirimReceipt"/>
                             <!--<input type="hidden" name="email_kirim_receipt" id="emailKirimReceipt"/>-->
                             <button type="submit" class="submit">OK</button>

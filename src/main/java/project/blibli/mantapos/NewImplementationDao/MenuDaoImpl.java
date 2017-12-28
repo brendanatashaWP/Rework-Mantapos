@@ -117,6 +117,7 @@ public class MenuDaoImpl implements MenuDao {
                 menu.setId(resultSet.getInt(idMenu));
                 menu.setNama_menu(resultSet.getString(namaMenu));
                 menu.setHarga_menu(resultSet.getDouble(hargaMenu));
+                menu.setKategori_menu(resultSet.getString(kategoriMenu));
                 menu.setLokasi_gambar_menu(resultSet.getString(lokasiGambarMenu));
                 menuList.add(menu);
             }
@@ -146,6 +147,7 @@ public class MenuDaoImpl implements MenuDao {
                 menu.setId(resultSet.getInt(idMenu));
                 menu.setNama_menu(resultSet.getString(namaMenu));
                 menu.setHarga_menu(resultSet.getDouble(hargaMenu));
+                menu.setKategori_menu(resultSet.getString(kategoriMenu));
                 menu.setLokasi_gambar_menu(resultSet.getString(lokasiGambarMenu));
             }
         } catch (Exception ex){
@@ -158,6 +160,7 @@ public class MenuDaoImpl implements MenuDao {
         return menu;
     }
 
+    //TODO : Masih salah
     @Override
     public int getLastId(Integer idResto) {
         Connection connection;
@@ -197,6 +200,7 @@ public class MenuDaoImpl implements MenuDao {
             preparedStatement.setDouble(2, modelData.getHarga_menu());
             preparedStatement.setString(3, modelData.getKategori_menu());
             preparedStatement.setString(4, modelData.getLokasi_gambar_menu());
+            preparedStatement.setInt(5, modelData.getId());
             preparedStatement.executeUpdate();
         } catch (Exception ex){
             System.out.println("Gagal update menu " + modelData.getId() + " : " + ex.toString());
@@ -239,7 +243,7 @@ public class MenuDaoImpl implements MenuDao {
             preparedStatement.setInt(1, idResto);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                count = resultSet.getInt("sum");
+                count = resultSet.getInt(1);
             }
         } catch (Exception ex){
             System.out.println("Gagal get count menu restoran " + idResto + " : " + ex.toString());

@@ -13,7 +13,10 @@ import project.blibli.mantapos.Model.Ledger;
 import project.blibli.mantapos.Model.Menu;
 import project.blibli.mantapos.Model.OrderedMenu;
 import project.blibli.mantapos.Model.Restoran;
-import project.blibli.mantapos.ImplementationDao.*;
+import project.blibli.mantapos.NewImplementationDao.LedgerDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.MenuDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.MenuYangDipesanDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.RestoranDaoImpl;
 import project.blibli.mantapos.WeekGenerator;
 
 import javax.mail.MessagingException;
@@ -47,10 +50,10 @@ public class CashierController {
         String loggedInUsername = authentication.getName(); //Ambil username yang sedang login
         mav.addObject("loggedInUsername", loggedInUsername);
 
-        restoran = restaurantDao.GetRestaurantInfo(loggedInUsername); //Mengambil informasi restoran berdasarkan nama username yang login (username itu belong ke restoran mana)
+        restoran = restaurantDao.readOne(restaurantDao.readIdResto(loggedInUsername)); //Mengambil informasi restoran berdasarkan nama username yang login (username itu belong ke restoran mana)
         mav.addObject("restoran", restoran); //object restoran ini gunanya nanti untuk di receipt
 
-        List<Menu> menuList = menuDao.getAllMenu(restoran.getId(), 0, 0); //Mengambil semua menu yang ada di database. itemPerPage dan page dibuat 0 karena tidak akan memakai pagination
+        List<Menu> menuList = menuDao.readAll(restoran.getId(), 0, 0); //Mengambil semua menu yang ada di database. itemPerPage dan page dibuat 0 karena tidak akan memakai pagination
         mav.setViewName("cashier");
         mav.addObject("menuList", menuList);
         return mav;
@@ -63,13 +66,14 @@ public class CashierController {
                                      @RequestParam(value = "array_qty", required = false) String[] array_qty,
                                      @RequestParam(value = "is_kirim_email_receipt", required = false) String is_kirim_email_receipt,
                                      @RequestParam(value = "email_kirim_receipt", required = false) String email_kirim_receipt,
-                                     @RequestParam("nama_resto") String nama_resto,
+                                     @RequestParam("namaResto") String nama_resto,
                                      @RequestParam("customer_name") String nama_customer,
                                      Authentication authentication){
         ModelAndView mav = new ModelAndView();
 
         String loggedInUsername = authentication.getName(); //Ambil username yang sedang login
-        int id_resto = restaurantDao.GetRestoranId(loggedInUsername);
+        int id_resto = restaurantDao.readIdResto(loggedInUsername);
+        System.out.println("id resto : " + id_resto);
 //        restoran = restaurantDao.GetRestaurantInfo(loggedInUsername); //Mengambil informasi restoran berdasarkan username yg login (username itu belong ke restoran mana)
 //        int id_resto = restoran.getId(); //Mengambil id restoran yang didapat dari hasil di atas
 
@@ -79,11 +83,11 @@ public class CashierController {
         ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth())); //setWeek, value week diambil dari tanggalnya. Detailnya ada di class WeekGenerator
         ledger.setMonth(LocalDateTime.now().getMonthValue()); //setMonth
         ledger.setYear(LocalDateTime.now().getYear()); //setYear
-        ledgerDao.Insert(ledger, restoran.getId()); //insert informasi pemesanan ke database (tabel ledger_harian)
-        int lastOrderId = ledgerDao.GetLastOrderId(); //Mengambil id dari order yang barusan dimasukkan (record terakhir). ID nya ini untuk dijadikan foreign key di table OrderedMenu
+        ledgerDao.insert(ledger, restoran.getId()); //insert informasi pemesanan ke database (tabel ledger_harian)
+        int lastOrderId = ledgerDao.getLastId(id_resto); //Mengambil id dari order yang barusan dimasukkan (record terakhir). ID nya ini untuk dijadikan foreign key di table OrderedMenu
         //Melakukan for dari 0 hingga panjang dari Array array_id_order. Array ini isinya adalah id dari menu2 yang dipesan. Memasukkan id menu2 itu ada di order.js
         for(int i=0; i<array_id_order.length; i++){
-            orderedMenuDao.Insert(lastOrderId, Integer.parseInt(array_id_order[i]),
+            orderedMenuDao.insertMenuYangDipesan(lastOrderId, Integer.parseInt(array_id_order[i]),
                     Integer.parseInt(array_qty[i]));
             //Melakukan insert ke table OrderedMenu. Dimana foreign key nya adalah id dari last Order (record terakhir tadi).
             //lalu id dari tiap2 menu yang dipesan itu diinsert ke table OrderedMenu, bersamaan dengan quantity-nya dari Array array_qty. Memasukkan quantity-nya ada di order.js
@@ -99,21 +103,22 @@ public class CashierController {
                 helper.setTo(email_kirim_receipt); //Alamat tujuan pengiriman email, di-pass dari HTML kesini dalam variabel email_kirim_receipt
                 helper.setSubject("RECEIPT PEMBELIAN DI " + nama_resto); //Subject email
                 context.setVariable("nama_customer", nama_customer); //Melempar nama customer ke HTML receipt (email.html)
-                context.setVariable("nama_resto", nama_resto); //Melempar nama restoran ke HTML receipt (email.html)
+                context.setVariable("namaResto", nama_resto); //Melempar nama restoran ke HTML receipt (email.html)
                 context.setVariable("tanggal", LocalDate.now().toString()); //Melempar tanggal sekarang ke HTML receipt (email.html)
                 context.setVariable("total_harga", ledger.getBiaya()); //Melempar total biaya ke HTML receipt (email.html). Total biaya didapat dari object ledger yang dilempar dari kasir kesini.
                 List<OrderedMenu> ordered_menu_list = new ArrayList<>(); //List yang berisi detail menu (nama menu, harga menu, qty, dan total harga menu)
                 for (int i=0; i<array_id_order.length; i++){
-                    List<Menu> menuList = menuDao.getMenuById(id_resto, Integer.parseInt(array_id_order[i])); //Mengambil detail dari masing-masing menu. Cara mengambil detailnya adalah berdasarkan id menu yang ada di Array array_id_order
-                    for (Menu menu:menuList
-                         ) {
-                        ordered_menu_list.add(new OrderedMenu(
-                                menu.getNama_menu(),
-                                String.valueOf(menu.getHarga_menu() * Integer.parseInt(array_qty[i])),
-                                Integer.parseInt(array_qty[i])));
-                        //Menambahkan detail menu yang didapat dari menuDao.getMenuById di atas ke list ordered_menu_list.
-                        //List itu nantinya akan dilempar ke HTML receipt (email.html) untuk ditampilkan di table
-                    }
+                    Menu menuObject = menuDao.readOne(Integer.parseInt(array_id_order[i])); //Mengambil detail dari masing-masing menu. Cara mengambil detailnya adalah berdasarkan id menu yang ada di Array array_id_order
+                    ordered_menu_list.add(new OrderedMenu(
+                            menuObject.getNama_menu(),
+                            String.valueOf(menuObject.getHarga_menu() * Integer.parseInt(array_qty[i])),
+                            Integer.parseInt(array_qty[i])));
+//                    for (Menu menu:menuList
+//                         ) {
+//
+//                        //Menambahkan detail menu yang didapat dari menuDao.getMenuById di atas ke list ordered_menu_list.
+//                        //List itu nantinya akan dilempar ke HTML receipt (email.html) untuk ditampilkan di table
+//                    }
                 }
                 context.setVariable("ordered_menu_list", ordered_menu_list); //Melempar list ordered_menu_list yang berisi detail menu yang di-order ke HTML receipt (email.html)
                 String body = templateEngine.process("email", context); //Menspecify body dari email adalah email.html dengan context (yaitu variabel2 yang dilempar tadi)

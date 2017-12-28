@@ -30,8 +30,6 @@ public class LedgerDaoImpl implements LedgerDao {
     private static final String tipeDebit = "debit";
     private static final String tipeKredit = "kredit";
 
-    Ledger ledger = new Ledger();
-
     @Override
     public void createTipeLedger() {
         Connection connection;
@@ -69,6 +67,7 @@ public class LedgerDaoImpl implements LedgerDao {
             preparedStatement.setInt(1, idResto);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                Ledger ledger = new Ledger();
                 ledger.setMonth(resultSet.getInt(month));
                 ledger.setYear(resultSet.getInt(year));
                 //Keperluan di bawah ini bukanlah keperluan, tapi untuk String nama bulan (alih fungsi)
@@ -102,6 +101,7 @@ public class LedgerDaoImpl implements LedgerDao {
             preparedStatement.setInt(3, yearr);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                Ledger ledger = new Ledger();
                 ledger.setKeperluan(resultSet.getString(keperluan));
                 ledger.setTipe(resultSet.getString(tipe));
                 ledger.setBiaya(resultSet.getDouble(biaya));
@@ -136,6 +136,7 @@ public class LedgerDaoImpl implements LedgerDao {
             preparedStatement.setInt(3, yearr);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                Ledger ledger = new Ledger();
                 ledger.setWeek(resultSet.getInt(week));
                 ledger.setTipe(resultSet.getString(tipe));
                 ledger.setBiaya(resultSet.getDouble("sum"));
@@ -168,6 +169,7 @@ public class LedgerDaoImpl implements LedgerDao {
             preparedStatement.setInt(2, yearr);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                Ledger ledger = new Ledger();
                 ledger.setMonth(resultSet.getInt(month));
                 ledger.setTipe(resultSet.getString(tipe));
                 ledger.setBiaya(resultSet.getDouble("sum"));
@@ -204,6 +206,7 @@ public class LedgerDaoImpl implements LedgerDao {
             preparedStatement.setInt(7, year2);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
+                Ledger ledger = new Ledger();
                 ledger.setKeperluan(resultSet.getString(keperluan));
                 ledger.setTipe(resultSet.getString(tipe));
                 ledger.setBiaya(resultSet.getDouble(biaya));
@@ -237,6 +240,7 @@ public class LedgerDaoImpl implements LedgerDao {
             preparedStatement.setInt(4, (page-1)*itemPerPage);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                Ledger ledger = new Ledger();
                 ledger.setWaktu(resultSet.getString("waktu"));
                 ledger.setKeperluan(resultSet.getString("keperluan"));
                 ledger.setBiaya(resultSet.getInt("biaya"));
@@ -524,7 +528,7 @@ public class LedgerDaoImpl implements LedgerDao {
             );
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                lastId = resultSet.getInt(idLedger);
+                lastId = resultSet.getInt(1);
             }
         } catch (Exception ex){
             System.out.println("Gagal get last id ledger : " + ex.toString());

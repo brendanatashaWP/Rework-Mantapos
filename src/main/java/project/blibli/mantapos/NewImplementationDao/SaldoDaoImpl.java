@@ -29,14 +29,14 @@ public class SaldoDaoImpl implements SaldoDao {
         ResultSet resultSet = null;
         try{
             preparedStatement = connection.prepareStatement(
-                    "SELECT " + saldoAwal + " FROM " + tableSaldo + " WHERE " + this.idResto + "=? AND " + month + "=? AND " + year + "=?"
+                    "SELECT " + this.saldoAwal + " FROM " + tableSaldo + " WHERE " + this.idResto + "=? AND " + month + "=? AND " + year + "=?"
             );
             preparedStatement.setInt(1, idResto);
             preparedStatement.setInt(2, monthh);
             preparedStatement.setInt(3, yearr);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                saldoAwal = resultSet.getInt(saldoAwal);
+                saldoAwal = resultSet.getInt(this.saldoAwal);
             }
         } catch (Exception ex){
             System.out.println("Gagal get saldo awal : " + ex.toString());
@@ -142,10 +142,11 @@ public class SaldoDaoImpl implements SaldoDao {
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
                 SaldoAwal saldoAwal = new SaldoAwal();
-                saldoAwal.setId_resto(resultSet.getInt(idResto));
+                saldoAwal.setId_resto(resultSet.getInt(this.idResto));
                 saldoAwal.setMonth(resultSet.getInt(month));
                 saldoAwal.setYear(resultSet.getInt(year));
                 saldoAwal.setSaldo_awal(resultSet.getDouble(this.saldoAwal));
+                saldoAwalListTiapBulan.add(saldoAwal);
             }
         } catch (Exception ex){
             System.out.println("Gagal read saldo awal tiap bulan : " + ex.toString());
@@ -190,7 +191,7 @@ public class SaldoDaoImpl implements SaldoDao {
             preparedStatement.setInt(1, idResto);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                count = resultSet.getInt("sum");
+                count = resultSet.getInt(1);
             }
         } catch (Exception ex){
             System.out.println("Gagal get count saldo : " + ex.toString());

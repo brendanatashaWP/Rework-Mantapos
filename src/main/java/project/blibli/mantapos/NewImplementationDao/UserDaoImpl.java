@@ -422,7 +422,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setInt(1, idResto);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                count = resultSet.getInt("sum");
+                count = resultSet.getInt(1);
             }
         } catch (Exception ex){
             System.out.println("Gagal count users " + ex.toString());
