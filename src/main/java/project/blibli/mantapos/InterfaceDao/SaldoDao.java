@@ -4,6 +4,7 @@ import project.blibli.mantapos.Model.SaldoAwal;
 
 import java.util.List;
 
+//Interface yang menangani masalah DAO berkaitan dengan saldo
 public interface SaldoDao {
     void CreateTable();
     void AddSaldoAwal(int id_restoo, double saldoAwal);

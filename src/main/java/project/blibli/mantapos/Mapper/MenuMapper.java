@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MenuMapper implements RowMapper<Menu>{
+
+    //Class Mapper, untuk mapping value dari resultSet ke model yang bersesuaian.
+
     @Override
     public Menu mapRow(ResultSet resultSet, int i) throws SQLException {
         Menu menu = new Menu();

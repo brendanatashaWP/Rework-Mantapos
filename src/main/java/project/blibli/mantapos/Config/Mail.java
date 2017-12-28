@@ -11,6 +11,7 @@ import java.util.Properties;
 
 public class Mail {
 
+    //Class yang mengatur konfigurasi untuk mengirim email
     public JavaMailSender send() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("mail.axella.online");

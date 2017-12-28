@@ -4,6 +4,8 @@ import project.blibli.mantapos.Model.Ledger;
 
 import java.util.List;
 
+//Interface yang menangani masalah DAO berkaitan dengan ledger
+//TODO : Cari manfaatnya pakai interface itu apaan
 public interface LedgerDao {
     void CreateTable();
     void CreateTipe();

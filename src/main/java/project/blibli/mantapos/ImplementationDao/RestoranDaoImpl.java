@@ -77,6 +77,8 @@ public class RestoranDaoImpl implements RestoranDao {
                 " WHERE users.id_resto=restoran.id " +
                 "AND user_roles.id=users.id " +
                 "AND user_roles.role=?::role_type";
+        //Mengambil list restoran yang terdaftar di mantapos
+        //Yang diambil adalah id, nama restoran, lokasi restoran, id user (owner), nama lengkap user (owner), username user (owner), status user (owner) apakah disabled atau enabled, nomor ktp, nomor telepon, dan alamat user (owner)
         try{
             List<Map<String, Object>> rows = jdbcTemplate.queryForList(query, new Object[] {"owner"});
             for(Map row : rows){
@@ -119,6 +121,7 @@ public class RestoranDaoImpl implements RestoranDao {
         return jumlahRestoran;
     }
 
+    //TODO : Dimatangkan lagi apakah sebetulnya perlu method ini hanya untuk mengambil restoran info untuk di pass dari cashierController ke cashier.html untuk keperluan receipt.
     @Override
     public Restoran GetRestaurantInfo(String username) {
         Restoran restoran = new Restoran();

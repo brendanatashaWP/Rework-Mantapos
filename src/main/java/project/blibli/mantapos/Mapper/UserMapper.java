@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserMapper implements RowMapper<User> {
+
+    //Class Mapper, untuk mapping value dari resultSet ke model yang bersesuaian.
+
     @Override
     public User mapRow(ResultSet resultSet, int i) throws SQLException {
         User user = new User();
