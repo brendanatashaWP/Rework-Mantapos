@@ -7,8 +7,11 @@
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
-<body>
+<body th:onload="'javascript:terimaDataInsertKeArray(\'' + ${dummyList} + '\'); chartOnLoad()'">
 <div th:replace="fragments/navbar-top-manager :: header"/>
+<!--<th:block th:each="dummy : ${dummyList}">-->
+
+<!--</th:block>-->
 <!--<nav class="navbar navbar-fixed-top">-->
     <!--<div class="container-fluid">-->
         <!--<div class="navbar-header">-->
@@ -47,10 +50,16 @@
                 <small>Grafik Pemasukkan</small>
             </h1>
         </section>
+        <!--<th:block th:each="dummy : ${dummyList}">-->
+            <!--<h3 th:text="${dummy}"></h3>-->
+        <!--</th:block>-->
+        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
     </div>
     <!-- /.content -->
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/chart.js/"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </body>
 </html>

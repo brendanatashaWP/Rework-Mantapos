@@ -33,7 +33,15 @@ public class OwnerManagerController {
     //Jika user mengakses /dashboard
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView managerDashboardHtml(){
-        return new ModelAndView("owner-manager/dashboard");
+        List<String> dummyLedgerList = new ArrayList<>();
+//        String query = "SELECT month, tipe, sum(biaya) from ledger_harian where id_resto=? and year=? group by month, tipe order by month, tipe asc";
+        for (int i=1000; i<13000; i+=1000){
+            dummyLedgerList.add(String.valueOf(i));
+        }
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("owner-manager/dashboard");
+        mav.addObject("dummyList", dummyLedgerList);
+        return mav;
     }
     //Jika user mengakses menu/{page}, dimana {page} ini adalah page keberapa laman menu itu, misal menu/1 berarti laman menu page 1 di pagination-nya
     @GetMapping(value = "/menu/{page}")
