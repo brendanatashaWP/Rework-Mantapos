@@ -47,7 +47,7 @@ public class RestoranDaoImpl implements RestoranDao {
                 " VALUES (?,?)";
         try{
             jdbcTemplate.update(query, new Object[]{
-                    restoran.getNama_resto(), restoran.getLokasi_resto()
+                    restoran.getNamaResto(), restoran.getLokasiResto()
             });
         } catch (Exception ex){
             System.out.println("Gagal insert restoran baru : " + ex.toString());
@@ -84,14 +84,14 @@ public class RestoranDaoImpl implements RestoranDao {
             for(Map row : rows){
                 Restoran restoran = new Restoran();
                 restoran.setId((Integer) row.get("id"));
-                restoran.setNama_resto((String) row.get(nama_resto));
-                restoran.setLokasi_resto((String) row.get(lokasi_resto));
-                restoran.setId_user((Integer) row.get("id"));
-                restoran.setNama_lengkap((String) row.get("nama_lengkap"));
+                restoran.setNamaResto((String) row.get(nama_resto));
+                restoran.setLokasiResto((String) row.get(lokasi_resto));
+                restoran.setIdUser((Integer) row.get("id"));
+                restoran.setNamaLengkap((String) row.get("nama_lengkap"));
                 restoran.setEnabled((Boolean) row.get("enabled"));
                 restoran.setUsername((String) row.get("username"));
-                restoran.setNomor_ktp((String) row.get("nomor_ktp"));
-                restoran.setNomor_telepon((String) row.get("nomor_telepon"));
+                restoran.setNomorKtp((String) row.get("nomor_ktp"));
+                restoran.setNomorTelepon((String) row.get("nomor_telepon"));
                 restoran.setAlamat((String) row.get("alamat"));
                 restoranList.add(restoran);
             }

@@ -4,7 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import project.blibli.mantapos.Model.Restoran;
 import project.blibli.mantapos.Model.User;
-import project.blibli.mantapos.ImplementationDao.*;
+import project.blibli.mantapos.NewImplementationDao.RestoranDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.UserDaoImpl;
 
 @SpringBootApplication
 public class MantaposApplication {
@@ -12,37 +13,45 @@ public class MantaposApplication {
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(MantaposApplication.class, args);
 
-		RestoranDaoImpl restaurantDao = new RestoranDaoImpl();
-		restaurantDao.CreateTable();
-//		Restoran restoran = new Restoran();
-//		restoran.setNama_resto("ADMIN"); restoran.setLokasi_resto("ADMIN");
-//		restaurantDao.Insert(restoran);
+		RestoranDaoImpl restoranDao = new RestoranDaoImpl();
+		restoranDao.createTable();
 
 		UserDaoImpl userDao = new UserDaoImpl();
-		userDao.CreateRole();
+		userDao.createRoleUser();
+		userDao.createTable();
 
-		userDao.CreateTableUser();
-		userDao.CreateTableRole();
+//		RestoranDaoImpl restaurantDao = new RestoranDaoImpl();
+//		restaurantDao.CreateTable();
+//		Restoran restoran = new Restoran();
+//		restoran.setNamaResto("ADMIN"); restoran.setLokasiResto("ADMIN");
+//		restoranDao.insert(restoran, 0);
+//
+//		UserDaoImpl userDao = new UserDaoImpl();
+//		userDao.CreateRole();
+//
+//		userDao.CreateTableUser();
+//		userDao.CreateTableRole();
 //		User user = new User();
-//		user.setNama_lengkap("Axellageraldinc"); user.setAlamat("Terban");
-//		user.setNomor_telepon("08123451234"); user.setNomor_ktp("123123123123123");
+//		user.setNamaLengkap("Axellageraldinc"); user.setAlamat("Terban");
+//		user.setJenisKelamin("L");
+//		user.setNomorTelepon("08123451234"); user.setNomorKtp("123123123123123");
 //		user.setPassword("axell123"); user.setUsername("axell");
-//		user.setRole("admin"); user.setId_resto(1);
-//		userDao.Insert(user);
-
-		MenuDaoImpl menuDao = new MenuDaoImpl();
-		menuDao.CreateTable();
+//		user.setRole("admin"); user.setIdResto(1);
+//		userDao.insert(user, 10);
 //
-		LedgerDaoImpl orderDao = new LedgerDaoImpl();
-		orderDao.CreateTipe();
-		orderDao.CreateTable();
+//		MenuDaoImpl menuDao = new MenuDaoImpl();
+//		menuDao.CreateTable();
+////
+//		LedgerDaoImpl orderDao = new LedgerDaoImpl();
+//		orderDao.CreateTipe();
+//		orderDao.CreateTable();
+////
+//		SaldoDaoImpl saldoDao = new SaldoDaoImpl();
+//		saldoDao.CreateTable();
+////		saldoDao.AddSaldoAwal(1, 500000);
 //
-		SaldoDaoImpl saldoDao = new SaldoDaoImpl();
-		saldoDao.CreateTable();
-//		saldoDao.AddSaldoAwal(1, 500000);
-
-		MenuYangDipesanDaoImpl orderedMenuDao = new MenuYangDipesanDaoImpl();
-		orderedMenuDao.CreateTable();
+//		MenuYangDipesanDaoImpl orderedMenuDao = new MenuYangDipesanDaoImpl();
+//		orderedMenuDao.CreateTable();
 	}
 
 }

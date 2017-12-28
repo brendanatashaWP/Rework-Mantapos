@@ -45,12 +45,12 @@
                         <tbody>
                         <th:block th:each="item : ${restoranList}">
                             <tr>
-                                <td th:text="${item.nama_resto}"/>
-                                <td th:text="${item.lokasi_resto}"/>
-                                <td th:text="${item.nama_lengkap}"/>
+                                <td th:text="${item.namaResto}"/>
+                                <td th:text="${item.lokasiResto}"/>
+                                <td th:text="${item.namaLengkap}"/>
                                 <td th:text="${item.username}"/>
-                                <td th:text="${item.nomor_ktp}"/>
-                                <td th:text="${item.nomor_telepon}"/>
+                                <td th:text="${item.nomorKtp}"/>
+                                <td th:text="${item.nomorTelepon}"/>
                                 <td th:text="${item.alamat}"/>
                                 <div th:if="${item.enabled == true}">
                                     <td><a th:href="@{/delete/user/{id}(id=${item.id})}">Nonaktifkan</a></td>
@@ -90,15 +90,15 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     Nama restoran :<br/>
-                                    <input class="form-control" type="text" name="nama_resto"/>
+                                    <input class="form-control" type="text" name="namaResto"/>
                                 </div>
                                 <div class="form-group">
                                     Lokasi restoran :<br/>
-                                    <input class="form-control" type="text" name="lokasi_resto"/>
+                                    <input class="form-control" type="text" name="lokasiResto"/>
                                 </div>
                                 <div class="form-group">
                                     Nama pemilik :<br/>
-                                    <input class="form-control" type="text" name="nama_lengkap"/>
+                                    <input class="form-control" type="text" name="namaLengkap"/>
                                 </div>
                                 <div class="form-group">
                                     Username pemilik :<br/>
@@ -112,11 +112,11 @@
                                 </div>
                                 <div class="form-group">
                                     Nomor KTP :<br/>
-                                    <input class="form-control" type="text" name="nomor_ktp"/>
+                                    <input class="form-control" type="text" name="nomorKtp"/>
                                 </div>
                                 <div class="form-group">
                                     Nomor telepon :<br/>
-                                    <input class="form-control" type="text" name="nomor_telepon"/>
+                                    <input class="form-control" type="text" name="nomorTelepon"/>
                                 </div>
                                 <div class="form-group">
                                     Alamat pemilik :<br/>

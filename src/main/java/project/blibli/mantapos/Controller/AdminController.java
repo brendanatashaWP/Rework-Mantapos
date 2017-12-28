@@ -38,7 +38,7 @@ public class AdminController {
                                           @ModelAttribute("user") User user){
         restoranDao.Insert(restoran); //melakukan insert object restoran ke database (isinya object ini adalah informasi restoran) (table restoran)
         user.setRole("owner"); //setRole untuk user yang di add sebagai owner
-        user.setId_resto(restoranDao.GetRestoranIdBerdasarkanNamaResto(restoran.getNama_resto())); //setIdResto berdasarkan nama restorannya. Jadi tadi kan sudah insert restoran, nama restorannya itu dijadikan parameter untuk mencari ID restoran tsb
+        user.setIdResto(restoranDao.GetRestoranIdBerdasarkanNamaResto(restoran.getNamaResto())); //setIdResto berdasarkan nama restorannya. Jadi tadi kan sudah insert restoran, nama restorannya itu dijadikan parameter untuk mencari ID restoran tsb
         userDao.Insert(user); //insert object user ke database (table user dan user_roles --> yang menangani insert ke user_roles ada di method insert user)
         return new ModelAndView("redirect:/restaurant");
     }

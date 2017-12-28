@@ -109,9 +109,9 @@ public class UserDaoImpl implements UserDao{
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         try{
             jdbcTemplate.update(query, new Object[]{
-                    user.getUsername(), hashedPassword, user.getNama_lengkap(),
-                    user.getNomor_ktp(), user.getNomor_telepon(), user.getAlamat(),
-                    user.getId_resto()
+                    user.getUsername(), hashedPassword, user.getNamaLengkap(),
+                    user.getNomorKtp(), user.getNomorTelepon(), user.getAlamat(),
+                    user.getIdResto()
             });
         } catch (Exception ex){
             System.out.println("Gagal insert user : " + ex.toString());
@@ -220,7 +220,7 @@ public class UserDaoImpl implements UserDao{
                     "," + alamat + "=?" +
             " WHERE " + id + "=? AND " + id_resto + "=?";
             jdbcTemplate.update(query1, new Object[] {
-                    user.getNama_lengkap(), user.getUsername(), user.getNomor_telepon(), user.getNomor_ktp(), user.getAlamat(),
+                    user.getNamaLengkap(), user.getUsername(), user.getNomorTelepon(), user.getNomorKtp(), user.getAlamat(),
                     user.getId(), id_restoo
             });
         } else if(!user.getPassword().equals("")){
@@ -234,7 +234,7 @@ public class UserDaoImpl implements UserDao{
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             String hashed = bCryptPasswordEncoder.encode(user.getPassword());
             jdbcTemplate.update(query1, new Object[] {
-                    user.getNama_lengkap(), user.getUsername(), user.getNomor_telepon(), user.getNomor_ktp(), user.getAlamat(), hashed,
+                    user.getNamaLengkap(), user.getUsername(), user.getNomorTelepon(), user.getNomorKtp(), user.getAlamat(), hashed,
                     user.getId(), id_restoo
             });
         }

@@ -3,7 +3,6 @@ package project.blibli.mantapos.Controller;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.*;
@@ -11,7 +10,6 @@ import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.MonthNameGenerator;
 import project.blibli.mantapos.WeekGenerator;
 
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -178,7 +176,7 @@ public class OwnerManagerController {
             //jika sebagai owner, maka user yang baru ditambahkan itu role-nya bisa manager atau cashier. Diambil dari value yang di-pick di employee.html
             user.setRole(user.getRole());
         }
-        user.setId_resto(id_resto); //set ID resto (foreign key) user dengan id_resto dari username yang login sekarang (yaitu atasannya)
+        user.setIdResto(id_resto); //set ID resto (foreign key) user dengan id_resto dari username yang login sekarang (yaitu atasannya)
         userDao.Insert(user); //insert user ke table user dan user_roles di database. Insert ke table user_roles ada di dalam method Insert ini juga.
         return new ModelAndView("redirect:/employee/1");
     }
