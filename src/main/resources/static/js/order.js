@@ -20,7 +20,6 @@ var tableReceipt = document.getElementById("tableReceipt");
 var priceTotalReceipt = document.getElementById("priceTotalReceipt");
 var CashReceipt = document.getElementById("CashReceipt");
 var ChangeReceipt = document.getElementById("ChangeReceipt");
-var a = 0; //tambah
 
 function startTime() {
     $('#changeModal').modal({ show: false});
