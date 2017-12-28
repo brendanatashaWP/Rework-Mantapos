@@ -3,9 +3,17 @@ package project.blibli.mantapos.Model;
 public class User {
     private int id;
     private String username, password, role;
-    private String nama_lengkap, nomor_ktp, nomor_telepon, alamat;
-    private int id_resto;
+    private String namaLengkap, nomorKtp, nomorTelepon, alamat, jenisKelamin;
+    private int idResto;
     private boolean enabled;
+
+    public String getJenisKelamin() {
+        return jenisKelamin;
+    }
+
+    public void setJenisKelamin(String jenisKelamin) {
+        this.jenisKelamin = jenisKelamin;
+    }
 
     public boolean getEnabled() {
         return enabled;
@@ -47,28 +55,28 @@ public class User {
         this.role = role;
     }
 
-    public String getNama_lengkap() {
-        return nama_lengkap;
+    public String getNamaLengkap() {
+        return namaLengkap;
     }
 
-    public void setNama_lengkap(String nama_lengkap) {
-        this.nama_lengkap = nama_lengkap;
+    public void setNamaLengkap(String namaLengkap) {
+        this.namaLengkap = namaLengkap;
     }
 
-    public String getNomor_ktp() {
-        return nomor_ktp;
+    public String getNomorKtp() {
+        return nomorKtp;
     }
 
-    public void setNomor_ktp(String nomor_ktp) {
-        this.nomor_ktp = nomor_ktp;
+    public void setNomorKtp(String nomorKtp) {
+        this.nomorKtp = nomorKtp;
     }
 
-    public String getNomor_telepon() {
-        return nomor_telepon;
+    public String getNomorTelepon() {
+        return nomorTelepon;
     }
 
-    public void setNomor_telepon(String nomor_telepon) {
-        this.nomor_telepon = nomor_telepon;
+    public void setNomorTelepon(String nomorTelepon) {
+        this.nomorTelepon = nomorTelepon;
     }
 
     public String getAlamat() {
@@ -79,11 +87,11 @@ public class User {
         this.alamat = alamat;
     }
 
-    public int getId_resto() {
-        return id_resto;
+    public int getIdResto() {
+        return idResto;
     }
 
-    public void setId_resto(int id_resto) {
-        this.id_resto = id_resto;
+    public void setIdResto(int idResto) {
+        this.idResto = idResto;
     }
 }

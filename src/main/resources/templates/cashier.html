@@ -210,8 +210,8 @@
                             <label><input type="checkbox" id="checkboxKirimEmailReceipt" th:onclick="'javascript:checkboxKirimEmailReceipt();'"/>Kirim receipt melalui email?</label>
                         </div>
                         <form action="/add-order" method="post">
-                            <input type="text" name="nama_resto" id="inputRestaurantName" th:value="${restoran.nama_resto}"/>
-                            <input type="text" name="lokasi_resto" id="inputRestaurantAddress" th:value="${restoran.lokasi_resto}"/>
+                            <input type="text" name="namaResto" id="inputRestaurantName" th:value="${restoran.namaResto}"/>
+                            <input type="text" name="lokasiResto" id="inputRestaurantAddress" th:value="${restoran.lokasiResto}"/>
                             <input type="text" name="customer_name" id="inputCustNameChange"/>
                             <input type="text" name="table_no" id="inputTableNoChange"/>
                             <input type="text" name="notes" id="inputNotesChange"/>
@@ -233,8 +233,8 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 th:text="${restoran.nama_resto}" id="restaurantNameReceipt" class="topModal" style="text-align:center"></h4>
-                        <h4 th:text="${restoran.lokasi_resto}" id="restaurantAddressReceipt" style="text-align: center"></h4>
+                        <h4 th:text="${restoran.namaResto}" id="restaurantNameReceipt" class="topModal" style="text-align:center"></h4>
+                        <h4 th:text="${restoran.lokasiResto}" id="restaurantAddressReceipt" style="text-align: center"></h4>
                         <h5 id="custNameReceipt">Dedy</h5>
                     </div>
                     <div class="modal-body">

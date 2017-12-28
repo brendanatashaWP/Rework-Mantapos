@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery(
                         "select username, password, enabled from users where username=?") //query Username
                 .authoritiesByUsernameQuery(
-                        "select username, role from user_roles where username=?") //query authority (role nya)
+                        "select username, role from users_roles where username=?") //query authority (role nya)
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 

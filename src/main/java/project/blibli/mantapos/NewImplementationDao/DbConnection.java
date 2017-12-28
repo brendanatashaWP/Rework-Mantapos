@@ -1,4 +1,4 @@
-package project.blibli.mantapos.ImplementationDao;
+package project.blibli.mantapos.NewImplementationDao;
 
 import java.sql.*;
 
@@ -8,11 +8,11 @@ public class DbConnection {
     public static Connection openConnection(){
         try{
             connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:1414/Mantapos_2",
+                    "jdbc:postgresql://localhost:1414/MantaposDatabase",
                     "postgres",
                     "postgres"
             );
-            System.out.println("DB connection success!");
+            System.out.println("DB Connection opened successfully!");
         } catch (Exception ex){
             System.out.println("Error start connection DB : " + ex.toString());
         }
@@ -25,7 +25,7 @@ public class DbConnection {
         } else{
             try {
                 connection.close();
-                System.out.println("Connection closed successfully!");
+                System.out.println("DB Connection closed successfully!");
             } catch (SQLException e) {
                 e.printStackTrace();
                 System.out.println("Failed closing connection : " + e.toString());

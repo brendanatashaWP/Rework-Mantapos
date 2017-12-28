@@ -2,11 +2,19 @@ package project.blibli.mantapos.Model;
 
 public class Restoran {
     private int id;
-    private String nama_resto, lokasi_resto;
+    private String namaResto, lokasiResto;
     private String username, password;
-    private String nama_lengkap, nomor_ktp, nomor_telepon, alamat;
-    private int id_user;
+    private String namaLengkap, nomorKtp, nomorTelepon, alamat, jenisKelamin;
+    private int idUser;
     private boolean enabled;
+
+    public String getJenisKelamin() {
+        return jenisKelamin;
+    }
+
+    public void setJenisKelamin(String jenisKelamin) {
+        this.jenisKelamin = jenisKelamin;
+    }
 
     public boolean isEnabled() {
         return enabled;
@@ -16,12 +24,12 @@ public class Restoran {
         this.enabled = enabled;
     }
 
-    public int getId_user() {
-        return id_user;
+    public int getIdUser() {
+        return idUser;
     }
 
-    public void setId_user(int id_user) {
-        this.id_user = id_user;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
     public int getId() {
@@ -32,20 +40,20 @@ public class Restoran {
         this.id = id;
     }
 
-    public String getNama_resto() {
-        return nama_resto;
+    public String getNamaResto() {
+        return namaResto;
     }
 
-    public void setNama_resto(String nama_resto) {
-        this.nama_resto = nama_resto;
+    public void setNamaResto(String namaResto) {
+        this.namaResto = namaResto;
     }
 
-    public String getLokasi_resto() {
-        return lokasi_resto;
+    public String getLokasiResto() {
+        return lokasiResto;
     }
 
-    public void setLokasi_resto(String lokasi_resto) {
-        this.lokasi_resto = lokasi_resto;
+    public void setLokasiResto(String lokasiResto) {
+        this.lokasiResto = lokasiResto;
     }
 
     public String getUsername() {
@@ -64,28 +72,28 @@ public class Restoran {
         this.password = password;
     }
 
-    public String getNama_lengkap() {
-        return nama_lengkap;
+    public String getNamaLengkap() {
+        return namaLengkap;
     }
 
-    public void setNama_lengkap(String nama_lengkap) {
-        this.nama_lengkap = nama_lengkap;
+    public void setNamaLengkap(String namaLengkap) {
+        this.namaLengkap = namaLengkap;
     }
 
-    public String getNomor_ktp() {
-        return nomor_ktp;
+    public String getNomorKtp() {
+        return nomorKtp;
     }
 
-    public void setNomor_ktp(String nomor_ktp) {
-        this.nomor_ktp = nomor_ktp;
+    public void setNomorKtp(String nomorKtp) {
+        this.nomorKtp = nomorKtp;
     }
 
-    public String getNomor_telepon() {
-        return nomor_telepon;
+    public String getNomorTelepon() {
+        return nomorTelepon;
     }
 
-    public void setNomor_telepon(String nomor_telepon) {
-        this.nomor_telepon = nomor_telepon;
+    public void setNomorTelepon(String nomorTelepon) {
+        this.nomorTelepon = nomorTelepon;
     }
 
     public String getAlamat() {

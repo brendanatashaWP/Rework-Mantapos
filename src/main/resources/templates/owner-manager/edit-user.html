@@ -24,35 +24,34 @@
         <div class="box">
             <div class="box-body">
                 <form action="/edit-user" method="post">
-                    <th:block th:each="user : ${userList}">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                    <input class="form-control" type="text" name="nama_lengkap" th:value="${user.nama_lengkap}"/><br/>
+                                    <input class="form-control" type="text" name="namaLengkap" th:value="${userObject.namaLengkap}"/><br/>
                                 </div>
                                 <br/>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-                                    <input class="form-control" type="text" name="nomor_ktp" th:value="${user.nomor_ktp}"/><br/>
+                                    <input class="form-control" type="text" name="nomorKtp" th:value="${userObject.nomorKtp}"/><br/>
                                 </div>
                                 <br/>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                                    <input class="form-control" type="text" name="nomor_telepon" th:value="${user.nomor_telepon}"/>
+                                    <input class="form-control" type="text" name="nomorTelepon" th:value="${userObject.nomorTelepon}"/>
                                 </div>
                                 <br/>
-                                <input type="hidden" name="id" th:value="${user.id}"/>
+                                <input type="hidden" name="id" th:value="${userObject.id}"/>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-home"></i></span>
-                                    <input class="form-control" type="text" name="alamat" th:value="${user.alamat}"/><br/>
+                                    <input class="form-control" type="text" name="alamat" th:value="${userObject.alamat}"/><br/>
                                 </div>
                                 <br/>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
-                                    <input class="form-control" type="text" name="username" th:value="${user.username}"/><br/>
+                                    <input class="form-control" type="text" name="username" th:value="${userObject.username}"/><br/>
                                 </div>
                                 <br/>
                                 <div class="input-group">
@@ -67,20 +66,33 @@
                         <div th:if="${role == '[owner]'}" class="form-group">
                             <strong>Role:<br/></strong>
                             <select name="role" class="form-control">
-                                <div th:if="${user.role == 'cashier'}">
+                                <div th:if="${userObject.role == 'cashier'}">
                                     <option th:value="manager" th:text="Manager"/>
                                     <option selected="selected" th:value="cashier" th:text="Cashier"/>
                                 </div>
-                                <div th:if="${user.role == 'manager'}">
+                                <div th:if="${userObject.role == 'manager'}">
                                     <option selected="selected" th:value="manager" th:text="Manager"/>
                                     <option th:value="cashier" th:text="Cashier"/>
                                 </div>
                             </select>
                         </div>
                         <div th:if="${role == '[manager]'}">
-                            <input name="role" type="hidden" th:value="${user.role}"/>
+                            <input name="role" type="hidden" th:value="${userObject.role}"/>
                         </div>
-                    </th:block>
+                    <div th:if="${userObject.jenisKelamin == 'L'}" class="form-group">
+                        <strong>Jenis Kelamin:<br/></strong>
+                        <select name="jenisKelamin" class="form-control">
+                            <option selected="selected" value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div th:if="${userObject.jenisKelamin == 'P'}" class="form-group">
+                        <strong>Jenis Kelamin:<br/></strong>
+                        <select name="jenisKelamin" class="form-control">
+                            <option value="L">Laki-laki</option>
+                            <option selected="selected" value="P">Perempuan</option>
+                        </select>
+                    </div>
                     <button class="form-control btn btn-primary" type="submit">ADD</button>
                 </form>
             </div>

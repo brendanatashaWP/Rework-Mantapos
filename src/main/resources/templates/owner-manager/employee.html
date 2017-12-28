@@ -45,10 +45,10 @@
                             <tbody>
                             <th:block th:each="user : ${userList}">
                                 <tr>
-                                    <td th:text="${user.nama_lengkap}"/>
+                                    <td th:text="${user.namaLengkap}"/>
                                     <td th:text="${user.username}"/>
-                                    <td th:text="${user.nomor_ktp}"/>
-                                    <td th:text="${user.nomor_telepon}"/>
+                                    <td th:text="${user.nomorKtp}"/>
+                                    <td th:text="${user.nomorTelepon}"/>
                                     <td th:text="${user.alamat}"/>
                                     <td th:text="${user.role}"/>
                                     <td><i class="fa fa-pencil text-primary"></i><a th:href="@{/edit/user/{id}(id=${user.id})}">Edit</a></td>
@@ -89,17 +89,17 @@
                                 <div class="col-md-6">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                        <input class="form-control" type="text" name="nama_lengkap" placeholder="Nama Lengkap"/>
+                                        <input class="form-control" type="text" name="namaLengkap" placeholder="Nama Lengkap"/>
                                     </div>
                                     <br/>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-                                        <input class="form-control" type="text" name="nomor_ktp" placeholder="Nomor KTP"/>
+                                        <input class="form-control" type="text" name="nomorKtp" placeholder="Nomor KTP"/>
                                     </div>
                                     <br/>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                                        <input class="form-control" type="text" name="nomor_telepon" placeholder="Nomor Telepon"/>
+                                        <input class="form-control" type="text" name="nomorTelepon" placeholder="Nomor Telepon"/>
                                     </div>
                                     <br/>
                                 </div>
@@ -129,6 +129,10 @@
                                 </div>
                                 <br/>
                             </div>
+                            <select name="jenisKelamin" class="form-control">
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
                             <button class="form-control btn btn-primary" type="submit">ADD</button>
                         </form>
                     </div>

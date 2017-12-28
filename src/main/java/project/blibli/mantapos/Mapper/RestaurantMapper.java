@@ -14,8 +14,8 @@ public class RestaurantMapper implements RowMapper<Restoran> {
     public Restoran mapRow(ResultSet resultSet, int i) throws SQLException {
         Restoran restoran = new Restoran();
         restoran.setId(resultSet.getInt("id"));
-        restoran.setNama_resto(resultSet.getString("nama_resto"));
-        restoran.setLokasi_resto(resultSet.getString("lokasi_resto"));
+        restoran.setNamaResto(resultSet.getString("nama_resto"));
+        restoran.setLokasiResto(resultSet.getString("lokasi_resto"));
         return restoran;
     }
 }
