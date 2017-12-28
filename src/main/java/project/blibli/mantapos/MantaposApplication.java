@@ -4,6 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import project.blibli.mantapos.Model.Restoran;
 import project.blibli.mantapos.Model.User;
+import project.blibli.mantapos.NewImplementationDao.MenuDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.MenuYangDipesanDaoImpl;
 import project.blibli.mantapos.NewImplementationDao.RestoranDaoImpl;
 import project.blibli.mantapos.NewImplementationDao.UserDaoImpl;
 
@@ -19,6 +21,12 @@ public class MantaposApplication {
 		UserDaoImpl userDao = new UserDaoImpl();
 		userDao.createRoleUser();
 		userDao.createTable();
+
+		MenuDaoImpl menuDao = new MenuDaoImpl();
+		menuDao.createTable();
+
+		MenuYangDipesanDaoImpl menuYangDipesanDao = new MenuYangDipesanDaoImpl();
+		menuYangDipesanDao.createTable();
 
 //		RestoranDaoImpl restaurantDao = new RestoranDaoImpl();
 //		restaurantDao.CreateTable();

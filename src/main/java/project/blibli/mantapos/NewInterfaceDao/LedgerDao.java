@@ -1,10 +1,11 @@
 package project.blibli.mantapos.NewInterfaceDao;
 
 import project.blibli.mantapos.Model.Ledger;
+import project.blibli.mantapos.NewImplementationDao.BasicDao;
 
 import java.util.List;
 
-public interface LedgerDao {
+public interface LedgerDao extends BasicDao<Ledger, Integer, Integer, Integer, Integer> {
     void createTipeLedger();
     List<Ledger> getListBulanDanTahun(int idResto);
     List<Ledger> getLedgerHarian(int idResto, int monthh, int yearr);

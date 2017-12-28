@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO : restoranDaoImpl pindahkan connection, preparedStatement, dan resultSet jadi didalam masing2 method
 public class RestoranDaoImpl implements RestoranDao {
 
     private static final String tableRestoran = "restoran";
@@ -202,7 +203,7 @@ public class RestoranDaoImpl implements RestoranDao {
             );
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                count = resultSet.getInt(idResto);
+                count = resultSet.getInt("sum");
             }
         } catch (Exception ex){
             System.out.println("Gagal count restoran : " + ex.toString());

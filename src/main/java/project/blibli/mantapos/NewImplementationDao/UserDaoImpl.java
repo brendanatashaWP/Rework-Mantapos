@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO : userDaoImpl pindahkan connection, preparedStatement, dan resultSet jadi didalam masing2 method
 public class UserDaoImpl implements UserDao {
 
     private static final String tableUser = "users";
@@ -399,7 +400,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setInt(1, idResto);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                count = resultSet.getInt(idUser);
+                count = resultSet.getInt("sum");
             }
         } catch (Exception ex){
             System.out.println("Gagal count users " + ex.toString());
