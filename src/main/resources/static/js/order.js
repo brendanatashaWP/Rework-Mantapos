@@ -20,6 +20,7 @@ var tableReceipt = document.getElementById("tableReceipt");
 var priceTotalReceipt = document.getElementById("priceTotalReceipt");
 var CashReceipt = document.getElementById("CashReceipt");
 var ChangeReceipt = document.getElementById("ChangeReceipt");
+var a = 0; //tambah
 
 function startTime() {
     $('#changeModal').modal({ show: false});
@@ -45,7 +46,7 @@ function checkTime(i) {
 
 function addToCart(id, name, price){
 
-    //variabel2 untuk cell dari table order nya..
+//   document.getElementById(idPanel).disabled= true;
     var row = tableCart.insertRow(-1);
     var cellName = row.insertCell(0);
     var cellQty = row.insertCell(1);
@@ -66,8 +67,29 @@ function addToCart(id, name, price){
 
     //Jika ada order baru, counter++
     counterOrder++;
+    var idbtn = 'btn' +id;
+
+
+    var array_id_cart = [];
+        for (var i=0; i<counterOrder; i++){
+        if(id!=array_id_cart[i]){
+              try{
+                  array_id_cart.push(id);
+                var btn = document.getElementById(idbtn);
+                btn.disabled = true;
+
+                }
+            catch(e){
+                alert(e);
+            }
+        }
+        else{
+        }
+        }
+
     //set variabel priceTotal menjadi 0 lagi.
     priceTotal = 0;
+
 
     //Iterasi sebanyak jumlah counterOrder
     for(i=0; i<counterOrder; i++){
@@ -78,7 +100,8 @@ function addToCart(id, name, price){
     //set nilai totalBayar
     totalBayar.innerHTML = "Rp " + priceTotal;
     inputPriceTotal.value = priceTotal;
-    this.document.getElementById(id).disabled= true;
+
+
 }
 
 function updatePrice(x){
@@ -225,3 +248,13 @@ function checkboxKirimEmailReceipt(){
         is_kirim_email_receipt.value = "no"
     }
 }
+
+
+// $(document).ready(function(){
+//            $("'btn' + ${menu.id}").click(function(e){
+//                e.preventDefault();
+//
+//                $(this).attr('disabled', true);
+//            }
+//        }
+//}))
