@@ -458,7 +458,7 @@ public class LedgerDaoImpl implements LedgerDao {
             );
             preparedStatement.executeUpdate();
         } catch (Exception ex){
-
+            System.out.println("Gagal create table " + tableLedger + " : " + ex.toString());
         } finally {
             DbConnection.closePreparedStatement(preparedStatement);
             DbConnection.closeConnection(connection);

@@ -5,9 +5,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import project.blibli.mantapos.ImplementationDao.LedgerDaoImpl;
+import project.blibli.mantapos.ImplementationDao.MenuDaoImpl;
+import project.blibli.mantapos.ImplementationDao.RestoranDaoImpl;
+import project.blibli.mantapos.ImplementationDao.SaldoDaoImpl;
 import project.blibli.mantapos.Model.*;
-import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.MonthNameGenerator;
+import project.blibli.mantapos.NewImplementationDao.UserDaoImpl;
 import project.blibli.mantapos.WeekGenerator;
 
 import java.io.File;
@@ -84,7 +88,7 @@ public class OwnerManagerController {
         List<User> userList = new ArrayList<>();
         String username = authentication.getName();
         id_resto = restoranDao.GetRestoranId(username);
-        double jumlahEmployee = userDao.jumlahEmployee(id_resto);
+        double jumlahEmployee = userDao.count(id_resto);
         double jumlahPage = Math.ceil(jumlahEmployee/itemPerPage);
         List<Integer> pageList = new ArrayList<>();
         for (int i=1; i<=jumlahPage; i++){
@@ -93,10 +97,10 @@ public class OwnerManagerController {
         //Mengecek user yang login sekarang itu role-nya apa.
         if(authentication.getAuthorities().toString().equals("[manager]")){
             //jika role-nya adalah manager, maka mengambil semua user dengan role cashier
-            userList = userDao.getAllUser(id_resto, "cashier", itemPerPage, page);
+            userList = userDao.readAllUsers(id_resto, "cashier", itemPerPage, page);
         } else if(authentication.getAuthorities().toString().equals("[owner]")){
             //jika role-nya adalah owner, maka mengambil semua user dengan role manager dan cashier
-            userList = userDao.getAllUser(id_resto, "manager&cashier", itemPerPage, page);
+            userList = userDao.readAllUsers(id_resto, "manager&cashier", itemPerPage, page);
         }
         String role = authentication.getAuthorities().toString();
         mav.addObject("pageNo", page);
@@ -177,7 +181,7 @@ public class OwnerManagerController {
             user.setRole(user.getRole());
         }
         user.setIdResto(id_resto); //set ID resto (foreign key) user dengan id_resto dari username yang login sekarang (yaitu atasannya)
-        userDao.Insert(user); //insert user ke table user dan user_roles di database. Insert ke table user_roles ada di dalam method Insert ini juga.
+        userDao.insert(user, user.getIdResto()); //insert user ke table user dan user_roles di database. Insert ke table user_roles ada di dalam method Insert ini juga.
         return new ModelAndView("redirect:/employee/1");
     }
     //Jika user menambahkan outcome (pengeluaran baru)
@@ -280,11 +284,11 @@ public class OwnerManagerController {
         if(authentication.getAuthorities().toString().equals("[admin]")){
             //jika user yang login sekarang adalah seorang admin, maka yang dihapus (dinonaktifkan) adalah user tersebut beserta user user yang bersesuaian.
             //Karena jika yg login skrg adalah admin, maka yg dinonaktifkan adalah owner, maka yg dinonaktifkan adalah owner, manager, dan cashier dari restoran yang sama.
-            userDao.DeleteUserAndDependencies(id);
-            return new ModelAndView("redirect:/restaurant");
+            userDao.deleteUserAndDependencies(id);
+            return new ModelAndView("redirect:/restaurant/1");
         } else{
             //jika user yang login bukanlah admin (manager/owner)
-            userDao.DeleteUser(id); //cukup menonaktifkan user itu saja
+            userDao.delete(id); //cukup menonaktifkan user itu saja
             return new ModelAndView("redirect:/employee/1");
         }
     }
@@ -292,10 +296,10 @@ public class OwnerManagerController {
     @GetMapping(value = "/active/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView activeCashier(@PathVariable("id") int id,
                                       Authentication authentication){
-        userDao.ActivateUser(id); //tidak peduli role nya user yg login ini adalah admin atau bukan, yg diaktifkan tetaplah user yang ingin diaktifkan saja.
+        userDao.activateUser(id); //tidak peduli role nya user yg login ini adalah admin atau bukan, yg diaktifkan tetaplah user yang ingin diaktifkan saja.
         //kenapa? karena misal jika admin mengaktifkan seorang owner, jika diaktifkan owner beserta user2 lainnya, kalau misal ada cashier yg ternyata sudah nonaktif karena pensiun, masa ya harus diaktifkan juga
         if(authentication.getAuthorities().toString().equals("[admin]"))
-            return new ModelAndView("redirect:/restaurant");
+            return new ModelAndView("redirect:/restaurant/1");
         else
             return new ModelAndView("redirect:/employee/1");
     }
@@ -344,7 +348,8 @@ public class OwnerManagerController {
     public ModelAndView editUserHtml(@PathVariable("id") int id,
                                      Authentication authentication){
         int id_resto = restoranDao.GetRestoranId(authentication.getName());
-        List<User> userList = userDao.GetUserById(id_resto, id); //Ambil detail user yang ingin diedit berdasarkan id-nya
+        User userList = userDao.readOne(id); //Ambil detail user yang ingin diedit berdasarkan id-nya
+        //TODO : update bagian userList di atas karena sebelumnya ambil list, sekarang hanya satu object model saja. update juga di html nya
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/edit-user");
         String role = authentication.getAuthorities().toString();
@@ -358,7 +363,7 @@ public class OwnerManagerController {
                                          Authentication authentication){
         ModelAndView mav = new ModelAndView();
         int id_resto = restoranDao.GetRestoranId(authentication.getName());
-        userDao.UpdateUser(id_resto, user);
+        userDao.update(user, id_resto);
         mav.setViewName("redirect:/employee/1");
         return mav;
     }

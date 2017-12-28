@@ -21,20 +21,20 @@ public class RestoranDaoImpl implements RestoranDao {
     private static final String idUser = "id";
     private static final String usernameUser = "username";
     private static final String passwordUser = "password";
+    private static final String enabled = "enabled";
     private static final String namaLengkap = "nama_lengkap";
     private static final String jenisKelamin = "jenis_kelamin";
     private static final String nomorKtp = "nomor_ktp";
     private static final String nomorTelepon = "nomor_telepon";
     private static final String alamatUser = "alamat";
 
-    Connection connection;
-    PreparedStatement preparedStatement;
-    ResultSet resultSet;
     Restoran restoran = new Restoran();
     int idRestoran=0, count=0;
 
     @Override
     public void createTable(){
+        Connection connection;
+        PreparedStatement preparedStatement = null;
         connection = DbConnection.openConnection();
         try {
             preparedStatement = connection.prepareStatement(
@@ -60,6 +60,8 @@ public class RestoranDaoImpl implements RestoranDao {
 
     @Override
     public void insert(Restoran modelData, Integer idResto) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -86,6 +88,9 @@ public class RestoranDaoImpl implements RestoranDao {
 
     @Override
     public Restoran readOne(Integer idData) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -134,6 +139,9 @@ public class RestoranDaoImpl implements RestoranDao {
     //Mengambil id restoran berdasarkan nama restoran
     @Override
     public int readIdResto(String namaResto) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -156,6 +164,9 @@ public class RestoranDaoImpl implements RestoranDao {
 
     @Override
     public List<Restoran> readAllRestoran(String role) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         List<Restoran> restoranList = new ArrayList<>();
         connection = DbConnection.openConnection();
         try{
@@ -163,16 +174,17 @@ public class RestoranDaoImpl implements RestoranDao {
                     "SELECT" +
                             " *, " + //semua field restoran
                             " *" + //semua field user dari table users
-                            " FROM restoran, users, user_roles" +
+                            " FROM restoran, users, users_roles" +
                             " WHERE users.id_resto=restoran.id " +
-                            "AND user_roles.id=users.id " +
-                            "AND user_roles.role=?::role_type"
+                            "AND users_roles.id=users.id " +
+                            "AND users_roles.role=?::role_type"
             );
             preparedStatement.setString(1, role);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
                 restoran.setId(resultSet.getInt(idResto));
                 restoran.setNamaResto(resultSet.getString(namaResto));
+                restoran.setEnabled(resultSet.getBoolean(enabled));
                 restoran.setLokasiResto(resultSet.getString(alamatResto));
                 restoran.setIdUser(resultSet.getInt(idUser));
                 restoran.setNamaLengkap(resultSet.getString(namaLengkap));
@@ -196,6 +208,9 @@ public class RestoranDaoImpl implements RestoranDao {
 
     @Override
     public int countRestoran() {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(

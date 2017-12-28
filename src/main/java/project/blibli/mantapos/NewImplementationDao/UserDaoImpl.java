@@ -36,10 +36,6 @@ public class UserDaoImpl implements UserDao {
     private static final String tableUserRoles = "users_roles";
     private static final String refTableRestoran = "restoran";
 
-    Connection connection;
-    PreparedStatement preparedStatement;
-    ResultSet resultSet;
-
     User user = new User();
     int id=0, count=0;
 
@@ -48,6 +44,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void createRoleUser() {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -69,6 +67,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void deleteUserAndDependencies(int idResto) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -87,6 +87,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void activateUser(int id) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -106,6 +108,9 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> readAllUsers(int idResto, String role, int itemPerPage, int page) {
         List<User> userList = new ArrayList<>();
+        Connection connection;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         connection = DbConnection.openConnection();
         try{
             if(role.equals("manager&cashier")){
@@ -159,6 +164,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int getId(String username) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -181,6 +189,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void createTable() throws SQLException {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -220,6 +230,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void insert(User modelData, Integer idResto) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -276,6 +288,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User readOne(Integer idData) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -314,6 +329,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void update(User modelData, Integer idResto) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
         connection = DbConnection.openConnection();
         try {
             if (modelData.getPassword().equals("") || modelData.getPassword().isEmpty()) {
@@ -374,6 +391,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void delete(Integer idData) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
@@ -392,6 +411,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int count(Integer idResto) {
+        Connection connection;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
