@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RestaurantMapper implements RowMapper<Restoran> {
+
+    //Class Mapper, untuk mapping value dari resultSet ke model yang bersesuaian.
+
     @Override
     public Restoran mapRow(ResultSet resultSet, int i) throws SQLException {
         Restoran restoran = new Restoran();

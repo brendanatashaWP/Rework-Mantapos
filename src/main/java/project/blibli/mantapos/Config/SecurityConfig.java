@@ -16,25 +16,34 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    //Class yang mengatur konfigurasi mengenai security
+
+    //Melakukan AutoWired untuk DataSource (Database)
     @Qualifier("dataSource")
     @Autowired
     DataSource dataSource;
+
+    //Melakukan AutoWired untuk BCryptPasswordEncoder (untuk encrypt password)
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    //Melakukan AutoWired untuk hal Authentication
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-
-//        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("cashier");
         auth.jdbcAuthentication()
-                .dataSource(dataSource)
+                .dataSource(dataSource) //dataSource diambil dari DataSource
                 .usersByUsernameQuery(
-                        "select username, password, enabled from users where username=?")
+                        "select username, password, enabled from users where username=?") //query Username
                 .authoritiesByUsernameQuery(
-                        "select username, role from user_roles where username=?")
+                        "select username, role from user_roles where username=?") //query authority (role nya)
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 
+    //Konfigurasi mengenai page mana yang boleh diakses oleh siapa
+    //Konfigurasi mengenai page redirect jika login berhasil dan login gagal
+    //Konfigurasi mengenai page redirect jika logout berhasil
+    //Konfigurasi jika user ingin mengakses page yang tidak bisa (role tidak sesuai)
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.authorizeRequests()

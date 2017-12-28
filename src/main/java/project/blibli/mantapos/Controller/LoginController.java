@@ -21,23 +21,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+//Controller untuk menangani jika akses ke URL /login,
+//Akses ke URL "/" (URL "/" adalah URL jika user sukses login) (maka di redirect sesuai role-nya)
+//Akses ke URL /privilege, yaitu jika user mengakses page yang tidak seharusnya (role-nya tidak sesuai)
 public class LoginController {
 
-
-
+    //Jika user mengakses URL /login
     @GetMapping(value = "/login", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView loginHtml(@RequestParam(value = "error", required = false) String error,
                                   @RequestParam(value = "logout", required = false) String logout){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("login");
+        //jika dalam URL itu ada parameter error (/login?error), maka ada error, maka tambahkan object error ke mav. Nantinya akan di-check di login.html
         if(error!=null)
             mav.addObject("error", "Invalid username and/or password");
+        //jika dalam URL itu ada parameter logout (/login?logout), maka user berhasil logout, maka tambahkan object logout ke mav. Nantinya akan di-check di login.html
         else if(logout!=null)
             mav.addObject("logout", "You've been logged out successfully!");
         return mav;
     }
 
-    //DEFAULT PAGE FOR OWNER, MANAGER, CASHIER
+    //Melakukan assigning default page untuk user yang login berdasarkan role-nya
     @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView index(Authentication authentication){
         ModelAndView mav = new ModelAndView();
@@ -50,6 +54,7 @@ public class LoginController {
         return mav;
     }
 
+    //Jika user mencoba mengakses ke page yang tidak seharusnya (role tidak sesuai) (misal cashier ingin mengakses dashboard)
     @GetMapping(value = "/privilege", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView privilegePage(Authentication authentication){
         ModelAndView mav = new ModelAndView();

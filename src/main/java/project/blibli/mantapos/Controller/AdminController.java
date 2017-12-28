@@ -21,13 +21,13 @@ public class AdminController {
     public ModelAndView restaurantListHtml(@PathVariable("page") int page){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin-restaurant");
-        List<Restoran> restoranList = restoranDao.GetRestoranList(itemPerPage, page);
+        List<Restoran> restoranList = restoranDao.GetRestoranList(itemPerPage, page); //Mengambil list restoran yang terdaftar
         mav.addObject("restoranList", restoranList);
-        double jumlahRestoran = restoranDao.jumlahRestoran();
-        double jumlahPage = Math.ceil(jumlahRestoran/itemPerPage);
+        double jumlahRestoran = restoranDao.jumlahRestoran(); //Mengambil jumlah restoran yang terdaftar
+        double jumlahPage = Math.ceil(jumlahRestoran/itemPerPage); //Menghitung jumlah page yang ada utk pagination. Misal jmlResto = 8 dan item per page = 5, maka akan ada 2 page dengan isi 5 dan 3 item
         List<Integer> pageList = new ArrayList<>();
         for (int i=1; i<=jumlahPage; i++){
-            pageList.add(i);
+            pageList.add(i); //menambahkan angka page (1, 2, 3, dst) ke list PageList, nanti di HTML angka2nya akan di plot ke pagination
         }
         mav.addObject("pageNo", page);
         mav.addObject("pageList", pageList);
@@ -36,10 +36,10 @@ public class AdminController {
     @PostMapping(value = "/add-restaurant", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addRestaurantPost(@ModelAttribute("restoran") Restoran restoran,
                                           @ModelAttribute("user") User user){
-        restoranDao.Insert(restoran);
-        user.setRole("owner");
-        user.setId_resto(restoranDao.GetRestoranIdBerdasarkanNamaResto(restoran.getNama_resto()));
-        userDao.Insert(user);
+        restoranDao.Insert(restoran); //melakukan insert object restoran ke database (isinya object ini adalah informasi restoran) (table restoran)
+        user.setRole("owner"); //setRole untuk user yang di add sebagai owner
+        user.setId_resto(restoranDao.GetRestoranIdBerdasarkanNamaResto(restoran.getNama_resto())); //setIdResto berdasarkan nama restorannya. Jadi tadi kan sudah insert restoran, nama restorannya itu dijadikan parameter untuk mencari ID restoran tsb
+        userDao.Insert(user); //insert object user ke database (table user dan user_roles --> yang menangani insert ke user_roles ada di method insert user)
         return new ModelAndView("redirect:/restaurant");
     }
 }

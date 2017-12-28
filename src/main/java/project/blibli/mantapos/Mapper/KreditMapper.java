@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class KreditMapper implements RowMapper<Ledger> {
+
+    //Class Mapper, untuk mapping value dari resultSet ke model yang bersesuaian.
+
     @Override
     public Ledger mapRow(ResultSet resultSet, int i) throws SQLException {
         Ledger ledger = new Ledger();

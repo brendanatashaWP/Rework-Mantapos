@@ -1,10 +1,13 @@
 package project.blibli.mantapos;
 
 public class MonthNameGenerator {
+
+    //Class untuk men-generate nama bulan berdasarkan angka bulan ke berapa.
+
     public static String MonthNameGenerator(int month){
         String monthName="";
         switch (month){
-            case 1:
+            case 1: //Jika bulan ke-1, maka itu bulan Januari, dan seterusnya bisa dilihat di bawah.
                 monthName="Januari";
                 break;
             case 2:

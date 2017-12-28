@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SaldoAwalMapper implements RowMapper<SaldoAwal> {
+
+    //Class Mapper, untuk mapping value dari resultSet ke model yang bersesuaian.
+
     @Override
     public SaldoAwal mapRow(ResultSet resultSet, int i) throws SQLException {
         SaldoAwal saldoAwal = new SaldoAwal();

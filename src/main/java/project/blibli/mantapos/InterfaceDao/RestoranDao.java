@@ -4,6 +4,7 @@ import project.blibli.mantapos.Model.Restoran;
 
 import java.util.List;
 
+//Interface yang menangani masalah DAO berkaitan dengan restoran
 public interface RestoranDao {
     void CreateTable();
     void Insert(Restoran restoran);

@@ -4,6 +4,7 @@ import project.blibli.mantapos.Model.User;
 
 import java.util.List;
 
+//Interface yang menangani masalah DAO berkaitan dengan user
 public interface UserDao {
     void CreateRole();
     void CreateTableUser();

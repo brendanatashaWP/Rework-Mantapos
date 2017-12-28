@@ -4,6 +4,7 @@ import project.blibli.mantapos.Model.Menu;
 
 import java.util.List;
 
+//Interface yang menangani masalah DAO berkaitan dengan menu
 public interface MenuDao {
     void CreateTable();
     void Insert(int id_restoo, Menu menu);
