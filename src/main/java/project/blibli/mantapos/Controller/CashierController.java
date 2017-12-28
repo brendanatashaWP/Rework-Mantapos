@@ -79,6 +79,7 @@ public class CashierController {
         ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth())); //setWeek, value week diambil dari tanggalnya. Detailnya ada di class WeekGenerator
         ledger.setMonth(LocalDateTime.now().getMonthValue()); //setMonth
         ledger.setYear(LocalDateTime.now().getYear()); //setYear
+
         ledgerDao.Insert(ledger, restoran.getId()); //insert informasi pemesanan ke database (tabel ledger_harian)
         int lastOrderId = ledgerDao.GetLastOrderId(); //Mengambil id dari order yang barusan dimasukkan (record terakhir). ID nya ini untuk dijadikan foreign key di table OrderedMenu
         //Melakukan for dari 0 hingga panjang dari Array array_id_order. Array ini isinya adalah id dari menu2 yang dipesan. Memasukkan id menu2 itu ada di order.js

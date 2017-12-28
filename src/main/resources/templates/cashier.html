@@ -77,13 +77,14 @@
                             <th:block th:each="menu : ${menuList}"
                                       th:if="${menu.kategori_menu == 'drink'}">
                                 <!--tanda \ adalah escape character-->
-                                <a class="menuCard" href="#" th:onclick="'javascript:addToCart(\' '+ ${menu.id} +' \',\' '+ ${menu.nama_menu} +' \',\' '+ ${menu.harga_menu} +' \');'">
-                                    <div class="panel panel-default panel-menu" th:id="${menu.id}">
+                                <a class="menuCard" href="#">
+                                    <div class="panel panel-default panel-menu">
                                         <div class="panel-body">
                                             <img th:src="@{${menu.lokasi_gambar_menu}}" class="img-thumbnail" alt="ayam goreng"
                                                  width="80" height="80" style="margin-right: 10px"/>
                                             <h3 th:text="${menu.nama_menu}"/>
                                             <h4 th:text="'Rp ' + ${menu.harga_menu}"/>
+                                            <button class="btnAddtoCart" th:id="'btn' + ${menu.id}" th:onclick="'javascript:addToCart(\''+ ${menu.id} +'\',\' '+ ${menu.nama_menu} +'\',\' '+ ${menu.harga_menu} +' \');'">Add to Cart</button>
                                         </div>
                                     </div>
                                 </a>
@@ -209,17 +210,17 @@
                             <label><input type="checkbox" id="checkboxKirimEmailReceipt" th:onclick="'javascript:checkboxKirimEmailReceipt();'"/>Kirim receipt melalui email?</label>
                         </div>
                         <form action="/add-order" method="post">
-                            <input type="hidden" name="nama_resto" id="inputRestaurantName" th:value="${restoran.nama_resto}"/>
-                            <input type="hidden" name="lokasi_resto" id="inputRestaurantAddress" th:value="${restoran.lokasi_resto}"/>
-                            <input type="hidden" name="customer_name" id="inputCustNameChange"/>
-                            <input type="hidden" name="table_no" id="inputTableNoChange"/>
-                            <input type="hidden" name="notes" id="inputNotesChange"/>
-                            <input type="hidden" name="biaya" id="inputPriceTotalChange"/>
-                            <input type="hidden" name="cash_paid" id="inputCashPaid"/>
-                            <input type="hidden" name="cash_change" id="inputCashChange"/>
-                            <input type="hidden" name="array_id_order" id="array_id_orderChange"/>
-                            <input type="hidden" name="array_qty" id="array_qtyChange"/>
-                            <input type="hidden" name="is_kirim_email_receipt" id="is_kirim_email_receipt"/>
+                            <input type="text" name="nama_resto" id="inputRestaurantName" th:value="${restoran.nama_resto}"/>
+                            <input type="text" name="lokasi_resto" id="inputRestaurantAddress" th:value="${restoran.lokasi_resto}"/>
+                            <input type="text" name="customer_name" id="inputCustNameChange"/>
+                            <input type="text" name="table_no" id="inputTableNoChange"/>
+                            <input type="text" name="notes" id="inputNotesChange"/>
+                            <input type="text" name="biaya" id="inputPriceTotalChange"/>
+                            <input type="text" name="cash_paid" id="inputCashPaid"/>
+                            <input type="text" name="cash_change" id="inputCashChange"/>
+                            <input type="text" name="array_id_order" id="array_id_orderChange"/>
+                            <input type="text" name="array_qty" id="array_qtyChange"/>
+                            <input type="text" name="is_kirim_email_receipt" id="is_kirim_email_receipt"/>
                             <input style="display: none;" name="email_kirim_receipt" placeholder="Masukkan email" type="text" id="inputEmailKirimReceipt"/>
                             <!--<input type="hidden" name="email_kirim_receipt" id="emailKirimReceipt"/>-->
                             <button type="submit" class="submit">OK</button>

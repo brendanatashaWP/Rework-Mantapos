@@ -73,9 +73,11 @@ function addToCart(id, name, price){
         for (var i=0; i<counterOrder; i++){
         if(id!=array_id_cart[i]){
               try{
-                  array_id_cart.push(id);
+                array_id_cart.push(id);
                 var btn = document.getElementById(idbtn);
                 btn.disabled = true;
+                btn.style.backgroundColor = "#000000"; //change button bgColor
+                btn.innerHTML = "Already added"; //change button text
 
                 }
             catch(e){
