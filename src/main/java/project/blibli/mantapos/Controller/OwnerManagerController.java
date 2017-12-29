@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.MonthNameGenerator;
-import project.blibli.mantapos.NewImplementationDao.*;
+import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.WeekGenerator;
 
 import java.io.File;
@@ -137,7 +137,8 @@ public class OwnerManagerController {
         id_resto = restoranDao.readIdResto(username);
         int intBulan = LocalDate.now().getMonthValue();
         String bulan = MonthNameGenerator.MonthNameGenerator(intBulan); //Mengambil nama bulan berdasarkan nilai integer bulan-nya
-        List<SaldoAwal> saldoAwalList = saldoDao.readAll(id_resto, itemPerPage, page); //Mengambil saldo awal setiap bulannya untuk ditampilkan di main menu dari laman saldo
+//        List<Saldo> saldoList = saldoDao.readAll(id_resto, itemPerPage, page); //Mengambil saldo awal setiap bulannya untuk ditampilkan di main menu dari laman saldo
+        int saldoAwal = saldoDao.getSaldoAwal(id_resto);
         double jumlahBanyakSaldo = saldoDao.count(id_resto);
         double jumlahPage = Math.ceil(jumlahBanyakSaldo/itemPerPage);
         List<Integer> pageList = new ArrayList<>();
@@ -146,7 +147,8 @@ public class OwnerManagerController {
         }
         mav.addObject("pageNo", page);
         mav.addObject("pageList", pageList);
-        mav.addObject("saldoAwalList", saldoAwalList);
+//        mav.addObject("saldoAwalList", saldoList);
+        mav.addObject("saldoAwal", saldoAwal);
         mav.addObject("bulan", bulan);
         mav.setViewName("owner-manager/saldo-awal");
         return mav;
@@ -155,10 +157,11 @@ public class OwnerManagerController {
     //Jika user menambahkan saldo baru
     @PostMapping(value = "/saldo-post", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addSaldoAwalHtml(Authentication authentication,
-                                         @ModelAttribute("saldoAwal") SaldoAwal saldoAwal){
+                                         @ModelAttribute("saldoAwal") Saldo saldo){
         String username = authentication.getName();
         id_resto = restoranDao.readIdResto(username);
-        saldoDao.insert(saldoAwal, id_resto); //Menambahkan saldo awal dengan foreign key id restoran yang sesuai dan nilai saldo awal ada di object saldoAwal yang di-pass dari html
+        saldo.setTipe_saldo("awal");
+        saldoDao.insert(saldo, id_resto); //Menambahkan saldo awal dengan foreign key id restoran yang sesuai dan nilai saldo awal ada di object saldo yang di-pass dari html
         return new ModelAndView("redirect:/saldo/1");
     }
     //Jika user menambahkan menu baru
@@ -210,6 +213,14 @@ public class OwnerManagerController {
         ledger.setTipe("kredit"); //karena ini adalah pengeluaran (outcome), berarti tipenya adalah kredit
         ledger.setKeperluan(ledger.getKeperluan() + "(" + qty + ")"); //Keperluannya adalah diambil dari keperluan yang diinputkan oleh user ditambahkan dengan quantity yang diinputkan oleh user
         ledgerDao.insert(ledger, id_resto); //insert pengeluaran ke table outcome di database
+        Saldo saldo = new Saldo();
+        saldo.setId_resto(id_resto);
+        saldo.setTipe_saldo("akhir");
+        saldo.setTanggal(tanggal);
+        saldo.setMonth(month);
+        saldo.setYear(year);
+        saldo.setSaldo(saldoDao.getSaldoAwal(id_resto) + ledgerDao.getTotalDebitBulanan(id_resto, month, year) - ledgerDao.getTotalKreditBulanan(id_resto, month, year)); //saldo akhir = saldo awal + debit - kredit
+        saldoDao.insert(saldo, id_resto);
         return new ModelAndView("redirect:/outcome/1");
     }
     //Setelah pilih jangka waktu untuk melihat ledger, maka page ini diakses
@@ -229,7 +240,15 @@ public class OwnerManagerController {
         if(skala.equals("harian") || skala.equals("mingguan")){ //jika skala yang di-pass dari ledger.html adalah harian atau mingguan. Yang di-pick user adalah bulan dan tahunnya. Misal user ingin melihat ledger harian di bulan Oktober tahun 2017. Atau mingguan di bulan Desember tahun 2017
             total_kredit = ledgerDao.getTotalKreditBulanan(id_resto, month, year); //Mengambil total kredit bulanan di bulan dan tahun yang di pick user
             total_debit = ledgerDao.getTotalDebitBulanan(id_resto, month, year); //Mengambil total debit bulanan dari bulan dan tahun yang di pick user
-            saldo_awal = saldoDao.getSaldoAwal(id_resto, month, year); //Mengambil saldo awal di bulan dan tahun yang di pick user
+//            saldo_awal = saldoDao.getSaldoAwal(id_resto); //Mengambil saldo awal di bulan dan tahun yang di pick user
+            if (month==1){
+                saldo_awal = saldoDao.getSaldoAkhir(id_resto, 12, year-1);
+            } else{
+                saldo_awal = saldoDao.getSaldoAkhir(id_resto, (month-1), (year));
+            }
+            if(saldo_awal==0){ //artinya bulan kemarin tidak ada
+                saldo_awal = saldoDao.getSaldoAwal(id_resto);
+            }
             saldo_akhir = saldo_awal+total_debit-total_kredit; //Menghitung saldo akhir (dari saldo awal ditambah pemasukkan (total debit) dikurangi pengeluaran (total kredit)
             mutasi = saldo_akhir-saldo_awal; //mutasi, masih belum tahu maksudnya mutasi ini apa. //TODO : Cari definisi dari mutasi itu apa
             if(skala.equals("harian")){
@@ -246,7 +265,7 @@ public class OwnerManagerController {
             //karena bulanan, maka user memilih tahunnya. misal user ingin melihat ledger secara bulanan di tahun 2017
             total_kredit = ledgerDao.getTotalKreditTahunan(id_resto, year); //mengambil total kredit
             total_debit = ledgerDao.getTotalDebitTahunan(id_resto, year); //mengambil total debit
-            saldo_awal = saldoDao.getSaldoAwal(id_resto, month, year); //mengambil saldo awal. //TODO : dimatangkan lagi saldo awal untuk ledger bulanan itu diambil dari saldo awal di bulan pertama tahun yang dipilih (misal 2017) atau saldo awal di awal buanget
+            saldo_awal = saldoDao.getSaldoAwal(id_resto); //mengambil saldo awal.
             saldo_akhir = saldo_awal+total_debit-total_kredit;
             mutasi = saldo_akhir-saldo_awal;
             ledgerList = ledgerDao.getLedgerBulanan(id_resto, year); //mengambil ledger bulanan di tahun yang di pick user
@@ -283,9 +302,6 @@ public class OwnerManagerController {
         mav.addObject("saldo_akhir", saldo_akhir);
         mav.addObject("mutasi", mutasi);
         mav.addObject("ledgerList", ledgerList);
-        for (Ledger ledger : ledgerList){
-            System.out.println(ledger.getKeperluan() + "\n" + ledger.getBiaya());
-        }
         mav.addObject("skala_ledger", skala_ledger);
         mav.setViewName("owner-manager/ledger");
         return mav;

@@ -1,6 +1,6 @@
-package project.blibli.mantapos.NewImplementationDao;
+package project.blibli.mantapos.ImplementationDao;
 
-import project.blibli.mantapos.NewInterfaceDao.MenuYangDipesanDao;
+import project.blibli.mantapos.InterfaceDao.MenuYangDipesanDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

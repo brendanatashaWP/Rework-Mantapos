@@ -9,14 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import project.blibli.mantapos.Config.Mail;
-import project.blibli.mantapos.Model.Ledger;
-import project.blibli.mantapos.Model.Menu;
-import project.blibli.mantapos.Model.OrderedMenu;
-import project.blibli.mantapos.Model.Restoran;
-import project.blibli.mantapos.NewImplementationDao.LedgerDaoImpl;
-import project.blibli.mantapos.NewImplementationDao.MenuDaoImpl;
-import project.blibli.mantapos.NewImplementationDao.MenuYangDipesanDaoImpl;
-import project.blibli.mantapos.NewImplementationDao.RestoranDaoImpl;
+import project.blibli.mantapos.Model.*;
+import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.WeekGenerator;
 
 import javax.mail.MessagingException;
@@ -32,9 +26,11 @@ public class CashierController {
 
     MenuDaoImpl menuDao = new MenuDaoImpl();
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
+    SaldoDaoImpl saldoDao = new SaldoDaoImpl();
     MenuYangDipesanDaoImpl orderedMenuDao = new MenuYangDipesanDaoImpl();
     RestoranDaoImpl restaurantDao = new RestoranDaoImpl();
     Restoran restoran;
+    Saldo saldo = new Saldo();
 
     Mail mail = new Mail();
 
@@ -76,14 +72,25 @@ public class CashierController {
         System.out.println("id resto : " + id_resto);
 //        restoran = restaurantDao.GetRestaurantInfo(loggedInUsername); //Mengambil informasi restoran berdasarkan username yg login (username itu belong ke restoran mana)
 //        int id_resto = restoran.getId(); //Mengambil id restoran yang didapat dari hasil di atas
-
+        int tanggal = LocalDate.now().getDayOfMonth();
+        int bulan = LocalDate.now().getMonthValue();
+        int tahun = LocalDate.now().getYear();
         ledger.setTipe("debit"); ledger.setKeperluan("penjualan menu"); //Karena disini adalah pemasukkan, makannya tipe ledger adalah debit dan keperluannya adalah penjualan menu
         ledger.setWaktu(LocalDate.now().toString()); //setWaktu untuk di-insert ke database adalah waktu sekarang (yyyy-mm-dd)
-        ledger.setTanggal(LocalDate.now().getDayOfMonth()); //setTanggal
+        ledger.setTanggal(tanggal); //setTanggal
         ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth())); //setWeek, value week diambil dari tanggalnya. Detailnya ada di class WeekGenerator
-        ledger.setMonth(LocalDateTime.now().getMonthValue()); //setMonth
-        ledger.setYear(LocalDateTime.now().getYear()); //setYear
+        ledger.setMonth(bulan); //setMonth
+        ledger.setYear(tahun); //setYear
         ledgerDao.insert(ledger, restoran.getId()); //insert informasi pemesanan ke database (tabel ledger_harian)
+
+        saldo.setId_resto(id_resto);
+        saldo.setTipe_saldo("akhir");
+        saldo.setTanggal(tanggal);
+        saldo.setMonth(bulan);
+        saldo.setYear(tahun);
+        saldo.setSaldo(saldoDao.getSaldoAwal(id_resto) + ledgerDao.getTotalDebitBulanan(id_resto, bulan, tahun) - ledgerDao.getTotalKreditBulanan(id_resto, bulan, tahun)); //saldo akhir = saldo awal + debit - kredit
+        saldoDao.insert(saldo, id_resto);
+
         int lastOrderId = ledgerDao.getLastId(id_resto); //Mengambil id dari order yang barusan dimasukkan (record terakhir). ID nya ini untuk dijadikan foreign key di table OrderedMenu
         //Melakukan for dari 0 hingga panjang dari Array array_id_order. Array ini isinya adalah id dari menu2 yang dipesan. Memasukkan id menu2 itu ada di order.js
         for(int i=0; i<array_id_order.length; i++){
