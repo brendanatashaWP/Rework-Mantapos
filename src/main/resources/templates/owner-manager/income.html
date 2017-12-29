@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Outcome</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
+</head>
+<body>
+<div th:replace="fragments/navbar-top-manager :: header"/>
+<div class="container" style="margin-top: 50px;">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Daftar Pemasukkan (non transaksi)
+                <small>Daftar pemasukkan (non transaksi) yang ada</small>
+            </h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">PEMASUKKAN</h3>
+                </div>
+                <div class="box-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Date:</th>
+                            <th>Income Name</th>
+                            <th>Credit:</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="income:${incomeList}">
+                            <tr>
+                                <td th:text="${income.waktu}"/>
+                                <td th:text="${income.keperluan}"/>
+                                <td th:text="${income.biaya}"/>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <th:block th:each="page : ${pageList}">
+                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/income/{page}(page=${page})}" th:text="${page}"></a></li>
+                            <li th:if="${page} != ${pageNo}"><a th:href="@{/income/{page}(page=${page})}" th:text="${page}"></a></li>
+                        </th:block>
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">PEMASUKKAN</h3>
+                </div>
+                <div class="box-body">
+                    <form action="/income-post" method="post" class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-calendar" /></span>
+                            <input class="form-control" type="date" name="waktu" placeholder="Waktu Pemasukkan Dilakukan"/><br/>
+                        </div>
+                        <br/>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-shopping-basket" /></span>
+                            <input class="form-control" type="text" name="keperluan" placeholder="Keperluan pemasukkan"/><br/>
+                        </div>
+                        <br/>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-plus-square" /></span>
+                            <input class="form-control" type="text" name="quantity" placeholder="Quantity Keperluan Pemasukkan"/><br/>
+                        </div>
+                        <br/>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-money" /></span>
+                            <input class="form-control" type="number" name="biaya" placeholder="Biaya Pemasukkan"/><br/>
+                        </div>
+                        <br/>
+                        <button class="form-control btn btn-primary" type="submit">SUBMIT</button>
+                    </form>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+        </section>
+
+    </div>
+    <!-- /.content -->
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
