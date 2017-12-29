@@ -2,7 +2,7 @@ package project.blibli.mantapos.Model;
 
 public class Ledger {
     private int id, tanggal, week, month, year, id_resto;
-    private double biaya;
+    private int biaya;
     private String waktu, keperluan, tipe;
 
     public int getId() {
@@ -69,11 +69,11 @@ public class Ledger {
         this.year = year;
     }
 
-    public double getBiaya() {
+    public int getBiaya() {
         return biaya;
     }
 
-    public void setBiaya(double biaya) {
+    public void setBiaya(int biaya) {
         this.biaya = biaya;
     }
 

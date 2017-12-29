@@ -67,7 +67,7 @@ public class MenuDaoImpl implements MenuDao {
                             "VALUES(?,?,?,?,?)"
             );
             preparedStatement.setString(1, modelData.getNama_menu());
-            preparedStatement.setDouble(2, modelData.getHarga_menu());
+            preparedStatement.setInt(2, modelData.getHarga_menu());
             preparedStatement.setString(3, modelData.getLokasi_gambar_menu());
             preparedStatement.setString(4, modelData.getKategori_menu());
             preparedStatement.setInt(5, idResto);
@@ -114,7 +114,7 @@ public class MenuDaoImpl implements MenuDao {
                 Menu menu = new Menu();
                 menu.setId(resultSet.getInt(idMenu));
                 menu.setNama_menu(resultSet.getString(namaMenu));
-                menu.setHarga_menu(resultSet.getDouble(hargaMenu));
+                menu.setHarga_menu(resultSet.getInt(hargaMenu));
                 menu.setKategori_menu(resultSet.getString(kategoriMenu));
                 menu.setLokasi_gambar_menu(resultSet.getString(lokasiGambarMenu));
                 menuList.add(menu);
@@ -146,7 +146,7 @@ public class MenuDaoImpl implements MenuDao {
                 menu = new Menu();
                 menu.setId(resultSet.getInt(idMenu));
                 menu.setNama_menu(resultSet.getString(namaMenu));
-                menu.setHarga_menu(resultSet.getDouble(hargaMenu));
+                menu.setHarga_menu(resultSet.getInt(hargaMenu));
                 menu.setKategori_menu(resultSet.getString(kategoriMenu));
                 menu.setLokasi_gambar_menu(resultSet.getString(lokasiGambarMenu));
             }
@@ -198,7 +198,7 @@ public class MenuDaoImpl implements MenuDao {
                             " WHERE " + idMenu + "=?"
             );
             preparedStatement.setString(1, modelData.getNama_menu());
-            preparedStatement.setDouble(2, modelData.getHarga_menu());
+            preparedStatement.setInt(2, modelData.getHarga_menu());
             preparedStatement.setString(3, modelData.getKategori_menu());
             preparedStatement.setString(4, modelData.getLokasi_gambar_menu());
             preparedStatement.setInt(5, modelData.getId());

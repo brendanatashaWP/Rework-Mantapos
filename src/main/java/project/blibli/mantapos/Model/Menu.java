@@ -11,7 +11,7 @@ public class Menu {
     private String nama_menu;
     private String lokasi_gambar_menu;
     private String kategori_menu;
-    private double harga_menu;
+    private int harga_menu;
     private MultipartFile multipartFile;
 
     public MultipartFile getMultipartFile() {
@@ -46,11 +46,11 @@ public class Menu {
         this.lokasi_gambar_menu = lokasi_gambar_menu;
     }
 
-    public double getHarga_menu() {
+    public int getHarga_menu() {
         return harga_menu;
     }
 
-    public void setHarga_menu(double harga_menu) {
+    public void setHarga_menu(int harga_menu) {
         this.harga_menu = harga_menu;
     }
 

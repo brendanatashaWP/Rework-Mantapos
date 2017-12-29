@@ -35,15 +35,18 @@ public class OwnerManagerController {
     public ModelAndView managerDashboardHtml(Authentication authentication){
         List<String> dummyLedgerList = new ArrayList<>();
         int idResto = restoranDao.readIdResto(authentication.getName());
-//        String query = "SELECT month, tipe, sum(biaya) from ledger_harian where id_resto=? and year=? group by month, tipe order by month, tipe asc";
         List<Ledger> ledgerListBulanan = ledgerDao.getLedgerBulanan(idResto, LocalDate.now().getYear());
         for (Ledger ledger:ledgerListBulanan
              ) {
             dummyLedgerList.add(String.valueOf(ledger.getBiaya()));
         }
+        String totalPengeluaran = "Rp " + ledgerDao.getTotalKreditAllTime(idResto);
+        String totalPemasukkan = "Rp " + ledgerDao.getTotalDebitAllTime(idResto);
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/dashboard");
         mav.addObject("dummyList", dummyLedgerList);
+        mav.addObject("total_pengeluaran", totalPengeluaran);
+        mav.addObject("total_pemasukkan", totalPemasukkan);
         return mav;
     }
     //Jika user mengakses menu/{page}, dimana {page} ini adalah page keberapa laman menu itu, misal menu/1 berarti laman menu page 1 di pagination-nya
