@@ -240,7 +240,6 @@ public class OwnerManagerController {
         if(skala.equals("harian") || skala.equals("mingguan")){ //jika skala yang di-pass dari ledger.html adalah harian atau mingguan. Yang di-pick user adalah bulan dan tahunnya. Misal user ingin melihat ledger harian di bulan Oktober tahun 2017. Atau mingguan di bulan Desember tahun 2017
             total_kredit = ledgerDao.getTotalKreditBulanan(id_resto, month, year); //Mengambil total kredit bulanan di bulan dan tahun yang di pick user
             total_debit = ledgerDao.getTotalDebitBulanan(id_resto, month, year); //Mengambil total debit bulanan dari bulan dan tahun yang di pick user
-//            saldo_awal = saldoDao.getSaldoAwal(id_resto); //Mengambil saldo awal di bulan dan tahun yang di pick user
             if (month==1){
                 saldo_awal = saldoDao.getSaldoAkhir(id_resto, 12, year-1);
             } else{
@@ -265,7 +264,11 @@ public class OwnerManagerController {
             //karena bulanan, maka user memilih tahunnya. misal user ingin melihat ledger secara bulanan di tahun 2017
             total_kredit = ledgerDao.getTotalKreditTahunan(id_resto, year); //mengambil total kredit
             total_debit = ledgerDao.getTotalDebitTahunan(id_resto, year); //mengambil total debit
-            saldo_awal = saldoDao.getSaldoAwal(id_resto); //mengambil saldo awal.
+            int monthTerkecil = saldoDao.getMinMonthInYear(id_resto, year);
+            saldo_awal = saldoDao.getSaldoAkhir(id_resto, monthTerkecil, (year));
+            if(saldo_awal==0){ //artinya bulan kemarin tidak ada
+                saldo_awal = saldoDao.getSaldoAwal(id_resto);
+            }
             saldo_akhir = saldo_awal+total_debit-total_kredit;
             mutasi = saldo_akhir-saldo_awal;
             ledgerList = ledgerDao.getLedgerBulanan(id_resto, year); //mengambil ledger bulanan di tahun yang di pick user
@@ -289,7 +292,14 @@ public class OwnerManagerController {
 
             total_kredit = ledgerDao.getTotalKreditCustom(id_resto, tanggalAwal, monthAwal, yearAwal, tanggalAkhir,  monthAkhir, yearAkhir); //Total kredit dari waktu awal hingga akhir yang dikehendaki user
             total_debit = ledgerDao.getTotalDebitCustom(id_resto, tanggalAwal, monthAwal, yearAwal, tanggalAkhir,  monthAkhir, yearAkhir); //Total debit dari waktu awal hingga akhir yang dikehendaki user
-            saldo_awal = saldoDao.getSaldoAwalCustom(id_resto, tanggalAwal, monthAwal, yearAwal); //Mengambil saldo awal dari waktu awal yang di pick user. //TODO: ini dipastikan lagi mau saldo awal dari waktu awal yang di pick user, atau dari awal buanget, atau gimana
+            if (month==1){
+                saldo_awal = saldoDao.getSaldoAwalCustom(id_resto, 12, yearAwal-1); //Mengambil saldo awal dari waktu awal yang di pick user.
+            } else{
+                saldo_awal = saldoDao.getSaldoAwalCustom(id_resto, monthAwal-1, yearAwal); //Mengambil saldo awal dari waktu awal yang di pick user.
+            }
+            if(saldo_awal==0){ //artinya bulan kemarin tidak ada
+                saldo_awal = saldoDao.getSaldoAwal(id_resto);
+            }
             saldo_akhir = saldo_awal+total_debit-total_kredit;
             mutasi = saldo_akhir-saldo_awal;
             ledgerList = ledgerDao.getLedgerCustom(id_resto, tanggalAwal, monthAwal, yearAwal, tanggalAkhir,  monthAkhir, yearAkhir); //Mengambil ledger berdasarkan waktu awal dan waktu akhir yang di pick user

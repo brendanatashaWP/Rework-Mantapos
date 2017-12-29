@@ -5,7 +5,8 @@ import project.blibli.mantapos.ImplementationDao.BasicDao;
 
 public interface SaldoDao extends BasicDao<Saldo, Integer, Integer, Integer, Integer> {
     int getSaldoAwal(int idResto);
-    int getSaldoAwalCustom(int idResto, int tanggal1, int month1, int year1);
+    int getSaldoAwalCustom(int idResto, int month, int year);
     int isSaldoAkhirExists(int idResto, int month, int year);
     int getSaldoAkhir(int idResto, int month, int year);
+    int getMinMonthInYear(int idResto, int year);
 }

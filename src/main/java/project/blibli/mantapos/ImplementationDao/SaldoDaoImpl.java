@@ -52,23 +52,23 @@ public class SaldoDaoImpl implements SaldoDao {
     //saldo awal custom, ambil saldo akhir dari bulan x-1 dari bulan x-y.
     //misal custom range antara bulan maret-april, berarti saldo awalnya adalah saldo akhir bulan februari
     @Override
-    public int getSaldoAwalCustom(int idResto, int tanggal1, int month1, int year1) {
+    public int getSaldoAwalCustom(int idResto, int month, int year) {
         int saldoAwalCustom=0;
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try{
             preparedStatement = connection.prepareStatement(
-                    "SELECT SUM (" + saldoAwal + ") FROM " + tableSaldoAwal + " WHERE " + this.idResto + "=? " +
+                    "SELECT " + saldoAkhir + " FROM " + tableSaldoAkhir + " WHERE " + this.idResto + "=? " +
                             "AND " +
-                            month + "=? AND " + year + "=?"
+                            this.month + "=? AND " + this.year + "=?"
             );
             preparedStatement.setInt(1, idResto);
-            preparedStatement.setInt(3, month1);
-            preparedStatement.setInt(4, year1);
+            preparedStatement.setInt(2, month);
+            preparedStatement.setInt(3, year);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                saldoAwalCustom = resultSet.getInt("sum");
+                saldoAwalCustom = resultSet.getInt(saldoAkhir);
             }
         } catch (Exception ex){
             System.out.println("Gagal get saldo awal custom : " + ex.toString());
@@ -133,6 +133,32 @@ public class SaldoDaoImpl implements SaldoDao {
             DbConnection.closeConnection(connection);
         }
         return saldoAkhir;
+    }
+
+    @Override
+    public int getMinMonthInYear(int idResto, int year) {
+        int minMonth=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT MIN(" + month + ") FROM " + tableSaldoAkhir + " WHERE " + this.idResto + "=? AND " + this.year + "=?"
+            );
+            preparedStatement.setInt(1, idResto);
+            preparedStatement.setInt(2, year);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                minMonth = resultSet.getInt(month);
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get min month in year : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return minMonth;
     }
 
     @Override
