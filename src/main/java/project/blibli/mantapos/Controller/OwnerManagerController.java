@@ -32,11 +32,14 @@ public class OwnerManagerController {
 
     //Jika user mengakses /dashboard
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView managerDashboardHtml(){
+    public ModelAndView managerDashboardHtml(Authentication authentication){
         List<String> dummyLedgerList = new ArrayList<>();
+        int idResto = restoranDao.readIdResto(authentication.getName());
 //        String query = "SELECT month, tipe, sum(biaya) from ledger_harian where id_resto=? and year=? group by month, tipe order by month, tipe asc";
-        for (int i=1000; i<13000; i+=1000){
-            dummyLedgerList.add(String.valueOf(i));
+        List<Ledger> ledgerListBulanan = ledgerDao.getLedgerBulanan(idResto, LocalDate.now().getYear());
+        for (Ledger ledger:ledgerListBulanan
+             ) {
+            dummyLedgerList.add(String.valueOf(ledger.getBiaya()));
         }
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/dashboard");
