@@ -113,7 +113,7 @@ public class SaldoDaoImpl implements SaldoDao {
                             "VALUES(?,?,?,?,?)"
             );
             preparedStatement.setInt(1, idResto);
-            preparedStatement.setDouble(2, modelData.getSaldo_awal());
+            preparedStatement.setInt(2, modelData.getSaldo_awal());
             preparedStatement.setInt(3, LocalDate.now().getDayOfMonth());
             preparedStatement.setInt(4, LocalDate.now().getMonthValue());
             preparedStatement.setInt(5, LocalDate.now().getYear());
@@ -145,7 +145,7 @@ public class SaldoDaoImpl implements SaldoDao {
                 saldoAwal.setId_resto(resultSet.getInt(this.idResto));
                 saldoAwal.setMonth(resultSet.getInt(month));
                 saldoAwal.setYear(resultSet.getInt(year));
-                saldoAwal.setSaldo_awal(resultSet.getDouble(this.saldoAwal));
+                saldoAwal.setSaldo_awal(resultSet.getInt(this.saldoAwal));
                 saldoAwalListTiapBulan.add(saldoAwal);
             }
         } catch (Exception ex){

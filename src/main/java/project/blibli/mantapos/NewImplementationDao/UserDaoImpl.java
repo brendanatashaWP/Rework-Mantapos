@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO : userDaoImpl pindahkan connection, preparedStatement, dan resultSet jadi didalam masing2 method
 public class UserDaoImpl implements UserDao {
 
     private static final String tableUser = "users";
@@ -35,9 +34,6 @@ public class UserDaoImpl implements UserDao {
 
     private static final String tableUserRoles = "users_roles";
     private static final String refTableRestoran = "restoran";
-
-    User user = new User();
-    int id=0, count=0;
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     String hashedPassword;
@@ -141,6 +137,7 @@ public class UserDaoImpl implements UserDao {
             }
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                User user = new User();
                 user.setId(resultSet.getInt(idUser));
                 user.setNamaLengkap(resultSet.getString(namaLengkap));
                 user.setJenisKelamin(resultSet.getString(jenisKelamin));
@@ -164,6 +161,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int getId(String username) {
+        int id=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -288,6 +286,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User readOne(Integer idData) {
+        User user = null;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -300,6 +299,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setInt(1, idData);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                user = new User();
                 user.setId(resultSet.getInt(idUser));
                 user.setUsername(resultSet.getString(usernameUser));
                 user.setPassword(resultSet.getString(passwordUser));
@@ -411,6 +411,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int count(Integer idResto) {
+        int count=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
