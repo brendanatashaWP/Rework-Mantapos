@@ -34,11 +34,11 @@ function cariMinMax(){
 
     for(i=0; i<12; i++){
         if(i==arrmax){
-            dataPointTest.push({ x: new Date(2017, i+1, 1), y: parseFloat(array[i]), indexLabel: "Highest", markerColor: "green", markerType: "triangle"});
+            dataPointTest.push({ x: new Date(2017, i, 1), y: parseFloat(array[i]), indexLabel: "Highest", markerColor: "green", markerType: "triangle"});
         } else if(i==arrmin){
-            dataPointTest.push({ x: new Date(2017, i+1, 1), y: parseFloat(array[i]), indexLabel: "Lowest", markerColor: "red", markerType: "cross"});
+            dataPointTest.push({ x: new Date(2017, i, 1), y: parseFloat(array[i]), indexLabel: "Lowest", markerColor: "red", markerType: "cross"});
         } else{
-            dataPointTest.push({ x: new Date(2017, i+1, 1), y: parseFloat(array[i])});
+            dataPointTest.push({ x: new Date(2017, i, 1), y: parseFloat(array[i])});
         }
     }
 }
