@@ -35,15 +35,18 @@ public class OwnerManagerController {
     public ModelAndView managerDashboardHtml(Authentication authentication){
         List<String> dummyLedgerList = new ArrayList<>();
         int idResto = restoranDao.readIdResto(authentication.getName());
-//        String query = "SELECT month, tipe, sum(biaya) from ledger_harian where id_resto=? and year=? group by month, tipe order by month, tipe asc";
         List<Ledger> ledgerListBulanan = ledgerDao.getLedgerBulanan(idResto, LocalDate.now().getYear());
         for (Ledger ledger:ledgerListBulanan
              ) {
             dummyLedgerList.add(String.valueOf(ledger.getBiaya()));
         }
+        String totalPengeluaran = "Rp " + ledgerDao.getTotalKreditAllTime(idResto);
+        String totalPemasukkan = "Rp " + ledgerDao.getTotalDebitAllTime(idResto);
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/dashboard");
         mav.addObject("dummyList", dummyLedgerList);
+        mav.addObject("total_pengeluaran", totalPengeluaran);
+        mav.addObject("total_pemasukkan", totalPemasukkan);
         return mav;
     }
     //Jika user mengakses menu/{page}, dimana {page} ini adalah page keberapa laman menu itu, misal menu/1 berarti laman menu page 1 di pagination-nya
@@ -221,7 +224,7 @@ public class OwnerManagerController {
         String username = authentication.getName();
         id_resto = restoranDao.readIdResto(username);
         List<Ledger> ledgerList = new ArrayList<>();
-        double saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
+        int saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
         String skala_ledger=""; //skala ledger bisa harian, mingguan, bulanan, atau tahunan
         if(skala.equals("harian") || skala.equals("mingguan")){ //jika skala yang di-pass dari ledger.html adalah harian atau mingguan. Yang di-pick user adalah bulan dan tahunnya. Misal user ingin melihat ledger harian di bulan Oktober tahun 2017. Atau mingguan di bulan Desember tahun 2017
             total_kredit = ledgerDao.getTotalKreditBulanan(id_resto, month, year); //Mengambil total kredit bulanan di bulan dan tahun yang di pick user
@@ -327,7 +330,7 @@ public class OwnerManagerController {
         ModelAndView mav = new ModelAndView();
         String username = authentication.getName();
         int id_resto = restoranDao.readIdResto(username);
-        Menu menuObject = menuDao.readOne(id); //Mengambil detail sebuah menu berdasarkan id nya. //TODO : dipastikan lagi ini bagusnya di store ke list atau cukup model Menu saja
+        Menu menuObject = menuDao.readOne(id); //Mengambil detail sebuah menu berdasarkan id nya.
         mav.addObject("menuObject", menuObject);
         mav.setViewName("owner-manager/edit-menu");
         return mav;

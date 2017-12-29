@@ -104,7 +104,7 @@ public class LedgerDaoImpl implements LedgerDao {
                 Ledger ledger = new Ledger();
                 ledger.setKeperluan(resultSet.getString(keperluan));
                 ledger.setTipe(resultSet.getString(tipe));
-                ledger.setBiaya(resultSet.getDouble(biaya));
+                ledger.setBiaya(resultSet.getInt(biaya));
                 ledger.setWaktu(resultSet.getString(waktu));
                 ledgerListHarian.add(ledger);
             }
@@ -139,7 +139,7 @@ public class LedgerDaoImpl implements LedgerDao {
                 Ledger ledger = new Ledger();
                 ledger.setWeek(resultSet.getInt(week));
                 ledger.setTipe(resultSet.getString(tipe));
-                ledger.setBiaya(resultSet.getDouble("sum"));
+                ledger.setBiaya(resultSet.getInt("sum"));
                 ledgerListMingguan.add(ledger);
             }
         } catch (Exception ex){
@@ -172,7 +172,7 @@ public class LedgerDaoImpl implements LedgerDao {
                 Ledger ledger = new Ledger();
                 ledger.setMonth(resultSet.getInt(month));
                 ledger.setTipe(resultSet.getString(tipe));
-                ledger.setBiaya(resultSet.getDouble("sum"));
+                ledger.setBiaya(resultSet.getInt("sum"));
                 ledgerListBulanan.add(ledger);
             }
         } catch (Exception ex){
@@ -209,7 +209,7 @@ public class LedgerDaoImpl implements LedgerDao {
                 Ledger ledger = new Ledger();
                 ledger.setKeperluan(resultSet.getString(keperluan));
                 ledger.setTipe(resultSet.getString(tipe));
-                ledger.setBiaya(resultSet.getDouble(biaya));
+                ledger.setBiaya(resultSet.getInt(biaya));
                 ledger.setWaktu(resultSet.getString(waktu));
                 ledgerListCustom.add(ledger);
             }
@@ -441,6 +441,60 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
+    public int getTotalDebitAllTime(int idResto) {
+        int totalDebitAllTime=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT SUM(" + biaya + ") FROM " + tableLedger + " WHERE " + this.idResto + "=?" +
+                            "AND " + tipe + "=?::" + tipeLedger
+            );
+            preparedStatement.setInt(1, idResto);
+            preparedStatement.setString(2, tipeDebit);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                totalDebitAllTime = resultSet.getInt("sum");
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get total debit all time : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return totalDebitAllTime;
+    }
+
+    @Override
+    public int getTotalKreditAllTime(int idResto) {
+        int totalKreditAllTime=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT SUM(" + biaya + ") FROM " + tableLedger + " WHERE " + this.idResto + "=?" +
+                            "AND " + tipe + "=?::" + tipeLedger
+            );
+            preparedStatement.setInt(1, idResto);
+            preparedStatement.setString(2, tipeKredit);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                totalKreditAllTime = resultSet.getInt("sum");
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get total kredit all time : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return totalKreditAllTime;
+    }
+
+    @Override
     public void createTable() throws SQLException {
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = null;
@@ -490,7 +544,7 @@ public class LedgerDaoImpl implements LedgerDao {
             );
             preparedStatement.setInt(1, idResto);
             preparedStatement.setString(2, modelData.getTipe());
-            preparedStatement.setDouble(3, modelData.getBiaya());
+            preparedStatement.setInt(3, modelData.getBiaya());
             preparedStatement.setString(4, modelData.getKeperluan());
             preparedStatement.setString(5, modelData.getWaktu());
             preparedStatement.setInt(6, modelData.getTanggal());

@@ -111,14 +111,8 @@ public class CashierController {
                     Menu menuObject = menuDao.readOne(Integer.parseInt(array_id_order[i])); //Mengambil detail dari masing-masing menu. Cara mengambil detailnya adalah berdasarkan id menu yang ada di Array array_id_order
                     ordered_menu_list.add(new OrderedMenu(
                             menuObject.getNama_menu(),
-                            String.valueOf(menuObject.getHarga_menu() * Integer.parseInt(array_qty[i])),
+                            (menuObject.getHarga_menu() * Integer.parseInt(array_qty[i])),
                             Integer.parseInt(array_qty[i])));
-//                    for (Menu menu:menuList
-//                         ) {
-//
-//                        //Menambahkan detail menu yang didapat dari menuDao.getMenuById di atas ke list ordered_menu_list.
-//                        //List itu nantinya akan dilempar ke HTML receipt (email.html) untuk ditampilkan di table
-//                    }
                 }
                 context.setVariable("ordered_menu_list", ordered_menu_list); //Melempar list ordered_menu_list yang berisi detail menu yang di-order ke HTML receipt (email.html)
                 String body = templateEngine.process("email", context); //Menspecify body dari email adalah email.html dengan context (yaitu variabel2 yang dilempar tadi)

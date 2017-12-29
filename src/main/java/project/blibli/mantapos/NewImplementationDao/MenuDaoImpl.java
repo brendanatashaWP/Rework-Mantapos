@@ -24,8 +24,6 @@ public class MenuDaoImpl implements MenuDao {
     private static final String refTableRestoran = "restoran";
     private static final String idResto = "id_resto";
 
-    int count=0, lastId=0;
-
     @Override
     public void createTable() throws SQLException {
         Connection connection;
@@ -69,7 +67,7 @@ public class MenuDaoImpl implements MenuDao {
                             "VALUES(?,?,?,?,?)"
             );
             preparedStatement.setString(1, modelData.getNama_menu());
-            preparedStatement.setDouble(2, modelData.getHarga_menu());
+            preparedStatement.setInt(2, modelData.getHarga_menu());
             preparedStatement.setString(3, modelData.getLokasi_gambar_menu());
             preparedStatement.setString(4, modelData.getKategori_menu());
             preparedStatement.setInt(5, idResto);
@@ -116,7 +114,7 @@ public class MenuDaoImpl implements MenuDao {
                 Menu menu = new Menu();
                 menu.setId(resultSet.getInt(idMenu));
                 menu.setNama_menu(resultSet.getString(namaMenu));
-                menu.setHarga_menu(resultSet.getDouble(hargaMenu));
+                menu.setHarga_menu(resultSet.getInt(hargaMenu));
                 menu.setKategori_menu(resultSet.getString(kategoriMenu));
                 menu.setLokasi_gambar_menu(resultSet.getString(lokasiGambarMenu));
                 menuList.add(menu);
@@ -137,7 +135,7 @@ public class MenuDaoImpl implements MenuDao {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         connection = DbConnection.openConnection();
-        Menu menu = new Menu();
+        Menu menu = null;
         try{
             preparedStatement = connection.prepareStatement(
                     "SELECT * FROM " + tableMenu + " WHERE " + idMenu + "=?"
@@ -145,9 +143,10 @@ public class MenuDaoImpl implements MenuDao {
             preparedStatement.setInt(1, idData);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                menu = new Menu();
                 menu.setId(resultSet.getInt(idMenu));
                 menu.setNama_menu(resultSet.getString(namaMenu));
-                menu.setHarga_menu(resultSet.getDouble(hargaMenu));
+                menu.setHarga_menu(resultSet.getInt(hargaMenu));
                 menu.setKategori_menu(resultSet.getString(kategoriMenu));
                 menu.setLokasi_gambar_menu(resultSet.getString(lokasiGambarMenu));
             }
@@ -161,9 +160,9 @@ public class MenuDaoImpl implements MenuDao {
         return menu;
     }
 
-    //TODO : Masih salah
     @Override
     public int getLastId(Integer idResto) {
+        int lastId=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -198,7 +197,7 @@ public class MenuDaoImpl implements MenuDao {
                             " WHERE " + idMenu + "=?"
             );
             preparedStatement.setString(1, modelData.getNama_menu());
-            preparedStatement.setDouble(2, modelData.getHarga_menu());
+            preparedStatement.setInt(2, modelData.getHarga_menu());
             preparedStatement.setString(3, modelData.getKategori_menu());
             preparedStatement.setString(4, modelData.getLokasi_gambar_menu());
             preparedStatement.setInt(5, modelData.getId());
@@ -233,6 +232,7 @@ public class MenuDaoImpl implements MenuDao {
 
     @Override
     public int count(Integer idResto) {
+        int count=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

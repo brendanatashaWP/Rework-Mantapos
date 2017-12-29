@@ -1,10 +1,10 @@
 package project.blibli.mantapos.Model;
 
 public class OrderedMenu {
-    String nama, price;
-    int qty;
+    String nama;
+    int qty, price;
 
-    public OrderedMenu(String nama, String price, int qty) {
+    public OrderedMenu(String nama, int price, int qty) {
         this.nama = nama;
         this.price = price;
         this.qty = qty;
@@ -18,11 +18,11 @@ public class OrderedMenu {
         this.nama = nama;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
