@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO : userDaoImpl pindahkan connection, preparedStatement, dan resultSet jadi didalam masing2 method
 public class UserDaoImpl implements UserDao {
 
     private static final String tableUser = "users";
@@ -35,8 +34,6 @@ public class UserDaoImpl implements UserDao {
 
     private static final String tableUserRoles = "users_roles";
     private static final String refTableRestoran = "restoran";
-
-    int id=0, count=0;
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     String hashedPassword;
@@ -164,6 +161,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int getId(String username) {
+        int id=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -413,6 +411,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int count(Integer idResto) {
+        int count=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

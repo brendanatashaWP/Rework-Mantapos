@@ -330,7 +330,7 @@ public class OwnerManagerController {
         ModelAndView mav = new ModelAndView();
         String username = authentication.getName();
         int id_resto = restoranDao.readIdResto(username);
-        Menu menuObject = menuDao.readOne(id); //Mengambil detail sebuah menu berdasarkan id nya. //TODO : dipastikan lagi ini bagusnya di store ke list atau cukup model Menu saja
+        Menu menuObject = menuDao.readOne(id); //Mengambil detail sebuah menu berdasarkan id nya.
         mav.addObject("menuObject", menuObject);
         mav.setViewName("owner-manager/edit-menu");
         return mav;

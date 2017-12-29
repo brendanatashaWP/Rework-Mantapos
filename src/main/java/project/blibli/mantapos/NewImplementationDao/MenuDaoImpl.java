@@ -160,7 +160,6 @@ public class MenuDaoImpl implements MenuDao {
         return menu;
     }
 
-    //TODO : Masih salah
     @Override
     public int getLastId(Integer idResto) {
         int lastId=0;
