@@ -46,7 +46,7 @@ public class CashierController {
         String loggedInUsername = authentication.getName(); //Ambil username yang sedang login
         mav.addObject("loggedInUsername", loggedInUsername);
 
-        restoran = restaurantDao.readOne(restaurantDao.readIdResto(loggedInUsername)); //Mengambil informasi restoran berdasarkan nama username yang login (username itu belong ke restoran mana)
+        restoran = restaurantDao.readOne(restaurantDao.readIdRestoBasedOnUsernameRestoTerkait(loggedInUsername)); //Mengambil informasi restoran berdasarkan nama username yang login (username itu belong ke restoran mana)
         mav.addObject("restoran", restoran); //object restoran ini gunanya nanti untuk di receipt
 
         List<Menu> menuList = menuDao.readAll(restoran.getId(), 0, 0); //Mengambil semua menu yang ada di database. itemPerPage dan page dibuat 0 karena tidak akan memakai pagination
@@ -68,7 +68,7 @@ public class CashierController {
         ModelAndView mav = new ModelAndView();
 
         String loggedInUsername = authentication.getName(); //Ambil username yang sedang login
-        int id_resto = restaurantDao.readIdResto(loggedInUsername);
+        int id_resto = restaurantDao.readIdRestoBasedOnUsernameRestoTerkait(loggedInUsername);
         System.out.println("id resto : " + id_resto);
 //        restoran = restaurantDao.GetRestaurantInfo(loggedInUsername); //Mengambil informasi restoran berdasarkan username yg login (username itu belong ke restoran mana)
 //        int id_resto = restoran.getId(); //Mengambil id restoran yang didapat dari hasil di atas

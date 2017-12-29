@@ -34,7 +34,7 @@ public class OwnerManagerController {
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView managerDashboardHtml(Authentication authentication){
         List<String> dummyLedgerList = new ArrayList<>();
-        int idResto = restoranDao.readIdResto(authentication.getName());
+        int idResto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(authentication.getName());
         List<Ledger> ledgerListBulanan = ledgerDao.getLedgerBulanan(idResto, LocalDate.now().getYear());
         for (Ledger ledger:ledgerListBulanan
              ) {
@@ -55,7 +55,7 @@ public class OwnerManagerController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/menu");
         String username = authentication.getName(); //Mengambil username yang login
-        id_resto = restoranDao.readIdResto(username); //Mengambil id restoran berdasarkan username yang login (username itu belong ke restoran mana)
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username); //Mengambil id restoran berdasarkan username yang login (username itu belong ke restoran mana)
 
         List<Menu> menuList = menuDao.readAll(id_resto, itemPerPage, page); //Mengambil semua menu yang ada, dengan parameter id restoran yang sudah diambil tadi, jumlah itemPerPage (yaitu 5), dan page ke berapa diambil dari URL tadi, misal menu/1, berarti page = 1
         mav.setViewName("owner-manager/menu");
@@ -77,7 +77,7 @@ public class OwnerManagerController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/outcome");
         String username = authentication.getName(); //Mengambil username dari user yang login
-        id_resto = restoranDao.readIdResto(username); //Mengambil id restoran berdasarkan username yang login tadi (username itu belong ke restoran mana)
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username); //Mengambil id restoran berdasarkan username yang login tadi (username itu belong ke restoran mana)
         List<Ledger> outcomeList = ledgerDao.getKreditHarian(id_resto, itemPerPage, page); //Mengambil object-object outcome yang ada di table ledger_harian. karena ini outcome, berarti kredit. Lalu itemPerPage itu untuk me-limit query SELECT nya sampai berapa item dan page itu untuk mencari offset (record dibaca mulai dari item ke-berapa)
         double jumlahBanyakOutcome = saldoDao.count(id_resto); //Menghitung jumlah item outcome ada berapa row
         double jumlahPage = Math.ceil(jumlahBanyakOutcome/itemPerPage); //Menghitung jumlahPage, didapatkan dari jumlah row outcome dibagi dengan item per page. Misal jumlah row outcome 12 dan item per page 5, maka akan ada 3 page dengan item-nya 5,5,3
@@ -98,7 +98,7 @@ public class OwnerManagerController {
         mav.setViewName("owner-manager/employee");
         List<User> userList = new ArrayList<>();
         String username = authentication.getName();
-        id_resto = restoranDao.readIdResto(username);
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
         double jumlahEmployee = userDao.count(id_resto);
         double jumlahPage = Math.ceil(jumlahEmployee/itemPerPage);
         List<Integer> pageList = new ArrayList<>();
@@ -124,7 +124,7 @@ public class OwnerManagerController {
     @GetMapping(value = "/range", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView ledgerChooseRangeHtml(Authentication authentication){
         String username = authentication.getName();
-        id_resto = restoranDao.readIdResto(username);
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
         List<Ledger> monthAndYearList = ledgerDao.getListBulanDanTahun(id_resto); //Mengambil semua month dan year yang ada di database. Ini di pass ke pilih-range-ledger.html, supaya dropdown di html itu nanti sesuai dengan month dan year yang tersedia di database saja
         return new ModelAndView("owner-manager/pilih-range-ledger", "monthAndYearList", monthAndYearList);
     }
@@ -134,7 +134,7 @@ public class OwnerManagerController {
             Authentication authentication){
         ModelAndView mav = new ModelAndView();
         String username = authentication.getName();
-        id_resto = restoranDao.readIdResto(username);
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
         int intBulan = LocalDate.now().getMonthValue();
         String bulan = MonthNameGenerator.MonthNameGenerator(intBulan); //Mengambil nama bulan berdasarkan nilai integer bulan-nya
 //        List<Saldo> saldoList = saldoDao.readAll(id_resto, itemPerPage, page); //Mengambil saldo awal setiap bulannya untuk ditampilkan di main menu dari laman saldo
@@ -159,7 +159,7 @@ public class OwnerManagerController {
     public ModelAndView addSaldoAwalHtml(Authentication authentication,
                                          @ModelAttribute("saldoAwal") Saldo saldo){
         String username = authentication.getName();
-        id_resto = restoranDao.readIdResto(username);
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
         saldo.setTipe_saldo("awal");
         saldoDao.insert(saldo, id_resto); //Menambahkan saldo awal dengan foreign key id restoran yang sesuai dan nilai saldo awal ada di object saldo yang di-pass dari html
         return new ModelAndView("redirect:/saldo/1");
@@ -169,7 +169,7 @@ public class OwnerManagerController {
     public ModelAndView addMenuJson(@ModelAttribute("menu") Menu menu,
                                     Authentication authentication){
         String username = authentication.getName();
-        id_resto = restoranDao.readIdResto(username);
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
         try{
             String filename = String.valueOf(menuDao.getLastId(id_resto) + 1) + ".jpg"; //generate filename berdasarkan dari nilai id menu yang ditambahkan. Misal id menu yang barusan ditambahkan adalah 1, berarti nama gambarnya adalah 1.jpg
             FileCopyUtils.copy(menu.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename)); //Melakukan upload gambar
@@ -185,7 +185,7 @@ public class OwnerManagerController {
     public ModelAndView addUserHtml(@ModelAttribute("user")User user,
                                     Authentication authentication){
         String username = authentication.getName();
-        id_resto = restoranDao.readIdResto(username);
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
         //Mengambil username yang login itu dia role-nya sebagai apa
         if(authentication.getAuthorities().toString().equals("[manager]")){
             //jika sebagai manager, maka user yang baru ditambahkan itu role-nya adalah cashier
@@ -204,7 +204,7 @@ public class OwnerManagerController {
                                         @RequestParam("quantity") String qty,
                                         Authentication authentication){
         String username = authentication.getName();
-        id_resto = restoranDao.readIdResto(username);
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
         String[] dateSplit = ledger.getWaktu().split("-"); //split date dengan character "-" dari date yang di-pick dari user melalui outcome.html (formatnya yyyy-mm-dd)
         int tanggal = Integer.parseInt(dateSplit[2]); ledger.setTanggal(tanggal); //tanggal itu ada di elemen ke-2
         int week = WeekGenerator.GetWeek(tanggal); ledger.setWeek(week); //week di-generate melalui class WeekGenerator, lalu setWeek di model ledger
@@ -233,7 +233,7 @@ public class OwnerManagerController {
                                Authentication authentication){
         ModelAndView mav = new ModelAndView();
         String username = authentication.getName();
-        id_resto = restoranDao.readIdResto(username);
+        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
         List<Ledger> ledgerList = new ArrayList<>();
         int saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
         String skala_ledger=""; //skala ledger bisa harian, mingguan, bulanan, atau tahunan
@@ -355,7 +355,7 @@ public class OwnerManagerController {
                                      Authentication authentication){
         ModelAndView mav = new ModelAndView();
         String username = authentication.getName();
-        int id_resto = restoranDao.readIdResto(username);
+        int id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
         Menu menuObject = menuDao.readOne(id); //Mengambil detail sebuah menu berdasarkan id nya.
         mav.addObject("menuObject", menuObject);
         mav.setViewName("owner-manager/edit-menu");
@@ -366,7 +366,7 @@ public class OwnerManagerController {
     public ModelAndView editMenuPostHtml(@ModelAttribute("menu") Menu menu,
                                          Authentication authentication){
         ModelAndView mav = new ModelAndView();
-        int id_resto = restoranDao.readIdResto(authentication.getName()); //Mengambil id restoran berdasarkan username yang login sekarang (username ini belong ke restoran mana)
+        int id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(authentication.getName()); //Mengambil id restoran berdasarkan username yang login sekarang (username ini belong ke restoran mana)
         try {
             if(!menu.getMultipartFile().isEmpty()){
                 //jika multipartFile (tempat upload foto) itu tidak kosong, berarti user upload foto baru
@@ -387,7 +387,7 @@ public class OwnerManagerController {
     @GetMapping(value = "/edit/user/{id}")
     public ModelAndView editUserHtml(@PathVariable("id") int id,
                                      Authentication authentication){
-        int id_resto = restoranDao.readIdResto(authentication.getName());
+        int id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(authentication.getName());
         User userObject = userDao.readOne(id); //Ambil detail user yang ingin diedit berdasarkan id-nya
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/edit-user");
@@ -401,7 +401,7 @@ public class OwnerManagerController {
     public ModelAndView editUserPostHtml(@ModelAttribute("user") User user,
                                          Authentication authentication){
         ModelAndView mav = new ModelAndView();
-        int id_resto = restoranDao.readIdResto(authentication.getName());
+        int id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(authentication.getName());
         userDao.update(user, id_resto);
         mav.setViewName("redirect:/employee/1");
         return mav;

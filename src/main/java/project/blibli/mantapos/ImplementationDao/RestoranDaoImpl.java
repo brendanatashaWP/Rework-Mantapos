@@ -136,7 +136,7 @@ public class RestoranDaoImpl implements RestoranDao {
 
     //Mengambil id restoran berdasarkan nama restoran
     @Override
-    public int readIdResto(String usernameUser) {
+    public int readIdRestoBasedOnUsernameRestoTerkait(String usernameUser) {
         int idRestoran=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
@@ -153,13 +153,40 @@ public class RestoranDaoImpl implements RestoranDao {
                 idRestoran = resultSet.getInt("id_resto");
             }
         } catch (Exception ex){
-            System.out.println("Gagal read id resto berdasarkan nama restoran " + usernameUser + " : " + ex.toString());
+            System.out.println("Gagal read id resto berdasarkan username terkait restoran " + usernameUser + " : " + ex.toString());
         } finally {
             DbConnection.closeResultSet(resultSet);
             DbConnection.closePreparedStatement(preparedStatement);
             DbConnection.closeConnection(connection);
         }
         return idRestoran;
+    }
+
+    @Override
+    public int readIdRestoBasedOnNamaResto(String namaResto) {
+        int idResto=0;
+        Connection connection;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        connection = DbConnection.openConnection();
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT " + this.idResto +
+                            " FROM " + tableRestoran + " WHERE " + this.namaResto + "=?"
+            );
+            preparedStatement.setString(1, namaResto);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                idResto = resultSet.getInt(1);
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal read id resto berdasarkan nama restoran " + namaResto + " : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return idResto;
     }
 
     @Override
@@ -216,8 +243,9 @@ public class RestoranDaoImpl implements RestoranDao {
         connection = DbConnection.openConnection();
         try{
             preparedStatement = connection.prepareStatement(
-                    "SELECT COUNT(*) FROM " + tableRestoran
+                    "SELECT COUNT(*) FROM " + tableRestoran + " WHERE " + namaResto + " NOT LIKE ?"
             );
+            preparedStatement.setString(1, "ADMIN");
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
                 count = resultSet.getInt(1);
