@@ -224,7 +224,7 @@ public class OwnerManagerController {
         String username = authentication.getName();
         id_resto = restoranDao.readIdResto(username);
         List<Ledger> ledgerList = new ArrayList<>();
-        double saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
+        int saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
         String skala_ledger=""; //skala ledger bisa harian, mingguan, bulanan, atau tahunan
         if(skala.equals("harian") || skala.equals("mingguan")){ //jika skala yang di-pass dari ledger.html adalah harian atau mingguan. Yang di-pick user adalah bulan dan tahunnya. Misal user ingin melihat ledger harian di bulan Oktober tahun 2017. Atau mingguan di bulan Desember tahun 2017
             total_kredit = ledgerDao.getTotalKreditBulanan(id_resto, month, year); //Mengambil total kredit bulanan di bulan dan tahun yang di pick user
