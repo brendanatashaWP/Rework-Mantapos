@@ -31,39 +31,6 @@ public class MantaposApplication {
 
 		SaldoDaoImpl saldoDao = new SaldoDaoImpl();
 		saldoDao.createTable();
-
-//		RestoranDaoImpl restaurantDao = new RestoranDaoImpl();
-//		restaurantDao.CreateTable();
-//		Restoran restoran = new Restoran();
-//		restoran.setNamaResto("ADMIN"); restoran.setLokasiResto("ADMIN");
-//		restoranDao.insert(restoran, 0);
-//
-//		UserDaoImpl userDao = new UserDaoImpl();
-//		userDao.CreateRole();
-//
-//		userDao.CreateTableUser();
-//		userDao.CreateTableRole();
-//		User user = new User();
-//		user.setNamaLengkap("Axellageraldinc"); user.setAlamat("Terban");
-//		user.setJenisKelamin("L");
-//		user.setNomorTelepon("08123451234"); user.setNomorKtp("123123123123123");
-//		user.setPassword("axell123"); user.setUsername("axell");
-//		user.setRole("admin"); user.setIdResto(1);
-//		userDao.insert(user, 10);
-//
-//		MenuDaoImpl menuDao = new MenuDaoImpl();
-//		menuDao.CreateTable();
-////
-//		LedgerDaoImpl orderDao = new LedgerDaoImpl();
-//		orderDao.CreateTipe();
-//		orderDao.CreateTable();
-////
-//		SaldoDaoImpl saldoDao = new SaldoDaoImpl();
-//		saldoDao.CreateTable();
-////		saldoDao.AddSaldoAwal(1, 500000);
-//
-//		MenuYangDipesanDaoImpl orderedMenuDao = new MenuYangDipesanDaoImpl();
-//		orderedMenuDao.CreateTable();
 	}
 
 }
