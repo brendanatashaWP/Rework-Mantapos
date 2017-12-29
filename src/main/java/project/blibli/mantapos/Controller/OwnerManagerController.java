@@ -34,7 +34,6 @@ public class OwnerManagerController {
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView managerDashboardHtml(){
         List<String> dummyLedgerList = new ArrayList<>();
-//        String query = "SELECT month, tipe, sum(biaya) from ledger_harian where id_resto=? and year=? group by month, tipe order by month, tipe asc";
         for (int i=1000; i<13000; i+=1000){
             dummyLedgerList.add(String.valueOf(i));
         }
