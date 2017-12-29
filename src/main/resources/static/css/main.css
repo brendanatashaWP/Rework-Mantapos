@@ -275,7 +275,7 @@ nav .navbar-nav li a:hover, nav .navbar-nav li a:focus{
     font-size:18px;
 }
 
-.btnAddtoCart{
+.btn.btn-btnAddtoCart{
     background-color: #ce0a48;
     color: whitesmoke;
     float: right;

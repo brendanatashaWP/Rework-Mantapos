@@ -44,7 +44,7 @@ function checkTime(i) {
 }
 
 function addToCart(id, name, price){
-
+    var idbtn = 'btn' +id;
 //   document.getElementById(idPanel).disabled= true;
     var row = tableCart.insertRow(-1);
     var cellName = row.insertCell(0);
@@ -62,13 +62,10 @@ function addToCart(id, name, price){
     cellPrice.innerHTML = price;
     cellPriceTotal.innerHTML = price;
 
-    cellRemove.innerHTML = '<a href="#" onclick="deleteItem(this)" style="text-decoration: none; color: red;">REMOVE</a>';
+    cellRemove.innerHTML = '<a href="#" onclick="deleteItem(this, ' + id + ')" style="text-decoration: none; color: red;">REMOVE</a>';
 
     //Jika ada order baru, counter++
     counterOrder++;
-    var idbtn = 'btn' +id;
-
-
     var array_id_cart = [];
         for (var i=0; i<counterOrder; i++){
         if(id!=array_id_cart[i]){
@@ -130,7 +127,13 @@ function updatePrice(x){
     inputPriceTotal.value = priceTotal;
 }
 
-function deleteItem(x) {
+function deleteItem(x, idnya) {
+    var idbtn2 = 'btn' + idnya;
+    var btn2 = document.getElementById(idbtn2);
+        btn2.disabled = false;
+        btn2.style.backgroundColor = "#ce0a48"; //change button bgColor
+        btn2.innerHTML = "Add to Cart";
+
     //ambil baris dari item yang sesuai
     var baris = x.parentNode.parentNode;
     //Mengurangi priceTotal dengan total price dari baris yang sesuai
@@ -139,6 +142,9 @@ function deleteItem(x) {
     counterOrder--;
     baris.parentNode.removeChild(baris);
     totalBayar.innerHTML = "Rp " + priceTotal;
+
+
+
 }
 
 function addOrder() {
