@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import project.blibli.mantapos.Config.Mail;
+import project.blibli.mantapos.GetIdResto;
 import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.WeekGenerator;
@@ -35,7 +36,7 @@ public class CashierService {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("cashier");
         String loggedInUsername = getLoggedInUsername(authentication);
-        int idResto = getIdRestoBasedOnUsernameTerkait(loggedInUsername);
+        int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(loggedInUsername);
         mav.addObject("loggedInUsername", loggedInUsername);
         mav.addObject("restoran", getInfoRestoran(idResto));
         mav.addObject("menuList", getAllMenu(idResto));
@@ -55,7 +56,7 @@ public class CashierService {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/cashier");
         String loggedInUsername = authentication.getName();
-        int idResto = getIdRestoBasedOnUsernameTerkait(loggedInUsername);
+        int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(loggedInUsername);
         insertPemasukkan(ledger, idResto);
         updateSaldoAkhir(idResto);
         insertDetailMenuYangDipesan(getLastIdOrder(idResto), arrayIdMenu, arrayQtyMenu);
@@ -73,11 +74,6 @@ public class CashierService {
     public Restoran getInfoRestoran(int idResto){
         Restoran restoran = restoranDao.readOne(idResto);
         return restoran;
-    }
-
-    public int getIdRestoBasedOnUsernameTerkait(String username){
-        int idResto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        return idResto;
     }
 
     public String getLoggedInUsername(Authentication authentication){

@@ -1,5 +1,6 @@
 package project.blibli.mantapos.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
@@ -8,6 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.MonthNameGenerator;
 import project.blibli.mantapos.ImplementationDao.*;
+import project.blibli.mantapos.Service.OwnerManager.DashboardService;
+import project.blibli.mantapos.Service.OwnerManager.MenuService;
 import project.blibli.mantapos.WeekGenerator;
 
 import java.io.File;
@@ -30,45 +33,25 @@ public class OwnerManagerController {
     private RestoranDaoImpl restoranDao = new RestoranDaoImpl();
     int id_resto, itemPerPage=5; //itemPerPage dibuat 5 item saja.
 
+    DashboardService dashboardService;
+    MenuService menuService;
+
+    @Autowired
+    public OwnerManagerController (DashboardService dashboardService,
+                                   MenuService menuService){
+        this.dashboardService = dashboardService;
+        this.menuService = menuService;
+    }
+
     //Jika user mengakses /dashboard
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView managerDashboardHtml(Authentication authentication){
-        List<String> dummyLedgerList = new ArrayList<>();
-        int idResto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(authentication.getName());
-        List<Ledger> ledgerListBulanan = ledgerDao.getLedgerBulanan(idResto, LocalDate.now().getYear());
-        for (Ledger ledger:ledgerListBulanan
-             ) {
-            dummyLedgerList.add(String.valueOf(ledger.getBiaya()));
-        }
-        String totalPengeluaran = "Rp " + ledgerDao.getTotalKreditAllTime(idResto);
-        String totalPemasukkan = "Rp " + ledgerDao.getTotalDebitAllTime(idResto);
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("owner-manager/dashboard");
-        mav.addObject("dummyList", dummyLedgerList);
-        mav.addObject("total_pengeluaran", totalPengeluaran);
-        mav.addObject("total_pemasukkan", totalPemasukkan);
-        return mav;
+        return dashboardService.getMappingDashboard(authentication);
     }
     //Jika user mengakses menu/{page}, dimana {page} ini adalah page keberapa laman menu itu, misal menu/1 berarti laman menu page 1 di pagination-nya
     @GetMapping(value = "/menu/{page}")
     public ModelAndView menuPaginated(Menu menu, @PathVariable("page") int page, Authentication authentication){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("owner-manager/menu");
-        String username = authentication.getName(); //Mengambil username yang login
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username); //Mengambil id restoran berdasarkan username yang login (username itu belong ke restoran mana)
-
-        List<Menu> menuList = menuDao.readAll(id_resto, itemPerPage, page); //Mengambil semua menu yang ada, dengan parameter id restoran yang sudah diambil tadi, jumlah itemPerPage (yaitu 5), dan page ke berapa diambil dari URL tadi, misal menu/1, berarti page = 1
-        mav.setViewName("owner-manager/menu");
-        mav.addObject("menuList", menuList);
-        double jumlahMenu = menuDao.count(id_resto); //Mengambil jumlah menu yang ada
-        double jumlahPage = Math.ceil(jumlahMenu/itemPerPage); //Menghitung jumlah page yang ada, yaitu dari jumlah total menu dibagi dengan jumlah item per page. Lalu dibulatkan ke atas. Misal jumlah menu adalah 12, jumlah item per page adalah 5, maka akan ada 3 page dengan jumlah item 5, 5, 3
-        List<Integer> pageList = new ArrayList<>(); //List pageList untuk menampung nilai integer dari page. (jika jumlahPage=3, maka di pageList akan ada 1,2,3
-        for (int i=1; i<=jumlahPage; i++){
-            pageList.add(i);
-        }
-        mav.addObject("pageNo", page);
-        mav.addObject("pageList", pageList);
-        return mav;
+        return menuService.getMappingMenu(authentication, page);
     }
     //Jika user mengakses laman outcome. Kurang lebih sama dengan menu/{page} di atas.
     @GetMapping(value = "/outcome/{page}", produces = MediaType.TEXT_HTML_VALUE)
@@ -168,17 +151,7 @@ public class OwnerManagerController {
     @PostMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addMenuJson(@ModelAttribute("menu") Menu menu,
                                     Authentication authentication){
-        String username = authentication.getName();
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        try{
-            String filename = String.valueOf(menuDao.getLastId(id_resto) + 1) + ".jpg"; //generate filename berdasarkan dari nilai id menu yang ditambahkan. Misal id menu yang barusan ditambahkan adalah 1, berarti nama gambarnya adalah 1.jpg
-            FileCopyUtils.copy(menu.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename)); //Melakukan upload gambar
-            menu.setLokasi_gambar_menu("/images/" + filename); //set lokasi gambarnya
-            menuDao.insert(menu, id_resto); //insert menu ke table menu di database
-        } catch (Exception ex){
-            System.out.println("Error add menu : " + ex.toString());
-        }
-        return new ModelAndView("redirect:/menu/1");
+        return menuService.postMappingAddNewMenu(authentication, menu);
     }
     //Jika user menambahkan user baru
     @PostMapping(value = "/add-user", produces = MediaType.TEXT_HTML_VALUE)
@@ -346,42 +319,18 @@ public class OwnerManagerController {
     //jika user menghapus menu
     @GetMapping(value = "/delete/menu/{id}")
     public ModelAndView deleteMenu(@PathVariable("id") int id){
-        menuDao.delete(id);
-        return new ModelAndView("redirect:/menu/1");
+        return menuService.getMappingDeleteMenu(id);
     }
     //jika user mengakses halaman untuk mengedit menu (keluar form dengan value dari menu yg bersesuaian di set ke input2 yang ada
     @GetMapping(value = "/edit/menu/{id}", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView editMenuHtml(@PathVariable("id") int id,
-                                     Authentication authentication){
-        ModelAndView mav = new ModelAndView();
-        String username = authentication.getName();
-        int id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        Menu menuObject = menuDao.readOne(id); //Mengambil detail sebuah menu berdasarkan id nya.
-        mav.addObject("menuObject", menuObject);
-        mav.setViewName("owner-manager/edit-menu");
-        return mav;
+    public ModelAndView editMenuHtml(@PathVariable("id") int id){
+        return menuService.getMappingEditMenu(id);
     }
     //jika user posting menu yang sudah di edit
     @PostMapping(value = "/edit-menu", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView editMenuPostHtml(@ModelAttribute("menu") Menu menu,
                                          Authentication authentication){
-        ModelAndView mav = new ModelAndView();
-        int id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(authentication.getName()); //Mengambil id restoran berdasarkan username yang login sekarang (username ini belong ke restoran mana)
-        try {
-            if(!menu.getMultipartFile().isEmpty()){
-                //jika multipartFile (tempat upload foto) itu tidak kosong, berarti user upload foto baru
-                String filename = String.valueOf(menu.getId() + 1) + ".jpg";
-                FileCopyUtils.copy(menu.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename)); //upload foto yang baru
-                menu.setLokasi_gambar_menu("/images/" + filename);
-            } else{
-                menu.setLokasi_gambar_menu(menu.getLokasi_gambar_menu());
-            }
-            menuDao.update(menu, id_resto); //update menu di table menu di database
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mav.setViewName("redirect:/menu/1");
-        return mav;
+        return menuService.postMappingEditMenu(authentication, menu);
     }
     //Jika user mengakses laman edit user (show form) beserta value value yang bersesuaian di input2 yang ada
     @GetMapping(value = "/edit/user/{id}")

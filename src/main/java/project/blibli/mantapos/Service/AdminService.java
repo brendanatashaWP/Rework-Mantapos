@@ -2,6 +2,7 @@ package project.blibli.mantapos.Service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
+import project.blibli.mantapos.GetIdResto;
 import project.blibli.mantapos.ImplementationDao.RestoranDaoImpl;
 import project.blibli.mantapos.ImplementationDao.UserDaoImpl;
 import project.blibli.mantapos.Model.Restoran;
@@ -38,7 +39,7 @@ public class AdminService {
                                             User user){
         ModelAndView mav = new ModelAndView();
         insertNewRestoran(restoran, 0);
-        int idResto = getIdRestoBasedOnNamaResto(restoran.getNamaResto());
+        int idResto = GetIdResto.getIdRestoBasedOnNamaResto(restoran.getNamaResto());
         user.setRole("owner");
         user.setIdResto(idResto);
         insertNewOwner(user, idResto);
@@ -62,11 +63,6 @@ public class AdminService {
 
     public void insertNewOwner(User user, int idResto){
         userDao.insert(user, idResto);
-    }
-
-    public int getIdRestoBasedOnNamaResto(String namaResto){
-        int idResto = restoranDao.readIdRestoBasedOnNamaResto(namaResto);
-        return idResto;
     }
 
 }
