@@ -24,7 +24,6 @@ public class MenuDaoImpl implements MenuDao {
     private static final String refTableRestoran = "restoran";
     private static final String idResto = "id_resto";
 
-    Menu menu = new Menu();
     int count=0, lastId=0;
 
     @Override
@@ -114,6 +113,7 @@ public class MenuDaoImpl implements MenuDao {
             }
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                Menu menu = new Menu();
                 menu.setId(resultSet.getInt(idMenu));
                 menu.setNama_menu(resultSet.getString(namaMenu));
                 menu.setHarga_menu(resultSet.getDouble(hargaMenu));
@@ -137,6 +137,7 @@ public class MenuDaoImpl implements MenuDao {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         connection = DbConnection.openConnection();
+        Menu menu = new Menu();
         try{
             preparedStatement = connection.prepareStatement(
                     "SELECT * FROM " + tableMenu + " WHERE " + idMenu + "=?"
