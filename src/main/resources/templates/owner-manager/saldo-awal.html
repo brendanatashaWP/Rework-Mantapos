@@ -38,13 +38,16 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <th:block th:each="saldo : ${saldoAwalList}">
-                            <tr>
-                                <td th:text="${saldo.month}"/>
-                                <td th:text="${saldo.year}"/>
-                                <td th:text="${saldo.saldo_awal}"/>
-                            </tr>
-                        </th:block>
+                        <!--<td th:text="${saldo.month}"></td>-->
+                        <!--<td th:text="${saldo.year}"></td>-->
+                        <td th:text="${saldoAwal}"></td>
+                        <!--<th:block th:each="saldo : ${saldoList}">-->
+                            <!--<tr>-->
+                                <!--<td th:text="${saldo.month}"/>-->
+                                <!--<td th:text="${saldo.year}"/>-->
+                                <!--<td th:text="${saldo.saldo}"/>-->
+                            <!--</tr>-->
+                        <!--</th:block>-->
                         </tbody>
                     </table>
                     <ul class="pagination">
@@ -73,7 +76,7 @@
                     <form action="/saldo-post" method="post" class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-money" /></span>
-                            <input class="form-control" type="number" name="saldo_awal" placeholder="Nominal Saldo Awal"/><br/>
+                            <input class="form-control" type="number" name="saldo" placeholder="Nominal Saldo Awal"/><br/>
                         </div>
                         <br/>
                         <button class="form-control btn btn-primary" type="submit">OK</button>

@@ -1,8 +1,8 @@
-package project.blibli.mantapos.NewImplementationDao;
+package project.blibli.mantapos.ImplementationDao;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import project.blibli.mantapos.Model.User;
-import project.blibli.mantapos.NewInterfaceDao.UserDao;
+import project.blibli.mantapos.InterfaceDao.UserDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

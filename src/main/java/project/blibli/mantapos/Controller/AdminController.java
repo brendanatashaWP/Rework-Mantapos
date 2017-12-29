@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.Restoran;
 import project.blibli.mantapos.Model.User;
-import project.blibli.mantapos.NewImplementationDao.RestoranDaoImpl;
-import project.blibli.mantapos.NewImplementationDao.UserDaoImpl;
+import project.blibli.mantapos.ImplementationDao.RestoranDaoImpl;
+import project.blibli.mantapos.ImplementationDao.UserDaoImpl;
 
 import java.util.ArrayList;
 import java.util.List;

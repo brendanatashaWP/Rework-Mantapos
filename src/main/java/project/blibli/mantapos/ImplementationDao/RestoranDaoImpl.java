@@ -1,7 +1,7 @@
-package project.blibli.mantapos.NewImplementationDao;
+package project.blibli.mantapos.ImplementationDao;
 
 import project.blibli.mantapos.Model.Restoran;
-import project.blibli.mantapos.NewInterfaceDao.RestoranDao;
+import project.blibli.mantapos.InterfaceDao.RestoranDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

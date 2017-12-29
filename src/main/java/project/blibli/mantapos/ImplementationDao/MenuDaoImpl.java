@@ -1,7 +1,7 @@
-package project.blibli.mantapos.NewImplementationDao;
+package project.blibli.mantapos.ImplementationDao;
 
 import project.blibli.mantapos.Model.Menu;
-import project.blibli.mantapos.NewInterfaceDao.MenuDao;
+import project.blibli.mantapos.InterfaceDao.MenuDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
