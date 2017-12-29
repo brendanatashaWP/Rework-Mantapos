@@ -28,7 +28,6 @@ public class RestoranDaoImpl implements RestoranDao {
     private static final String nomorTelepon = "nomor_telepon";
     private static final String alamatUser = "alamat";
 
-    Restoran restoran = new Restoran();
     int count=0;
 
     @Override
@@ -88,6 +87,7 @@ public class RestoranDaoImpl implements RestoranDao {
 
     @Override
     public Restoran readOne(Integer idData) {
+        Restoran restoran = null;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -99,6 +99,7 @@ public class RestoranDaoImpl implements RestoranDao {
             preparedStatement.setInt(1, idData);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                restoran = new Restoran();
                 restoran.setId(resultSet.getInt(idResto));
                 restoran.setNamaResto(resultSet.getString(namaResto));
                 restoran.setLokasiResto(resultSet.getString(alamatResto));
@@ -184,6 +185,7 @@ public class RestoranDaoImpl implements RestoranDao {
             preparedStatement.setString(1, role);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                Restoran restoran = new Restoran();
                 restoran.setId(resultSet.getInt(idResto));
                 restoran.setNamaResto(resultSet.getString(namaResto));
                 restoran.setEnabled(resultSet.getBoolean(enabled));

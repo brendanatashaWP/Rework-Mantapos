@@ -24,9 +24,6 @@ public class MenuDaoImpl implements MenuDao {
     private static final String refTableRestoran = "restoran";
     private static final String idResto = "id_resto";
 
-    Menu menu = new Menu();
-    int count=0, lastId=0;
-
     @Override
     public void createTable() throws SQLException {
         Connection connection;
@@ -114,6 +111,7 @@ public class MenuDaoImpl implements MenuDao {
             }
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                Menu menu = new Menu();
                 menu.setId(resultSet.getInt(idMenu));
                 menu.setNama_menu(resultSet.getString(namaMenu));
                 menu.setHarga_menu(resultSet.getDouble(hargaMenu));
@@ -137,6 +135,7 @@ public class MenuDaoImpl implements MenuDao {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         connection = DbConnection.openConnection();
+        Menu menu = null;
         try{
             preparedStatement = connection.prepareStatement(
                     "SELECT * FROM " + tableMenu + " WHERE " + idMenu + "=?"
@@ -144,6 +143,7 @@ public class MenuDaoImpl implements MenuDao {
             preparedStatement.setInt(1, idData);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
+                menu = new Menu();
                 menu.setId(resultSet.getInt(idMenu));
                 menu.setNama_menu(resultSet.getString(namaMenu));
                 menu.setHarga_menu(resultSet.getDouble(hargaMenu));
@@ -163,6 +163,7 @@ public class MenuDaoImpl implements MenuDao {
     //TODO : Masih salah
     @Override
     public int getLastId(Integer idResto) {
+        int lastId=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -232,6 +233,7 @@ public class MenuDaoImpl implements MenuDao {
 
     @Override
     public int count(Integer idResto) {
+        int count=0;
         Connection connection;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
