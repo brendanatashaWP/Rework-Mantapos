@@ -525,6 +525,32 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
+    public int countDebitAtaukredit(int idResto, String tipe) {
+        int count=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT COUNT(*) FROM " + tableLedger + " WHERE " + this.idResto + "=? AND " + this.tipe + "=?::" + tipeLedger
+            );
+            preparedStatement.setInt(1, idResto);
+            preparedStatement.setString(2, tipe);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                count = resultSet.getInt(1);
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get count debit atau kredit : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return count;
+    }
+
+    @Override
     public void createTable() throws SQLException {
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = null;

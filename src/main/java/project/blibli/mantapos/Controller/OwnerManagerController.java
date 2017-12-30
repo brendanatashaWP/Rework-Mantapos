@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.MonthNameGenerator;
 import project.blibli.mantapos.ImplementationDao.*;
+import project.blibli.mantapos.Service.OutcomeService;
 import project.blibli.mantapos.Service.OwnerManager.DashboardService;
 import project.blibli.mantapos.Service.OwnerManager.EmployeeService;
 import project.blibli.mantapos.Service.OwnerManager.MenuService;
@@ -39,16 +40,19 @@ public class OwnerManagerController {
     MenuService menuService;
     EmployeeService employeeService;
     SaldoService saldoService;
+    OutcomeService outcomeService;
 
     @Autowired
     public OwnerManagerController (DashboardService dashboardService,
                                    MenuService menuService,
                                    EmployeeService employeeService,
-                                   SaldoService saldoService){
+                                   SaldoService saldoService,
+                                   OutcomeService outcomeService){
         this.dashboardService = dashboardService;
         this.menuService = menuService;
         this.employeeService = employeeService;
         this.saldoService = saldoService;
+        this.outcomeService = outcomeService;
     }
 
     //Jika user mengakses /dashboard
@@ -65,21 +69,7 @@ public class OwnerManagerController {
     @GetMapping(value = "/outcome/{page}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView outcomeHtml(@PathVariable("page") int page,
             Authentication authentication){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("owner-manager/outcome");
-        String username = authentication.getName(); //Mengambil username dari user yang login
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username); //Mengambil id restoran berdasarkan username yang login tadi (username itu belong ke restoran mana)
-        List<Ledger> outcomeList = ledgerDao.getKreditHarian(id_resto, itemPerPage, page); //Mengambil object-object outcome yang ada di table ledger_harian. karena ini outcome, berarti kredit. Lalu itemPerPage itu untuk me-limit query SELECT nya sampai berapa item dan page itu untuk mencari offset (record dibaca mulai dari item ke-berapa)
-        double jumlahBanyakOutcome = saldoDao.count(id_resto); //Menghitung jumlah item outcome ada berapa row
-        double jumlahPage = Math.ceil(jumlahBanyakOutcome/itemPerPage); //Menghitung jumlahPage, didapatkan dari jumlah row outcome dibagi dengan item per page. Misal jumlah row outcome 12 dan item per page 5, maka akan ada 3 page dengan item-nya 5,5,3
-        List<Integer> pageList = new ArrayList<>(); //List untuk menampung nilai-nilai page (jika jumlahPage = 3, maka di pageList ini isinya 1,2,3
-        for (int i=1; i<=jumlahPage; i++){
-            pageList.add(i);
-        }
-        mav.addObject("outcomeList", outcomeList);
-        mav.addObject("pageNo", page);
-        mav.addObject("pageList", pageList);
-        return mav;
+        return outcomeService.getMappingOutcome(authentication, page);
     }
     //Jika user akses /employee, kurang lebih sama dengan menu/page dan outcome/page
     @GetMapping(value = "/employee/{page}", produces = MediaType.TEXT_HTML_VALUE)
@@ -125,25 +115,7 @@ public class OwnerManagerController {
     public ModelAndView outcomeHtmlPost(@ModelAttribute("ledger") Ledger ledger,
                                         @RequestParam("quantity") String qty,
                                         Authentication authentication){
-        String username = authentication.getName();
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        String[] dateSplit = ledger.getWaktu().split("-"); //split date dengan character "-" dari date yang di-pick dari user melalui outcome.html (formatnya yyyy-mm-dd)
-        int tanggal = Integer.parseInt(dateSplit[2]); ledger.setTanggal(tanggal); //tanggal itu ada di elemen ke-2
-        int week = WeekGenerator.GetWeek(tanggal); ledger.setWeek(week); //week di-generate melalui class WeekGenerator, lalu setWeek di model ledger
-        int month = Integer.parseInt(dateSplit[1]); ledger.setMonth(month); //month itu ada di elemen ke-1, lalu setMonth
-        int year = Integer.parseInt(dateSplit[0]); ledger.setYear(year); //year itu ada di elemen ke-0, lalu setYear
-        ledger.setTipe("kredit"); //karena ini adalah pengeluaran (outcome), berarti tipenya adalah kredit
-        ledger.setKeperluan(ledger.getKeperluan() + "(" + qty + ")"); //Keperluannya adalah diambil dari keperluan yang diinputkan oleh user ditambahkan dengan quantity yang diinputkan oleh user
-        ledgerDao.insert(ledger, id_resto); //insert pengeluaran ke table outcome di database
-        Saldo saldo = new Saldo();
-        saldo.setId_resto(id_resto);
-        saldo.setTipe_saldo("akhir");
-        saldo.setTanggal(tanggal);
-        saldo.setMonth(month);
-        saldo.setYear(year);
-        saldo.setSaldo(saldoDao.getSaldoAwal(id_resto) + ledgerDao.getTotalDebitBulanan(id_resto, month, year) - ledgerDao.getTotalKreditBulanan(id_resto, month, year)); //saldo akhir = saldo awal + debit - kredit
-        saldoDao.insert(saldo, id_resto);
-        return new ModelAndView("redirect:/outcome/1");
+        return outcomeService.postMappingOutcome(authentication, ledger, qty);
     }
     //Setelah pilih jangka waktu untuk melihat ledger, maka page ini diakses
     @PostMapping(value = "/ledger")
