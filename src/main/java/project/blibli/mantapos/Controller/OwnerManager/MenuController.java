@@ -19,8 +19,8 @@ public class MenuController {
     }
 
     //Jika user mengakses menu/{page}, dimana {page} ini adalah page keberapa laman menu itu, misal menu/1 berarti laman menu page 1 di pagination-nya
-    @GetMapping(value = "/menu/{page}")
-    public ModelAndView menuPaginated(Menu menu, @PathVariable("page") int page, Authentication authentication){
+    @GetMapping(value = "/menu")
+    public ModelAndView menuPaginated(Menu menu, @RequestParam(value = "page", required = false) Integer page, Authentication authentication){
         return menuService.getMappingMenu(authentication, page);
     }
 

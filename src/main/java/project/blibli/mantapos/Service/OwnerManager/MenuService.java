@@ -21,10 +21,13 @@ public class MenuService {
     private static String UPLOAD_LOCATION=System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
     public ModelAndView getMappingMenu(Authentication authentication,
-                                       int page){
+                                       Integer page){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/menu");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
+        if(page == null){
+            page=1;
+        }
         mav.addObject("menuList", getAllMenu(idResto, page));
         mav.addObject("pageNo", page);
         double jumlahMenu = getCountMenu(idResto);
@@ -40,7 +43,7 @@ public class MenuService {
     public ModelAndView postMappingAddNewMenu(Authentication authentication,
                                               Menu menu){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("redirect:/menu/1");
+        mav.setViewName("redirect:/menu");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         insertNewMenu(idResto, menu);
         return mav;
@@ -56,7 +59,7 @@ public class MenuService {
     public ModelAndView postMappingEditMenu(Authentication authentication,
                                             Menu menu){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("redirect:/menu/1");
+        mav.setViewName("redirect:/menu");
         updateMenu(GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName()), menu);
         return mav;
     }
@@ -64,7 +67,7 @@ public class MenuService {
     public ModelAndView getMappingDeleteMenu(int idMenu){
         ModelAndView mav = new ModelAndView();
         deleteMenu(idMenu);
-        mav.setViewName("redirect:/menu/1");
+        mav.setViewName("redirect:/menu");
         return mav;
     }
 
