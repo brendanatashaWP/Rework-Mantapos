@@ -12,6 +12,7 @@ import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.Service.OwnerManager.DashboardService;
 import project.blibli.mantapos.Service.OwnerManager.EmployeeService;
 import project.blibli.mantapos.Service.OwnerManager.MenuService;
+import project.blibli.mantapos.Service.OwnerManager.SaldoService;
 import project.blibli.mantapos.WeekGenerator;
 
 import java.io.File;
@@ -37,14 +38,17 @@ public class OwnerManagerController {
     DashboardService dashboardService;
     MenuService menuService;
     EmployeeService employeeService;
+    SaldoService saldoService;
 
     @Autowired
     public OwnerManagerController (DashboardService dashboardService,
                                    MenuService menuService,
-                                   EmployeeService employeeService){
+                                   EmployeeService employeeService,
+                                   SaldoService saldoService){
         this.dashboardService = dashboardService;
         this.menuService = menuService;
         this.employeeService = employeeService;
+        this.saldoService = saldoService;
     }
 
     //Jika user mengakses /dashboard
@@ -95,37 +99,14 @@ public class OwnerManagerController {
     @GetMapping(value = "/saldo/{page}")
     public ModelAndView addSaldoAwalHtml(@PathVariable("page") int page,
             Authentication authentication){
-        ModelAndView mav = new ModelAndView();
-        String username = authentication.getName();
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        int intBulan = LocalDate.now().getMonthValue();
-        String bulan = MonthNameGenerator.MonthNameGenerator(intBulan); //Mengambil nama bulan berdasarkan nilai integer bulan-nya
-//        List<Saldo> saldoList = saldoDao.readAll(id_resto, itemPerPage, page); //Mengambil saldo awal setiap bulannya untuk ditampilkan di main menu dari laman saldo
-        int saldoAwal = saldoDao.getSaldoAwal(id_resto);
-        double jumlahBanyakSaldo = saldoDao.count(id_resto);
-        double jumlahPage = Math.ceil(jumlahBanyakSaldo/itemPerPage);
-        List<Integer> pageList = new ArrayList<>();
-        for (int i=1; i<=jumlahPage; i++){
-            pageList.add(i);
-        }
-        mav.addObject("pageNo", page);
-        mav.addObject("pageList", pageList);
-//        mav.addObject("saldoAwalList", saldoList);
-        mav.addObject("saldoAwal", saldoAwal);
-        mav.addObject("bulan", bulan);
-        mav.setViewName("owner-manager/saldo-awal");
-        return mav;
+        return saldoService.getMappingSaldoAwal(authentication, page);
     }
 
     //Jika user menambahkan saldo baru
     @PostMapping(value = "/saldo-post", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addSaldoAwalHtml(Authentication authentication,
                                          @ModelAttribute("saldoAwal") Saldo saldo){
-        String username = authentication.getName();
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        saldo.setTipe_saldo("awal");
-        saldoDao.insert(saldo, id_resto); //Menambahkan saldo awal dengan foreign key id restoran yang sesuai dan nilai saldo awal ada di object saldo yang di-pass dari html
-        return new ModelAndView("redirect:/saldo/1");
+        return saldoService.postMappingAddSaldoAwal(authentication, saldo);
     }
     //Jika user menambahkan menu baru
     @PostMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)

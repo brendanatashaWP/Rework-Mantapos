@@ -40,14 +40,14 @@
                         <tbody>
                         <!--<td th:text="${saldo.month}"></td>-->
                         <!--<td th:text="${saldo.year}"></td>-->
-                        <td th:text="${saldoAwal}"></td>
-                        <!--<th:block th:each="saldo : ${saldoList}">-->
-                            <!--<tr>-->
-                                <!--<td th:text="${saldo.month}"/>-->
-                                <!--<td th:text="${saldo.year}"/>-->
-                                <!--<td th:text="${saldo.saldo}"/>-->
-                            <!--</tr>-->
-                        <!--</th:block>-->
+                        <!--<td th:text="${saldoAwal}"></td>-->
+                        <th:block th:each="saldo : ${saldoAwalList}">
+                            <tr>
+                                <td th:text="${saldo.month}"/>
+                                <td th:text="${saldo.year}"/>
+                                <td th:text="'Rp ' + ${saldo.saldo}"></td>
+                            </tr>
+                        </th:block>
                         </tbody>
                     </table>
                     <ul class="pagination">
