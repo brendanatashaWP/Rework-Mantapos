@@ -48,6 +48,7 @@ public class OutcomeService {
         mav.setViewName("redirect:/outcome/1");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         insertNewPengeluaran(idResto, ledger, qty);
+        updateSaldoAkhir(idResto);
         return mav;
     }
 
@@ -68,14 +69,14 @@ public class OutcomeService {
         ledgerDao.insert(ledger, idResto);
     }
 
-    private void updateSaldoAkhir(int idResto,
-                                  Saldo saldo){
+    private void updateSaldoAkhir(int idResto){
+        Saldo saldo = new Saldo();
         saldo.setId_resto(idResto);
         saldo.setTipe_saldo("akhir");
         saldo.setTanggal(tanggal);
         saldo.setMonth(bulan);
         saldo.setYear(tahun);
-        saldo.setSaldo(saldoDao.getSaldoAwal(idResto) + ledgerDao.getTotalDebitDalamSebulan(idResto, bulan, tahun) - ledgerDao.getTotalKreditDalamSebulan(idResto, bulan, tahun)); //saldo akhir = saldo awal + debit - kredit
+        saldo.setSaldo(saldoDao.getSaldoAwal(idResto) + ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "debit") - ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "kredit")); //saldo akhir = saldo awal + debit - kredit
         saldoDao.insert(saldo, idResto);
     }
 

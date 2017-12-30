@@ -29,12 +29,12 @@ public class DashboardService {
     }
 
     private int getTotalPengeluaranAllTime(int idResto){
-        int totalPengeluaranAllTime = ledgerDao.getTotalKreditAllTime(idResto);
+        int totalPengeluaranAllTime = ledgerDao.getTotalDebitKreditAllTime(idResto, "kredit");
         return totalPengeluaranAllTime;
     }
 
     private int getTotalPemasukkanAllTime(int idResto){
-        int totalPemasukkanAllTime = ledgerDao.getTotalDebitAllTime(idResto);
+        int totalPemasukkanAllTime = ledgerDao.getTotalDebitKreditAllTime(idResto, "debit");
         return totalPemasukkanAllTime;
     }
 

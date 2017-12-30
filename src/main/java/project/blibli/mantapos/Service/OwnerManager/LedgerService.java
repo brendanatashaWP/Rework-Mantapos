@@ -103,36 +103,36 @@ public class LedgerService {
     private int getTotalDebitDalamSebulan(int idResto,
                                      int month,
                                      int year){
-        int totalDebitDalamSebulan = ledgerDao.getTotalDebitDalamSebulan(idResto, month, year);
+        int totalDebitDalamSebulan = ledgerDao.getTotalDebitKreditDalamSebulan(idResto, month, year, "debit");
         return totalDebitDalamSebulan;
     }
 
     private int getTotalKreditDalamSebulan(int idResto,
                                       int month,
                                       int year){
-        int totalKreditDalamSebulan = ledgerDao.getTotalKreditDalamSebulan(idResto, month, year);
+        int totalKreditDalamSebulan = ledgerDao.getTotalDebitKreditDalamSebulan(idResto, month, year, "kredit");
         return totalKreditDalamSebulan;
     }
 
     private int getTotalDebitDalamSetahun(int idResto,
                                           int year){
-        int totalDebitDalamSetahun = ledgerDao.getTotalDebitDalamSetahun(idResto, year);
+        int totalDebitDalamSetahun = ledgerDao.getTotalDebitKreditDalamSetahun(idResto, year, "debit");
         return totalDebitDalamSetahun;
     }
 
     private int getTotalKreditDalamSetahun(int idResto,
                                            int year){
-        int totalKreditDalamSetahun = ledgerDao.getTotalKreditDalamSetahun(idResto, year);
+        int totalKreditDalamSetahun = ledgerDao.getTotalDebitKreditDalamSetahun(idResto, year, "kredit");
         return totalKreditDalamSetahun;
     }
 
     private int getTotalDebitDariAwalBanget(int idResto){
-        int totalDebit = ledgerDao.getTotalDebitAllTime(idResto);
+        int totalDebit = ledgerDao.getTotalDebitKreditAllTime(idResto, "debit");
         return totalDebit;
     }
 
     private int getTotalKreditDariAwalBanget(int idResto){
-        int totalKredit = ledgerDao.getTotalKreditAllTime(idResto);
+        int totalKredit = ledgerDao.getTotalDebitKreditAllTime(idResto, "kredit");
         return totalKredit;
     }
 
@@ -143,7 +143,7 @@ public class LedgerService {
                                     int tanggalAkhir,
                                     int bulanAkhir,
                                     int tahunAkhir){
-        int totalDebitCustom = ledgerDao.getTotalDebitCustom(idResto, tanggalAwal, bulanAwal, tahunAwal, tanggalAkhir, bulanAkhir, tahunAkhir);
+        int totalDebitCustom = ledgerDao.getTotalDebitKreditCustom(idResto, tanggalAwal, bulanAwal, tahunAwal, tanggalAkhir, bulanAkhir, tahunAkhir, "debit");
         return totalDebitCustom;
     }
 
@@ -154,7 +154,7 @@ public class LedgerService {
                                      int tanggalAkhir,
                                      int bulanAkhir,
                                      int tahunAkhir){
-        int totalKreditCustom = ledgerDao.getTotalKreditCustom(idResto, tanggalAwal, bulanAwal, tahunAwal, tanggalAkhir, bulanAkhir, tahunAkhir);
+        int totalKreditCustom = ledgerDao.getTotalDebitKreditCustom(idResto, tanggalAwal, bulanAwal, tahunAwal, tanggalAkhir, bulanAkhir, tahunAkhir, "kredit");
         return totalKreditCustom;
     }
 

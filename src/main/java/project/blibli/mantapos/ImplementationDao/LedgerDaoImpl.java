@@ -288,232 +288,21 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public int getTotalDebitDalamSebulan(int idResto, int monthh, int yearr) {
-        int totalDebitBulanan=0;
-        Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try{
-          preparedStatement = connection.prepareStatement(
-                  "SELECT SUM(" + biaya + ") FROM " + tableLedger +
-                          " WHERE " + this.idResto + "=? AND " + month + "=? AND " + year + "=? AND " +
-                          tipe + "=?::" + tipeLedger
-          );
-          preparedStatement.setInt(1, idResto);
-          preparedStatement.setInt(2, monthh);
-          preparedStatement.setInt(3, yearr);
-          preparedStatement.setString(4, tipeDebit);
-          resultSet = preparedStatement.executeQuery();
-          while(resultSet.next()){
-              totalDebitBulanan = resultSet.getInt("sum");
-          }
-        } catch (Exception ex){
-            System.out.println("Gagal get total debit bulanan : " + ex.toString());
-        } finally {
-            DbConnection.closeResultSet(resultSet);
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
-        return totalDebitBulanan;
-    }
-
-    @Override
-    public int getTotalDebitDalamSetahun(int idResto, int yearr) {
-        int totalDebitTahunan=0;
-        Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try{
-            preparedStatement = connection.prepareStatement(
-                    "SELECT SUM(" + biaya + ") FROM " + tableLedger +
-                            " WHERE " + this.idResto + "=? AND " + year + "=? AND " + tipe + "=?::" + tipeLedger
-            );
-            preparedStatement.setInt(1, idResto);
-            preparedStatement.setInt(2, yearr);
-            preparedStatement.setString(3, tipeDebit);
-            resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()){
-                totalDebitTahunan = resultSet.getInt("sum");
-            }
-        } catch (Exception ex){
-            System.out.println("Gagal get total debit tahunan : " + ex.toString());
-        } finally {
-            DbConnection.closeResultSet(resultSet);
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
-        return totalDebitTahunan;
-    }
-
-    @Override
-    public int getTotalDebitCustom(int idResto, int tanggal1, int month1, int year1, int tanggal2, int month2, int year2) {
-        int totalDebitCustom=0;
-        Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try{
-            preparedStatement = connection.prepareStatement(
-                    "SELECT SUM(" + biaya + ") FROM " + tableLedger +
-                            " WHERE " + this.idResto + "=? AND " + tanggal + " BETWEEN ? AND ? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ? AND " +
-                            tipe + "=?::" + tipeLedger
-            );
-            preparedStatement.setInt(1, idResto);
-            preparedStatement.setInt(2, tanggal1);
-            preparedStatement.setInt(3, tanggal2);
-            preparedStatement.setInt(4, month1);
-            preparedStatement.setInt(5, month2);
-            preparedStatement.setInt(6, year1);
-            preparedStatement.setInt(7, year2);
-            preparedStatement.setString(8, tipeDebit);
-            resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()){
-                totalDebitCustom = resultSet.getInt("sum");
-            }
-        } catch (Exception ex){
-            System.out.println("Gagal get total debit custom : " + ex.toString());
-        } finally {
-            DbConnection.closeResultSet(resultSet);
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
-        return totalDebitCustom;
-    }
-
-    @Override
-    public int getTotalKreditDalamSebulan(int idResto, int monthh, int yearr) {
-        int totalKreditBulanan=0;
-        Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try{
-            preparedStatement = connection.prepareStatement(
-                    "SELECT SUM(" + biaya + ") FROM " + tableLedger +
-                            " WHERE " + this.idResto + "=? AND " + month + "=? AND " + year + "=? AND " +
-                            tipe + "=?::" + tipeLedger
-            );
-            preparedStatement.setInt(1, idResto);
-            preparedStatement.setInt(2, monthh);
-            preparedStatement.setInt(3, yearr);
-            preparedStatement.setString(4, tipeKredit);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                totalKreditBulanan = resultSet.getInt("sum");
-            }
-        } catch (Exception ex){
-            System.out.println("Gagal get total kredit bulanan : " + ex.toString());
-        } finally {
-            DbConnection.closeResultSet(resultSet);
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
-        return totalKreditBulanan;
-    }
-
-    @Override
-    public int getTotalKreditDalamSetahun(int idResto, int yearr) {
-        int totalKreditTahunan=0;
-        Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try{
-            preparedStatement = connection.prepareStatement(
-                    "SELECT SUM(" + biaya + ") FROM " + tableLedger +
-                            " WHERE " + this.idResto + "=? AND " + year + "=? AND " + tipe + "=?::" + tipeLedger
-            );
-            preparedStatement.setInt(1, idResto);
-            preparedStatement.setInt(2, yearr);
-            preparedStatement.setString(3, tipeKredit);
-            resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()){
-                totalKreditTahunan = resultSet.getInt("sum");
-            }
-        } catch (Exception ex){
-            System.out.println("Gagal get total kredit tahunan : " + ex.toString());
-        } finally {
-            DbConnection.closeResultSet(resultSet);
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
-        return totalKreditTahunan;
-    }
-
-    @Override
-    public int getTotalKreditCustom(int idResto, int tanggal1, int month1, int year1, int tanggal2, int month2, int year2) {
-        int totalKreditCustom=0;
-        Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try{
-            preparedStatement = connection.prepareStatement(
-                    "SELECT SUM(" + biaya + ") FROM " + tableLedger +
-                            " WHERE " + this.idResto + "=? AND " + tanggal + " BETWEEN ? AND ? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ? AND " +
-                            tipe + "=?::" + tipeLedger
-            );
-            preparedStatement.setInt(1, idResto);
-            preparedStatement.setInt(2, tanggal1);
-            preparedStatement.setInt(3, tanggal2);
-            preparedStatement.setInt(4, month1);
-            preparedStatement.setInt(5, month2);
-            preparedStatement.setInt(6, year1);
-            preparedStatement.setInt(7, year2);
-            preparedStatement.setString(8, tipeKredit);
-            resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()){
-                totalKreditCustom = resultSet.getInt("sum");
-            }
-        } catch (Exception ex){
-            System.out.println("Gagal get total kredit custom : " + ex.toString());
-        } finally {
-            DbConnection.closeResultSet(resultSet);
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
-        return totalKreditCustom;
-    }
-
-    @Override
-    public int getTotalDebitAllTime(int idResto) {
-        int totalDebitAllTime=0;
+    public int getTotalDebitKreditAllTime(int idResto, String tipe) {
+        int totalDebitAtauKredit=0;
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try{
             preparedStatement = connection.prepareStatement(
                     "SELECT SUM(" + biaya + ") FROM " + tableLedger + " WHERE " + this.idResto + "=?" +
-                            "AND " + tipe + "=?::" + tipeLedger
+                            "AND " + this.tipe + "=?::" + tipeLedger
             );
             preparedStatement.setInt(1, idResto);
-            preparedStatement.setString(2, tipeDebit);
+            preparedStatement.setString(2, tipe);
             resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                totalDebitAllTime = resultSet.getInt("sum");
-            }
-        } catch (Exception ex){
-            System.out.println("Gagal get total debit all time : " + ex.toString());
-        } finally {
-            DbConnection.closeResultSet(resultSet);
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
-        return totalDebitAllTime;
-    }
-
-    @Override
-    public int getTotalKreditAllTime(int idResto) {
-        int totalKreditAllTime=0;
-        Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try{
-            preparedStatement = connection.prepareStatement(
-                    "SELECT SUM(" + biaya + ") FROM " + tableLedger + " WHERE " + this.idResto + "=?" +
-                            "AND " + tipe + "=?::" + tipeLedger
-            );
-            preparedStatement.setInt(1, idResto);
-            preparedStatement.setString(2, tipeKredit);
-            resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()){
-                totalKreditAllTime = resultSet.getInt("sum");
+                totalDebitAtauKredit = resultSet.getInt("sum");
             }
         } catch (Exception ex){
             System.out.println("Gagal get total kredit all time : " + ex.toString());
@@ -522,7 +311,99 @@ public class LedgerDaoImpl implements LedgerDao {
             DbConnection.closePreparedStatement(preparedStatement);
             DbConnection.closeConnection(connection);
         }
-        return totalKreditAllTime;
+        return totalDebitAtauKredit;
+    }
+
+    @Override
+    public int getTotalDebitKreditDalamSebulan(int idResto, int bulan, int tahun, String tipe) {
+        int totalDebitKreditDalamSebulan=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT SUM(" + biaya + ") FROM " + tableLedger +
+                            " WHERE " + this.idResto + "=? AND " + month + "=? AND " + year + "=? AND " +
+                            this.tipe + "=?::" + tipeLedger
+            );
+            preparedStatement.setInt(1, idResto);
+            preparedStatement.setInt(2, bulan);
+            preparedStatement.setInt(3, tahun);
+            preparedStatement.setString(4, tipe);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                totalDebitKreditDalamSebulan = resultSet.getInt("sum");
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get total kredit bulanan : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return totalDebitKreditDalamSebulan;
+    }
+
+    @Override
+    public int getTotalDebitKreditDalamSetahun(int idResto, int tahun, String tipe) {
+        int totalDebitKreditDalamSetahun=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT SUM(" + biaya + ") FROM " + tableLedger +
+                            " WHERE " + this.idResto + "=? AND " + year + "=? AND " + this.tipe + "=?::" + tipeLedger
+            );
+            preparedStatement.setInt(1, idResto);
+            preparedStatement.setInt(2, tahun);
+            preparedStatement.setString(3, tipeKredit);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                totalDebitKreditDalamSetahun = resultSet.getInt("sum");
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get total kredit tahunan : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return totalDebitKreditDalamSetahun;
+    }
+
+    @Override
+    public int getTotalDebitKreditCustom(int idResto, int tanggalAwal, int bulanAwal, int tahunAwal, int tanggalAkhir, int bulanAkhir, int tahunAkhir, String tipe) {
+        int totalDebitKreditCustom=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT SUM(" + biaya + ") FROM " + tableLedger +
+                            " WHERE " + this.idResto + "=? AND " + tanggal + " BETWEEN ? AND ? AND " + month + " BETWEEN ? AND ? AND " + year + " BETWEEN ? AND ? AND " +
+                            this.tipe + "=?::" + tipeLedger
+            );
+            preparedStatement.setInt(1, idResto);
+            preparedStatement.setInt(2, tanggalAwal);
+            preparedStatement.setInt(3, tanggalAkhir);
+            preparedStatement.setInt(4, bulanAwal);
+            preparedStatement.setInt(5, bulanAkhir);
+            preparedStatement.setInt(6, tahunAwal);
+            preparedStatement.setInt(7, tahunAkhir);
+            preparedStatement.setString(8, tipe);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                totalDebitKreditCustom = resultSet.getInt("sum");
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get total debit custom : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return totalDebitKreditCustom;
     }
 
     @Override
