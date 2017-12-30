@@ -19,10 +19,13 @@ public class AdminService {
 
     int itemPerPage=5;
 
-    public ModelAndView getMappingRestoran(int page){
+    public ModelAndView getMappingRestoran(Integer page){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin-restaurant");
         mav.addObject("restoranList", getAllRegisteredRestoran());
+        if (page==null){
+            page=1;
+        }
         double jumlahRestoran = getCountRestoran();
         double jumlahPage = Math.ceil(jumlahRestoran/itemPerPage);
         System.out.println("jumlah resto : " + jumlahRestoran);
@@ -43,7 +46,7 @@ public class AdminService {
         user.setRole("owner");
         user.setIdResto(idResto);
         insertNewOwner(user, idResto);
-        mav.setViewName("redirect:/restaurant/1");
+        mav.setViewName("redirect:/restaurant");
         return mav;
     }
 

@@ -78,7 +78,7 @@ public class EmployeeService {
         } else{
             deleteUser(authentication,idUser);
             if(getLoggedInUserRole(authentication).equals("[admin]")){
-                mav.setViewName("redirect:/restaurant/1");
+                mav.setViewName("redirect:/restaurant");
             } else{
                 mav.setViewName("redirect:/employee");
             }
@@ -94,7 +94,7 @@ public class EmployeeService {
         } else{
             activateUser(idUser);
             if(getLoggedInUserRole(authentication).equals("[admin]")){
-                mav.setViewName("redirect:/restaurant/1");
+                mav.setViewName("redirect:/restaurant");
             } else {
                 mav.setViewName("redirect:/employee");
             }

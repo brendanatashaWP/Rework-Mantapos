@@ -23,8 +23,8 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping(value = "/restaurant/{page}", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView restaurantListHtml(@PathVariable("page") int page){
+    @GetMapping(value = "/restaurant", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView restaurantListHtml(@RequestParam(value = "page", required = false) Integer page){
         return adminService.getMappingRestoran(page);
     }
 
