@@ -19,8 +19,8 @@ public class SaldoController {
     }
 
     //Jika user akses /saldo/page, sama dengan menu, outcome, dan employee untuk paging-nya
-    @GetMapping(value = "/saldo/{page}")
-    public ModelAndView addSaldoAwalHtml(@PathVariable("page") int page,
+    @GetMapping(value = "/saldo")
+    public ModelAndView addSaldoAwalHtml(@RequestParam(value = "page", required = false) Integer page,
                                          Authentication authentication){
         return saldoService.getMappingSaldoAwal(authentication, page);
     }

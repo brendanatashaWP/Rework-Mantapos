@@ -24,9 +24,12 @@ public class SaldoService {
     String bulan = MonthNameGenerator.MonthNameGenerator(intBulan); //Mengambil nama bulan berdasarkan nilai integer bulan-nya
 
     public ModelAndView getMappingSaldoAwal(Authentication authentication,
-                                            int page){
+                                            Integer page){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/saldo-awal");
+        if (page == null){
+            page = 1;
+        }
         mav.addObject("pageNo", page);
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         double jumlahBanyakSaldo = getCountSaldoAwal(idResto);
@@ -45,7 +48,7 @@ public class SaldoService {
     public ModelAndView postMappingAddSaldoAwal(Authentication authentication,
                                                 Saldo saldo){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("redirect:/saldo/1");
+        mav.setViewName("redirect:/saldo");
         saldo.setTipe_saldo("awal");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         insertSaldoAwal(idResto, saldo);
