@@ -17,11 +17,14 @@ public class EmployeeService {
     int itemPerPage=5;
 
     public ModelAndView getMappingEmployee(Authentication authentication,
-                                           int page){
+                                           Integer page){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/employee");
         String role = getLoggedInUserRole(authentication);
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
+        if(page == null){
+            page=1;
+        }
         List<User> userList = getAllUser(authentication, idResto, page);
         double jumlahEmployee = getCountUser(idResto);
         double jumlahPage = Math.ceil(jumlahEmployee/itemPerPage);
@@ -39,7 +42,7 @@ public class EmployeeService {
     public ModelAndView postMappingAddNewEmployee(Authentication authentication,
                                                   User user){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("redirect:/employee/1");
+        mav.setViewName("redirect:/employee");
         if (getLoggedInUserRole(authentication).equals("[manager]")){
             user.setRole("cashier");
         }
@@ -50,7 +53,7 @@ public class EmployeeService {
     }
 
     public ModelAndView getMappingEditEmployee(Authentication authentication,
-                                               int idUser){
+                                               Integer idUser){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/edit-user");
         mav.addObject("role", getLoggedInUserRole(authentication));
@@ -61,32 +64,40 @@ public class EmployeeService {
     public ModelAndView postMappingEditEmployee(Authentication authentication,
                                                 User user){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("redirect:/employee/1");
+        mav.setViewName("redirect:/employee");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         updateUser(user, idResto);
         return mav;
     }
 
     public ModelAndView postMappingDeleteEmployee(Authentication authentication,
-                                                  int idUser){
+                                                  Integer idUser){
         ModelAndView mav = new ModelAndView();
-        deleteUser(authentication,idUser);
-        if(getLoggedInUserRole(authentication).equals("[admin]")){
-            mav.setViewName("redirect:/restaurant/1");
+        if(idUser==null){
+            mav.setViewName("redirect:/employee");
         } else{
-            mav.setViewName("redirect:/employee/1");
+            deleteUser(authentication,idUser);
+            if(getLoggedInUserRole(authentication).equals("[admin]")){
+                mav.setViewName("redirect:/restaurant/1");
+            } else{
+                mav.setViewName("redirect:/employee");
+            }
         }
         return mav;
     }
 
     public ModelAndView postMappingActivateEmployee(Authentication authentication,
-                                                    int idUser){
+                                                    Integer idUser){
         ModelAndView mav = new ModelAndView();
-        activateUser(idUser);
-        if(getLoggedInUserRole(authentication).equals("[admin]")){
-            mav.setViewName("redirect:/restaurant/1");
-        } else {
-            mav.setViewName("redirect:/employee/1");
+        if(idUser==null){
+            mav.setViewName("redirect:/employee");
+        } else{
+            activateUser(idUser);
+            if(getLoggedInUserRole(authentication).equals("[admin]")){
+                mav.setViewName("redirect:/restaurant/1");
+            } else {
+                mav.setViewName("redirect:/employee");
+            }
         }
         return mav;
     }

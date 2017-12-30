@@ -19,8 +19,8 @@ public class EmployeeController {
     }
 
     //Jika user akses /employee, kurang lebih sama dengan menu/page dan outcome/page
-    @GetMapping(value = "/employee/{page}", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView cashierListHtml(@PathVariable("page") int page,
+    @GetMapping(value = "/employee", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView cashierListHtml(@RequestParam(value = "page", required = false) Integer page,
                                         Authentication authentication){
         return employeeService.getMappingEmployee(authentication, page);
     }
@@ -33,20 +33,20 @@ public class EmployeeController {
     }
 
     //Jika user menghapus user
-    @GetMapping(value = "/delete/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView deleteCashier(@PathVariable("id") int id,
+    @GetMapping(value = "/delete/user", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView deleteCashier(@RequestParam(value = "id", required = false) Integer id,
                                       Authentication authentication){
         return employeeService.postMappingDeleteEmployee(authentication, id);
     }
     //Jika user mengaktifkan lagi user
-    @GetMapping(value = "/active/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView activeCashier(@PathVariable("id") int id,
+    @GetMapping(value = "/active/user", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView activeCashier(@RequestParam(value = "id", required = false) Integer id,
                                       Authentication authentication){
         return employeeService.postMappingActivateEmployee(authentication, id);
     }
     //Jika user mengakses laman edit user (show form) beserta value value yang bersesuaian di input2 yang ada
-    @GetMapping(value = "/edit/user/{id}")
-    public ModelAndView editUserHtml(@PathVariable("id") int id,
+    @GetMapping(value = "/edit/user")
+    public ModelAndView editUserHtml(@RequestParam(value = "id", required = false) Integer id,
                                      Authentication authentication){
         return employeeService.getMappingEditEmployee(authentication, id);
     }
