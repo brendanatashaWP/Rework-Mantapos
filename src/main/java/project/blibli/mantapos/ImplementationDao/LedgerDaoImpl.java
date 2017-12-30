@@ -59,7 +59,7 @@ public class LedgerDaoImpl implements LedgerDao {
         ResultSet resultSet = null;
         try{
             preparedStatement = connection.prepareStatement(
-                    "SELECT " + month + "," + year + " FROM " + tableLedger +
+                    "SELECT DISTINCT " + month + "," + year + " FROM " + tableLedger +
                             " WHERE " + this.idResto + "=?" +
                             " GROUP BY " + month + "," + year +
                             " ORDER BY " + month + "," + year + " ASC"
@@ -492,6 +492,36 @@ public class LedgerDaoImpl implements LedgerDao {
             DbConnection.closeConnection(connection);
         }
         return totalKreditAllTime;
+    }
+
+    @Override
+    public List<String> getPenjualanBulananBerdasarkanTahun(int idResto, int year) {
+        List<String> penjualanBulananList = new ArrayList<>();
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement=null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT " + month + "," + tipe + ", SUM(" + biaya + ") FROM " + tableLedger +
+                            " WHERE " + this.idResto + "=? AND " + year + "=? AND " + tipe + "=?::" + tipeLedger +
+                            " GROUP BY " + month + "," + tipe +
+                            " ORDER BY " + month + "," + tipe + " ASC"
+            );
+            preparedStatement.setInt(1, idResto);
+            preparedStatement.setInt(2, year);
+            preparedStatement.setString(3, tipeDebit);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                penjualanBulananList.add(String.valueOf(resultSet.getInt("sum")));
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get penjualan bulanan berdasarkan tahun : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return penjualanBulananList;
     }
 
     @Override

@@ -21,10 +21,7 @@ public class DashboardService {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/dashboard");
         int idResto = getIdRestoBasedOnUsernameTerkait(authentication.getName());
-        List<String> dummyLedgerList = new ArrayList<>();
-        for (Ledger ledger : getPemasukkanBulanan(idResto, LocalDate.now().getYear())){
-            dummyLedgerList.add(String.valueOf(ledger.getBiaya()));
-        }
+        List<String> dummyLedgerList = getPemasukkanBulanan(idResto, LocalDate.now().getYear());
         mav.addObject("dummyList", dummyLedgerList);
         mav.addObject("total_pengeluaran", getTotalPengeluaranAllTime(idResto));
         mav.addObject("total_pemasukkan", getTotalPemasukkanAllTime(idResto));
@@ -41,9 +38,9 @@ public class DashboardService {
         return totalPemasukkanAllTime;
     }
 
-    private List<Ledger> getPemasukkanBulanan(int idResto,
+    private List<String> getPemasukkanBulanan(int idResto,
                                              int year){
-        List<Ledger> ledgerList = ledgerDao.getLedgerBulanan(idResto, year);
+        List<String> ledgerList = ledgerDao.getPenjualanBulananBerdasarkanTahun(idResto, year);
         return ledgerList;
     }
 

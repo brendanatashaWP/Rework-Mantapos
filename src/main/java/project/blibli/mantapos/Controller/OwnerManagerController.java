@@ -10,6 +10,7 @@ import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.MonthNameGenerator;
 import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.Service.OwnerManager.DashboardService;
+import project.blibli.mantapos.Service.OwnerManager.EmployeeService;
 import project.blibli.mantapos.Service.OwnerManager.MenuService;
 import project.blibli.mantapos.WeekGenerator;
 
@@ -35,12 +36,15 @@ public class OwnerManagerController {
 
     DashboardService dashboardService;
     MenuService menuService;
+    EmployeeService employeeService;
 
     @Autowired
     public OwnerManagerController (DashboardService dashboardService,
-                                   MenuService menuService){
+                                   MenuService menuService,
+                                   EmployeeService employeeService){
         this.dashboardService = dashboardService;
         this.menuService = menuService;
+        this.employeeService = employeeService;
     }
 
     //Jika user mengakses /dashboard
@@ -77,31 +81,7 @@ public class OwnerManagerController {
     @GetMapping(value = "/employee/{page}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView cashierListHtml(@PathVariable("page") int page,
             Authentication authentication){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("owner-manager/employee");
-        List<User> userList = new ArrayList<>();
-        String username = authentication.getName();
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        double jumlahEmployee = userDao.count(id_resto);
-        double jumlahPage = Math.ceil(jumlahEmployee/itemPerPage);
-        List<Integer> pageList = new ArrayList<>();
-        for (int i=1; i<=jumlahPage; i++){
-            pageList.add(i);
-        }
-        //Mengecek user yang login sekarang itu role-nya apa.
-        if(authentication.getAuthorities().toString().equals("[manager]")){
-            //jika role-nya adalah manager, maka mengambil semua user dengan role cashier
-            userList = userDao.readAllUsers(id_resto, "cashier", itemPerPage, page);
-        } else if(authentication.getAuthorities().toString().equals("[owner]")){
-            //jika role-nya adalah owner, maka mengambil semua user dengan role manager dan cashier
-            userList = userDao.readAllUsers(id_resto, "manager&cashier", itemPerPage, page);
-        }
-        String role = authentication.getAuthorities().toString();
-        mav.addObject("pageNo", page);
-        mav.addObject("pageList", pageList);
-        mav.addObject("userList", userList);
-        mav.addObject("role", role);
-        return mav;
+        return employeeService.getMappingEmployee(authentication, page);
     }
     //Jika user mengakses link /range, yaitu link untuk memilih jangka waktu melihat ledger (buku besar)
     @GetMapping(value = "/range", produces = MediaType.TEXT_HTML_VALUE)
@@ -157,19 +137,7 @@ public class OwnerManagerController {
     @PostMapping(value = "/add-user", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addUserHtml(@ModelAttribute("user")User user,
                                     Authentication authentication){
-        String username = authentication.getName();
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        //Mengambil username yang login itu dia role-nya sebagai apa
-        if(authentication.getAuthorities().toString().equals("[manager]")){
-            //jika sebagai manager, maka user yang baru ditambahkan itu role-nya adalah cashier
-            user.setRole("cashier");
-        } else if(authentication.getAuthorities().toString().equals("[owner]")){
-            //jika sebagai owner, maka user yang baru ditambahkan itu role-nya bisa manager atau cashier. Diambil dari value yang di-pick di employee.html
-            user.setRole(user.getRole());
-        }
-        user.setIdResto(id_resto); //set ID resto (foreign key) user dengan id_resto dari username yang login sekarang (yaitu atasannya)
-        userDao.insert(user, user.getIdResto()); //insert user ke table user dan user_roles di database. Insert ke table user_roles ada di dalam method Insert ini juga.
-        return new ModelAndView("redirect:/employee/1");
+        return employeeService.postMappingAddNewEmployee(authentication, user);
     }
     //Jika user menambahkan outcome (pengeluaran baru)
     @PostMapping(value = "/outcome-post", produces = MediaType.TEXT_HTML_VALUE)
@@ -293,28 +261,13 @@ public class OwnerManagerController {
     @GetMapping(value = "/delete/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView deleteCashier(@PathVariable("id") int id,
                                       Authentication authentication){
-        //Pengecekan role dari user yang login sekarang
-        if(authentication.getAuthorities().toString().equals("[admin]")){
-            //jika user yang login sekarang adalah seorang admin, maka yang dihapus (dinonaktifkan) adalah user tersebut beserta user user yang bersesuaian.
-            //Karena jika yg login skrg adalah admin, maka yg dinonaktifkan adalah owner, maka yg dinonaktifkan adalah owner, manager, dan cashier dari restoran yang sama.
-            userDao.deleteUserAndDependencies(id);
-            return new ModelAndView("redirect:/restaurant/1");
-        } else{
-            //jika user yang login bukanlah admin (manager/owner)
-            userDao.delete(id); //cukup menonaktifkan user itu saja
-            return new ModelAndView("redirect:/employee/1");
-        }
+        return employeeService.postMappingDeleteEmployee(authentication, id);
     }
     //Jika user mengaktifkan lagi user
     @GetMapping(value = "/active/user/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView activeCashier(@PathVariable("id") int id,
                                       Authentication authentication){
-        userDao.activateUser(id); //tidak peduli role nya user yg login ini adalah admin atau bukan, yg diaktifkan tetaplah user yang ingin diaktifkan saja.
-        //kenapa? karena misal jika admin mengaktifkan seorang owner, jika diaktifkan owner beserta user2 lainnya, kalau misal ada cashier yg ternyata sudah nonaktif karena pensiun, masa ya harus diaktifkan juga
-        if(authentication.getAuthorities().toString().equals("[admin]"))
-            return new ModelAndView("redirect:/restaurant/1");
-        else
-            return new ModelAndView("redirect:/employee/1");
+        return employeeService.postMappingActivateEmployee(authentication, id);
     }
     //jika user menghapus menu
     @GetMapping(value = "/delete/menu/{id}")
@@ -336,23 +289,12 @@ public class OwnerManagerController {
     @GetMapping(value = "/edit/user/{id}")
     public ModelAndView editUserHtml(@PathVariable("id") int id,
                                      Authentication authentication){
-        int id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(authentication.getName());
-        User userObject = userDao.readOne(id); //Ambil detail user yang ingin diedit berdasarkan id-nya
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("owner-manager/edit-user");
-        String role = authentication.getAuthorities().toString();
-        mav.addObject("role", role);
-        mav.addObject("userObject", userObject);
-        return mav;
+        return employeeService.getMappingEditEmployee(authentication, id);
     }
     //Memposting data user yang baru
     @PostMapping(value = "/edit-user")
     public ModelAndView editUserPostHtml(@ModelAttribute("user") User user,
                                          Authentication authentication){
-        ModelAndView mav = new ModelAndView();
-        int id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(authentication.getName());
-        userDao.update(user, id_resto);
-        mav.setViewName("redirect:/employee/1");
-        return mav;
+        return employeeService.postMappingEditEmployee(authentication, user);
     }
 }

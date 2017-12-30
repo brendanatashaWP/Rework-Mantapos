@@ -294,7 +294,7 @@ public class UserDaoImpl implements UserDao {
         try{
             preparedStatement = connection.prepareStatement(
                     "SELECT *, users_roles.role FROM " + tableUser + "," + tableUserRoles +
-                            " WHERE users.id=?" + " AND user_roles.id=users.id"
+                            " WHERE users.id=?" + " AND users_roles.id=users.id"
             );
             preparedStatement.setInt(1, idData);
             resultSet = preparedStatement.executeQuery();
@@ -350,7 +350,7 @@ public class UserDaoImpl implements UserDao {
                 preparedStatement.setString(5, modelData.getAlamat());
                 preparedStatement.setString(6, modelData.getJenisKelamin());
                 preparedStatement.setInt(7, modelData.getId());
-                preparedStatement.setInt(8, modelData.getIdResto());
+                preparedStatement.setInt(8, idResto);
                 preparedStatement.executeUpdate();
             } else {
                 preparedStatement = connection.prepareStatement(
@@ -371,7 +371,7 @@ public class UserDaoImpl implements UserDao {
                 preparedStatement.setString(6, modelData.getAlamat());
                 preparedStatement.setString(7, modelData.getJenisKelamin());
                 preparedStatement.setInt(8, modelData.getId());
-                preparedStatement.setInt(9, modelData.getIdResto());
+                preparedStatement.setInt(9, idResto);
                 preparedStatement.executeUpdate();
             }
             preparedStatement = connection.prepareStatement(

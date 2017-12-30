@@ -23,4 +23,6 @@ public interface LedgerDao extends BasicDao<Ledger, Integer, Integer, Integer, I
     int getTotalDebitAllTime(int idResto);
     int getTotalKreditAllTime(int idResto);
 
+    List<String> getPenjualanBulananBerdasarkanTahun(int idResto, int year);
+
 }
