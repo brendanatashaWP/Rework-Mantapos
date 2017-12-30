@@ -1,4 +1,4 @@
-package project.blibli.mantapos.Service;
+package project.blibli.mantapos.Service.OwnerManager;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -75,7 +75,7 @@ public class OutcomeService {
         saldo.setTanggal(tanggal);
         saldo.setMonth(bulan);
         saldo.setYear(tahun);
-        saldo.setSaldo(saldoDao.getSaldoAwal(idResto) + ledgerDao.getTotalDebitBulanan(idResto, bulan, tahun) - ledgerDao.getTotalKreditBulanan(idResto, bulan, tahun)); //saldo akhir = saldo awal + debit - kredit
+        saldo.setSaldo(saldoDao.getSaldoAwal(idResto) + ledgerDao.getTotalDebitDalamSebulan(idResto, bulan, tahun) - ledgerDao.getTotalKreditDalamSebulan(idResto, bulan, tahun)); //saldo akhir = saldo awal + debit - kredit
         saldoDao.insert(saldo, idResto);
     }
 

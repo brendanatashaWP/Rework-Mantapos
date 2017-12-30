@@ -3,22 +3,12 @@ package project.blibli.mantapos.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.*;
-import project.blibli.mantapos.MonthNameGenerator;
 import project.blibli.mantapos.ImplementationDao.*;
-import project.blibli.mantapos.Service.OutcomeService;
-import project.blibli.mantapos.Service.OwnerManager.DashboardService;
-import project.blibli.mantapos.Service.OwnerManager.EmployeeService;
-import project.blibli.mantapos.Service.OwnerManager.MenuService;
-import project.blibli.mantapos.Service.OwnerManager.SaldoService;
-import project.blibli.mantapos.WeekGenerator;
+import project.blibli.mantapos.Service.OwnerManager.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,18 +31,21 @@ public class OwnerManagerController {
     EmployeeService employeeService;
     SaldoService saldoService;
     OutcomeService outcomeService;
+    LedgerService ledgerService;
 
     @Autowired
     public OwnerManagerController (DashboardService dashboardService,
                                    MenuService menuService,
                                    EmployeeService employeeService,
                                    SaldoService saldoService,
-                                   OutcomeService outcomeService){
+                                   OutcomeService outcomeService,
+                                   LedgerService ledgerService){
         this.dashboardService = dashboardService;
         this.menuService = menuService;
         this.employeeService = employeeService;
         this.saldoService = saldoService;
         this.outcomeService = outcomeService;
+        this.ledgerService = ledgerService;
     }
 
     //Jika user mengakses /dashboard
@@ -80,10 +73,7 @@ public class OwnerManagerController {
     //Jika user mengakses link /range, yaitu link untuk memilih jangka waktu melihat ledger (buku besar)
     @GetMapping(value = "/range", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView ledgerChooseRangeHtml(Authentication authentication){
-        String username = authentication.getName();
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        List<Ledger> monthAndYearList = ledgerDao.getListBulanDanTahun(id_resto); //Mengambil semua month dan year yang ada di database. Ini di pass ke pilih-range-ledger.html, supaya dropdown di html itu nanti sesuai dengan month dan year yang tersedia di database saja
-        return new ModelAndView("owner-manager/pilih-range-ledger", "monthAndYearList", monthAndYearList);
+        return ledgerService.getMappingChooseRangeLedger(authentication);
     }
     //Jika user akses /saldo/page, sama dengan menu, outcome, dan employee untuk paging-nya
     @GetMapping(value = "/saldo/{page}")
@@ -125,90 +115,7 @@ public class OwnerManagerController {
                                @RequestParam(value = "ledger_custom_awal", required = false)  String ledger_custom_awal,
                                @RequestParam(value = "ledger_custom_akhir", required = false)  String ledger_custom_akhir,
                                Authentication authentication){
-        ModelAndView mav = new ModelAndView();
-        String username = authentication.getName();
-        id_resto = restoranDao.readIdRestoBasedOnUsernameRestoTerkait(username);
-        List<Ledger> ledgerList = new ArrayList<>();
-        int saldo_awal=0, total_debit=0, total_kredit=0, saldo_akhir=0, mutasi=0;
-        String skala_ledger=""; //skala ledger bisa harian, mingguan, bulanan, atau tahunan
-        if(skala.equals("harian") || skala.equals("mingguan")){ //jika skala yang di-pass dari ledger.html adalah harian atau mingguan. Yang di-pick user adalah bulan dan tahunnya. Misal user ingin melihat ledger harian di bulan Oktober tahun 2017. Atau mingguan di bulan Desember tahun 2017
-            total_kredit = ledgerDao.getTotalKreditBulanan(id_resto, month, year); //Mengambil total kredit bulanan di bulan dan tahun yang di pick user
-            total_debit = ledgerDao.getTotalDebitBulanan(id_resto, month, year); //Mengambil total debit bulanan dari bulan dan tahun yang di pick user
-            if (month==1){
-                saldo_awal = saldoDao.getSaldoAkhir(id_resto, 12, year-1);
-            } else{
-                saldo_awal = saldoDao.getSaldoAkhir(id_resto, (month-1), (year));
-            }
-            if(saldo_awal==0){ //artinya bulan kemarin tidak ada
-                saldo_awal = saldoDao.getSaldoAwal(id_resto);
-            }
-            saldo_akhir = saldo_awal+total_debit-total_kredit; //Menghitung saldo akhir (dari saldo awal ditambah pemasukkan (total debit) dikurangi pengeluaran (total kredit)
-            mutasi = saldo_akhir-saldo_awal; //mutasi, masih belum tahu maksudnya mutasi ini apa. //TODO : Cari definisi dari mutasi itu apa
-            if(skala.equals("harian")){
-                //jika skalanya adalah harian
-                ledgerList = ledgerDao.getLedgerHarian(id_resto, month, year); //mengambil ledger secara harian di bulan dan tahun yang di pick user
-                skala_ledger = "HARIAN";
-            } else if(skala.equals("mingguan")){
-                //jika skalanya adalah mingguan
-                ledgerList = ledgerDao.getLedgerMingguan(id_resto, month, year); //mengambil ledger secara mingguan di bulan dan tahun yang di pick user
-                skala_ledger = "MINGGUAN";
-            }
-        } else if(skala.equals("bulanan")){
-            //jika skalanya adalah bulanan
-            //karena bulanan, maka user memilih tahunnya. misal user ingin melihat ledger secara bulanan di tahun 2017
-            total_kredit = ledgerDao.getTotalKreditTahunan(id_resto, year); //mengambil total kredit
-            total_debit = ledgerDao.getTotalDebitTahunan(id_resto, year); //mengambil total debit
-            int monthTerkecil = saldoDao.getMinMonthInYear(id_resto, year);
-            saldo_awal = saldoDao.getSaldoAkhir(id_resto, monthTerkecil, (year));
-            if(saldo_awal==0){ //artinya bulan kemarin tidak ada
-                saldo_awal = saldoDao.getSaldoAwal(id_resto);
-            }
-            saldo_akhir = saldo_awal+total_debit-total_kredit;
-            mutasi = saldo_akhir-saldo_awal;
-            ledgerList = ledgerDao.getLedgerBulanan(id_resto, year); //mengambil ledger bulanan di tahun yang di pick user
-            skala_ledger = "BULANAN";
-        } else if(skala.equals("tahunan")){ //tahunan //TODO : Ledger tahunan
-
-        } else {
-            //custom ledger range
-
-            //inti dari 4 baris kode di bawah ini adalah untuk mengambil tanggal, bulan, dan tahun dari waktu awal yang dikehendaki user untuk melihat ledger
-            String[] dateAwalSplit = ledger_custom_awal.split("-");
-            int tanggalAwal = Integer.parseInt(dateAwalSplit[2]);
-            int monthAwal = Integer.parseInt(dateAwalSplit[1]);
-            int yearAwal = Integer.parseInt(dateAwalSplit[0]);
-
-            //inti dari 4 baris kode di bawah ini adalah untuk mengambil tanggal, bulan, dan tahun dari waktu akhir yang dikehendaki user unutuk melihat ledger
-            String[] dateAkhirSplit = ledger_custom_akhir.split("-");
-            int tanggalAkhir = Integer.parseInt(dateAkhirSplit[2]);
-            int monthAkhir = Integer.parseInt(dateAkhirSplit[1]);
-            int yearAkhir = Integer.parseInt(dateAkhirSplit[0]);
-
-            total_kredit = ledgerDao.getTotalKreditCustom(id_resto, tanggalAwal, monthAwal, yearAwal, tanggalAkhir,  monthAkhir, yearAkhir); //Total kredit dari waktu awal hingga akhir yang dikehendaki user
-            total_debit = ledgerDao.getTotalDebitCustom(id_resto, tanggalAwal, monthAwal, yearAwal, tanggalAkhir,  monthAkhir, yearAkhir); //Total debit dari waktu awal hingga akhir yang dikehendaki user
-            if (month==1){
-                saldo_awal = saldoDao.getSaldoAwalCustom(id_resto, 12, yearAwal-1); //Mengambil saldo awal dari waktu awal yang di pick user.
-            } else{
-                saldo_awal = saldoDao.getSaldoAwalCustom(id_resto, monthAwal-1, yearAwal); //Mengambil saldo awal dari waktu awal yang di pick user.
-            }
-            if(saldo_awal==0){ //artinya bulan kemarin tidak ada
-                saldo_awal = saldoDao.getSaldoAwal(id_resto);
-            }
-            saldo_akhir = saldo_awal+total_debit-total_kredit;
-            mutasi = saldo_akhir-saldo_awal;
-            ledgerList = ledgerDao.getLedgerCustom(id_resto, tanggalAwal, monthAwal, yearAwal, tanggalAkhir,  monthAkhir, yearAkhir); //Mengambil ledger berdasarkan waktu awal dan waktu akhir yang di pick user
-            skala_ledger = "CUSTOM";
-        }
-
-        mav.addObject("saldo_awal", saldo_awal);
-        mav.addObject("total_debit", total_debit);
-        mav.addObject("total_kredit", total_kredit);
-        mav.addObject("saldo_akhir", saldo_akhir);
-        mav.addObject("mutasi", mutasi);
-        mav.addObject("ledgerList", ledgerList);
-        mav.addObject("skala_ledger", skala_ledger);
-        mav.setViewName("owner-manager/ledger");
-        return mav;
+        return ledgerService.postMappingLihatLedger(authentication, skala, month, year, ledger_custom_awal, ledger_custom_akhir);
     }
     //Jika user menghapus user
     @GetMapping(value = "/delete/user/{id}", produces = MediaType.TEXT_HTML_VALUE)

@@ -109,7 +109,7 @@ public class CashierService {
         saldo.setTipe_saldo("akhir");
         saldo.setMonth(bulan);
         saldo.setYear(tahun);
-        saldo.setSaldo(saldoDao.getSaldoAwal(idResto) + ledgerDao.getTotalDebitBulanan(idResto, bulan, tahun) - ledgerDao.getTotalKreditBulanan(idResto, bulan, tahun)); //saldo akhir = saldo awal + debit - kredit
+        saldo.setSaldo(saldoDao.getSaldoAwal(idResto) + ledgerDao.getTotalDebitDalamSebulan(idResto, bulan, tahun) - ledgerDao.getTotalKreditDalamSebulan(idResto, bulan, tahun)); //saldo akhir = saldo awal + debit - kredit
     }
 
     public void kirimReceiptMelaluiEmail(String alamatEmailTujuan,

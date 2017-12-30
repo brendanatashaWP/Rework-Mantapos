@@ -59,7 +59,7 @@ public class LedgerDaoImpl implements LedgerDao {
         ResultSet resultSet = null;
         try{
             preparedStatement = connection.prepareStatement(
-                    "SELECT DISTINCT " + month + "," + year + " FROM " + tableLedger +
+                    "SELECT " + month + "," + year + " FROM " + tableLedger +
                             " WHERE " + this.idResto + "=?" +
                             " GROUP BY " + month + "," + year +
                             " ORDER BY " + month + "," + year + " ASC"
@@ -69,7 +69,7 @@ public class LedgerDaoImpl implements LedgerDao {
             while(resultSet.next()){
                 Ledger ledger = new Ledger();
                 ledger.setMonth(resultSet.getInt(month));
-                ledger.setYear(resultSet.getInt(year));
+                ledger.setYear(resultSet.getInt(year)); //TODO : List tahun masih kedouble-double
                 //Keperluan di bawah ini bukanlah keperluan, tapi untuk String nama bulan (alih fungsi)
                 ledger.setKeperluan(MonthNameGenerator.MonthNameGenerator(resultSet.getInt(month)));
                 listBulanDanTahun.add(ledger);
@@ -257,7 +257,7 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public int getTotalDebitBulanan(int idResto, int monthh, int yearr) {
+    public int getTotalDebitDalamSebulan(int idResto, int monthh, int yearr) {
         int totalDebitBulanan=0;
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = null;
@@ -287,7 +287,7 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public int getTotalDebitTahunan(int idResto, int yearr) {
+    public int getTotalDebitDalamSetahun(int idResto, int yearr) {
         int totalDebitTahunan=0;
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = null;
@@ -349,7 +349,7 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public int getTotalKreditBulanan(int idResto, int monthh, int yearr) {
+    public int getTotalKreditDalamSebulan(int idResto, int monthh, int yearr) {
         int totalKreditBulanan=0;
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = null;
@@ -379,7 +379,7 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
-    public int getTotalKreditTahunan(int idResto, int yearr) {
+    public int getTotalKreditDalamSetahun(int idResto, int yearr) {
         int totalKreditTahunan=0;
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = null;

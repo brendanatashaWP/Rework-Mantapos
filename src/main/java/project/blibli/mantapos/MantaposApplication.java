@@ -70,7 +70,7 @@ public class MantaposApplication {
 //					saldo_awal = saldoDao.getSaldoAwal(16);
 ////                saldo_awal = saldoDao.getSaldoAkhir(id_resto, month, year);
 //				}
-//				saldo.setSaldo(saldo_awal + ledgerDao.getTotalDebitBulanan(16, i+1, 2017) - ledgerDao.getTotalKreditBulanan(16, i+1, 2017)); //saldo akhir = saldo awal + debit - kredit
+//				saldo.setSaldo(saldo_awal + ledgerDao.getTotalDebitDalamSebulan(16, i+1, 2017) - ledgerDao.getTotalKreditDalamSebulan(16, i+1, 2017)); //saldo akhir = saldo awal + debit - kredit
 //				saldoDao.insert(saldo, 16);
 //			}
 //		}
@@ -95,7 +95,7 @@ public class MantaposApplication {
 //					saldo_awal = saldoDao.getSaldoAwal(16);
 ////                saldo_awal = saldoDao.getSaldoAkhir(id_resto, month, year);
 //				}
-//				saldo.setSaldo(saldo_awal + ledgerDao.getTotalDebitBulanan(16, i+1, 2017) - ledgerDao.getTotalKreditBulanan(16, i+1, 2017)); //saldo akhir = saldo awal + debit - kredit
+//				saldo.setSaldo(saldo_awal + ledgerDao.getTotalDebitDalamSebulan(16, i+1, 2017) - ledgerDao.getTotalKreditDalamSebulan(16, i+1, 2017)); //saldo akhir = saldo awal + debit - kredit
 //				saldoDao.insert(saldo, 16);
 //			}
 //		}
