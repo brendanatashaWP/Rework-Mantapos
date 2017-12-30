@@ -32,14 +32,14 @@ public class MenuController {
     }
 
     //jika user menghapus menu
-    @GetMapping(value = "/delete/menu/{id}")
-    public ModelAndView deleteMenu(@PathVariable("id") int id){
+    @GetMapping(value = "/delete/menu")
+    public ModelAndView deleteMenu(@RequestParam(value = "id", required = false) Integer id){
         return menuService.getMappingDeleteMenu(id);
     }
 
     //jika user mengakses halaman untuk mengedit menu (keluar form dengan value dari menu yg bersesuaian di set ke input2 yang ada
-    @GetMapping(value = "/edit/menu/{id}", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView editMenuHtml(@PathVariable("id") int id){
+    @GetMapping(value = "/edit/menu/", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView editMenuHtml(@RequestParam(value = "id", required = false) Integer id){
         return menuService.getMappingEditMenu(id);
     }
 

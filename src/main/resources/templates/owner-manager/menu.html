@@ -52,9 +52,9 @@
                                 </td>
                                 <td th:text="${menu.kategori_menu}"/>
                                 <td><i class="fa fa-pencil text-primary"></i><a
-                                        th:href="@{/edit/menu/{id}(id=${menu.id})}">Edit</a></td>
+                                        th:href="@{/edit/menu/(id=${menu.id})}">Edit</a></td>
                                 <td><i class="fa fa-trash text-primary"></i><a
-                                        th:href="@{/delete/menu/{id}(id=${menu.id})}">Delete</a></td>
+                                        th:href="@{/delete/menu/(id=${menu.id})}">Delete</a></td>
                             </tr>
                         </th:block>
                         </tbody>
