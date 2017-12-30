@@ -49,37 +49,6 @@ public class SaldoDaoImpl implements SaldoDao {
         return saldoAwal;
     }
 
-    //saldo awal custom, ambil saldo akhir dari bulan x-1 dari bulan x-y.
-    //misal custom range antara bulan maret-april, berarti saldo awalnya adalah saldo akhir bulan februari
-    @Override
-    public int getSaldoAwalCustom(int idResto, int month, int year) {
-        int saldoAwalCustom=0;
-        Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try{
-            preparedStatement = connection.prepareStatement(
-                    "SELECT " + saldoAkhir + " FROM " + tableSaldoAkhir + " WHERE " + this.idResto + "=? " +
-                            "AND " +
-                            this.month + "=? AND " + this.year + "=?"
-            );
-            preparedStatement.setInt(1, idResto);
-            preparedStatement.setInt(2, month);
-            preparedStatement.setInt(3, year);
-            resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()){
-                saldoAwalCustom = resultSet.getInt(saldoAkhir);
-            }
-        } catch (Exception ex){
-            System.out.println("Gagal get saldo awal custom : " + ex.toString());
-        } finally {
-            DbConnection.closeResultSet(resultSet);
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
-        return saldoAwalCustom;
-    }
-
     @Override
     public int isSaldoAkhirExists(int idResto, int month, int year) {
         int count=0;

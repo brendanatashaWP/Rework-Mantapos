@@ -7,10 +7,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import project.blibli.mantapos.Config.Mail;
-import project.blibli.mantapos.GetIdResto;
+import project.blibli.mantapos.Helper.GetIdResto;
 import project.blibli.mantapos.ImplementationDao.*;
 import project.blibli.mantapos.Model.*;
-import project.blibli.mantapos.WeekGenerator;
+import project.blibli.mantapos.Helper.WeekGenerator;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

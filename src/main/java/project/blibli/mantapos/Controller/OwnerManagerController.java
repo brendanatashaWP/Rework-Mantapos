@@ -17,14 +17,6 @@ import java.util.List;
 @RestController
 //Controller yang mengatur segala hal yang berkaitan dengan dashboard manager/owner
 public class OwnerManagerController {
-    private static String UPLOAD_LOCATION=System.getProperty("user.dir") + "/src/main/resources/static/images/";
-
-    UserDaoImpl userDao = new UserDaoImpl();
-    MenuDaoImpl menuDao = new MenuDaoImpl();
-    private LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
-    private SaldoDaoImpl saldoDao = new SaldoDaoImpl();
-    private RestoranDaoImpl restoranDao = new RestoranDaoImpl();
-    int id_resto, itemPerPage=5; //itemPerPage dibuat 5 item saja.
 
     DashboardService dashboardService;
     MenuService menuService;

@@ -1,7 +1,7 @@
 package project.blibli.mantapos.ImplementationDao;
 
 import project.blibli.mantapos.Model.Ledger;
-import project.blibli.mantapos.MonthNameGenerator;
+import project.blibli.mantapos.Helper.MonthNameGenerator;
 import project.blibli.mantapos.InterfaceDao.LedgerDao;
 
 import java.sql.Connection;

@@ -2,7 +2,7 @@ package project.blibli.mantapos.Service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
-import project.blibli.mantapos.GetIdResto;
+import project.blibli.mantapos.Helper.GetIdResto;
 import project.blibli.mantapos.ImplementationDao.RestoranDaoImpl;
 import project.blibli.mantapos.ImplementationDao.UserDaoImpl;
 import project.blibli.mantapos.Model.Restoran;

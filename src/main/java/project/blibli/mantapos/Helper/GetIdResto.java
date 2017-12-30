@@ -1,4 +1,4 @@
-package project.blibli.mantapos;
+package project.blibli.mantapos.Helper;
 
 import project.blibli.mantapos.ImplementationDao.RestoranDaoImpl;
 
