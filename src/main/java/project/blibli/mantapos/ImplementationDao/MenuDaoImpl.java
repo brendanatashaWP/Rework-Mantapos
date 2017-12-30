@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO : buat owner/manager bisa mendaftarkan kategori sendiri (inilah kenapa kategori gak dibuat type sendiri seperti user roles)
 //TODO : getLastId diganti menjadi search by idOrder yg unique yang di-pass dari HTML atau javascript
 public class MenuDaoImpl implements MenuDao {
 

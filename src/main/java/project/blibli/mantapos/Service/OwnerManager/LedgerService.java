@@ -60,7 +60,13 @@ public class LedgerService {
             ledgerList = getLedgerBulananDalamSetahun(idResto, tahunTerpilih);
             skalaLedgerPassToHtml = "BULANAN";
         } else if(skalaLedger.equals("tahunan")){
-            //TODO : ledger tahunan
+            saldoAwalBulanTerpilih = getSaldoAwalBanget(idResto);
+            totalDebit = getTotalDebitDariAwalBanget(idResto);
+            totalKredit = getTotalKreditDariAwalBanget(idResto);
+            saldoAkhirBulanTerpilih = hitungSaldoAkhirSekarang(saldoAwalBulanTerpilih, totalDebit, totalKredit);
+            mutasi = hitungMutasi(saldoAkhirBulanTerpilih, saldoAwalBulanTerpilih);
+            ledgerList = getLedgerTahunan(idResto);
+            skalaLedgerPassToHtml = "TAHUNAN";
         } else {
             String[] dateAwalSplit = ledgerCustomWaktuAwal.split("-");
             int tanggalAwal = Integer.parseInt(dateAwalSplit[2]);
@@ -118,6 +124,16 @@ public class LedgerService {
                                            int year){
         int totalKreditDalamSetahun = ledgerDao.getTotalKreditDalamSetahun(idResto, year);
         return totalKreditDalamSetahun;
+    }
+
+    private int getTotalDebitDariAwalBanget(int idResto){
+        int totalDebit = ledgerDao.getTotalDebitAllTime(idResto);
+        return totalDebit;
+    }
+
+    private int getTotalKreditDariAwalBanget(int idResto){
+        int totalKredit = ledgerDao.getTotalKreditAllTime(idResto);
+        return totalKredit;
     }
 
     private int getTotalDebitCustom(int idResto,
@@ -183,6 +199,11 @@ public class LedgerService {
     private List<Ledger> getLedgerBulananDalamSetahun(int idResto,
                                           int tahunTerpilih){
         List<Ledger> ledgerList = ledgerDao.getLedgerBulanan(idResto, tahunTerpilih);
+        return ledgerList;
+    }
+
+    private List<Ledger> getLedgerTahunan(int idResto){
+        List<Ledger> ledgerList = ledgerDao.getLedgerTahunan(idResto);
         return ledgerList;
     }
 

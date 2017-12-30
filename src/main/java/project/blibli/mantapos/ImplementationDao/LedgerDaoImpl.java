@@ -186,6 +186,37 @@ public class LedgerDaoImpl implements LedgerDao {
     }
 
     @Override
+    public List<Ledger> getLedgerTahunan(int idResto) {
+        List<Ledger> ledgerList = new ArrayList<>();
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                    "SELECT " + year + "," + tipe + "," + "SUM(" + biaya + ") FROM " + tableLedger +
+                            " WHERE " + this.idResto + "=? GROUP BY " + year + "," + tipe +
+                            " ORDER BY " + year + "," + tipe + " ASC"
+            );
+            preparedStatement.setInt(1, idResto);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                Ledger ledger = new Ledger();
+                ledger.setYear(resultSet.getInt(year));
+                ledger.setTipe(resultSet.getString(tipe));
+                ledger.setBiaya(resultSet.getInt("sum"));
+                ledgerList.add(ledger);
+            }
+        } catch (Exception ex){
+            System.out.println("Gagal get ledger tahunan : " + ex.toString());
+        } finally {
+            DbConnection.closeResultSet(resultSet);
+            DbConnection.closePreparedStatement(preparedStatement);
+            DbConnection.closeConnection(connection);
+        }
+        return ledgerList;
+    }
+
+    @Override
     public List<Ledger> getLedgerCustom(int idResto, int tanggal1, int month1, int year1, int tanggal2, int month2, int year2) {
         List<Ledger> ledgerListCustom = new ArrayList<>();
         Connection connection = DbConnection.openConnection();
