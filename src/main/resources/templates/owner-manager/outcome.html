@@ -49,8 +49,8 @@
                     </table>
                     <ul class="pagination">
                         <th:block th:each="page : ${pageList}">
-                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/outcome/{page}(page=${page})}" th:text="${page}"></a></li>
-                            <li th:if="${page} != ${pageNo}"><a th:href="@{/outcome/{page}(page=${page})}" th:text="${page}"></a></li>
+                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/outcome/(page=${page})}" th:text="${page}"></a></li>
+                            <li th:if="${page} != ${pageNo}"><a th:href="@{/outcome/(page=${page})}" th:text="${page}"></a></li>
                         </th:block>
                     </ul>
                 </div>

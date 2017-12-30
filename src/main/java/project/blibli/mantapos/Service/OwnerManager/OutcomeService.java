@@ -25,9 +25,12 @@ public class OutcomeService {
     int tahun = LocalDate.now().getYear();
 
     public ModelAndView getMappingOutcome(Authentication authentication,
-                                          int page){
+                                          Integer page){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/outcome");
+        if(page == null){
+            page=1;
+        }
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         double jumlahBanyakOutcome = getCountOutcome(idResto);
         double jumlahPage = Math.ceil(jumlahBanyakOutcome/itemPerPage); //Menghitung jumlahPage, didapatkan dari jumlah row outcome dibagi dengan item per page. Misal jumlah row outcome 12 dan item per page 5, maka akan ada 3 page dengan item-nya 5,5,3
@@ -45,7 +48,7 @@ public class OutcomeService {
                                            Ledger ledger,
                                            String qty){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("redirect:/outcome/1");
+        mav.setViewName("redirect:/outcome");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         insertNewPengeluaran(idResto, ledger, qty);
         updateSaldoAkhir(idResto);

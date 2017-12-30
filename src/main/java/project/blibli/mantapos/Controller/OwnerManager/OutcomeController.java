@@ -19,8 +19,8 @@ public class OutcomeController {
     }
 
     //Jika user mengakses laman outcome. Kurang lebih sama dengan menu/{page} di atas.
-    @GetMapping(value = "/outcome/{page}", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView outcomeHtml(@PathVariable("page") int page,
+    @GetMapping(value = "/outcome", produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView outcomeHtml(@RequestParam(value = "page", required = false) Integer page,
                                     Authentication authentication){
         return outcomeService.getMappingOutcome(authentication, page);
     }
