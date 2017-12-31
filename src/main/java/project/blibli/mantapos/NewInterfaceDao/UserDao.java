@@ -3,12 +3,12 @@ package project.blibli.mantapos.NewInterfaceDao;
 import project.blibli.mantapos.Model.User;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 
-public interface UserDao extends DaoInterface<User, HashMap<Integer, String>> {
+public interface UserDao extends DaoInterface<User, String> {
 
-    void createUsersRole() throws SQLException;
+    void createRoleUsers() throws SQLException;
     void createTableUsersRole() throws SQLException;
-    void insertToTableUsersRole(HashMap<Integer, String> condition) throws SQLException;
+    void insertTableUsersRole(User modelData) throws SQLException;
+    void updateTableUsersRole(User modelData, String condition) throws SQLException;
 
 }

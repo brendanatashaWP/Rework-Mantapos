@@ -116,7 +116,6 @@ public class RestoranDaoImpl implements RestoranDao {
         return 0;
     }
 
-    // TODO : perlukah update informasi restoran?
     @Override
     public void update(Restoran modelData, Integer idResto) {
 

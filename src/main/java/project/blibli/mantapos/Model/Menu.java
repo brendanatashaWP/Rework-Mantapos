@@ -7,7 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class Menu {
-    private int id;
+    private int id, idResto;
     private String nama_menu;
     private String lokasi_gambar_menu;
     private String kategori_menu;
@@ -28,6 +28,14 @@ public class Menu {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdResto() {
+        return idResto;
+    }
+
+    public void setIdResto(int idResto) {
+        this.idResto = idResto;
     }
 
     public String getNama_menu() {

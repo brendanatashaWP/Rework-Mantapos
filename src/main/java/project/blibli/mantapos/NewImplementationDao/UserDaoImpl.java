@@ -10,9 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class UserDaoImpl implements UserDao {
 
@@ -38,17 +37,24 @@ public class UserDaoImpl implements UserDao {
     private static final String tableUserRoles = "users_roles";
     private static final String refTableRestoran = "restoran";
 
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
-
-    String hashedPassword;
+    private User userMapping(ResultSet resultSet) throws SQLException{
+        User user = new User();
+        user.setId(resultSet.getInt(idUser));
+        user.setNamaLengkap(resultSet.getString(namaLengkap));
+        user.setJenisKelamin(resultSet.getString(jenisKelamin));
+        user.setUsername(resultSet.getString(usernameUser));
+        user.setNomorKtp(resultSet.getString(nomorKtp));
+        user.setNomorTelepon(resultSet.getString(nomorTelepon));
+        user.setAlamat(resultSet.getString(alamatUser));
+        user.setRole(resultSet.getString(roleUser));
+        user.setEnabled(resultSet.getBoolean(enabled));
+        return user;
+    }
 
     @Override
-    public void createUsersRole() throws SQLException {
-        Connection connection;
-        PreparedStatement preparedStatement;
-        connection = DbConnection.openConnection();
-        preparedStatement = connection.prepareStatement(
+    public void createRoleUsers() throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
                 "CREATE TYPE " + roleType + " AS ENUM " + "(" +
                         "'" + roleAdmin + "'," +
                         "'" + roleOwner + "'," +
@@ -62,53 +68,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void createTableUsersRole() throws SQLException {
-        Connection connection;
-        PreparedStatement preparedStatement;
-        connection = DbConnection.openConnection();
-        preparedStatement = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS " + tableUserRoles +
-                        "(" +
-                        idUser + " INT NOT NULL, " +
-                        usernameUser + " TEXT NOT NULL, " +
-                        roleUser + " " + roleType + " NOT NULL, " +
-                        "UNIQUE (" + usernameUser + "), " +
-                        "CONSTRAINT id_user_fk FOREIGN KEY (" + idUser + ")" + "REFERENCES " + tableUser + "(" + idUser + "))"
-        );
-        preparedStatement.executeUpdate();
-        DbConnection.closePreparedStatement(preparedStatement);
-        DbConnection.closeConnection(connection);
-    }
-
-    @Override
-    public void insertToTableUsersRole(HashMap<Integer, String> condition) throws SQLException {
-        Connection connection;
-        PreparedStatement preparedStatement;
-        connection = DbConnection.openConnection();
-        preparedStatement = connection.prepareStatement(
-                "INSERT INTO " + tableUserRoles +
-                        "(" +
-                        idUser + "," +
-                        usernameUser + "," +
-                        roleUser +
-                        ")" + " VALUES (?,?,?::" + roleType + ")"
-        );
-        preparedStatement.setInt(1, readId(entry.getValue().toString()));
-        for (Map.Entry<Integer, String> entry : condition.entrySet()){
-            preparedStatement.setString(2, modelData.getUsername());
-            preparedStatement.setString(3, modelData.getRole());
-        }
-        preparedStatement.executeUpdate();
-        DbConnection.closePreparedStatement(preparedStatement);
-        DbConnection.closeConnection(connection);
-    }
-
-    @Override
     public void createTable() throws SQLException {
-        Connection connection;
-        PreparedStatement preparedStatement;
-        connection = DbConnection.openConnection();
-        preparedStatement = connection.prepareStatement(
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
                 "CREATE TABLE IF NOT EXISTS " + tableUser +
                         "(" +
                         idUser + " SERIAL PRIMARY KEY, " +
@@ -130,11 +92,26 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void createTableUsersRole() throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS " + tableUserRoles +
+                        "(" +
+                        idUser + " INT NOT NULL, " +
+                        usernameUser + " TEXT NOT NULL, " +
+                        roleUser + " " + roleType + " NOT NULL, " +
+                        "UNIQUE (" + usernameUser + "), " +
+                        "CONSTRAINT id_user_fk FOREIGN KEY (" + idUser + ")" + "REFERENCES " + tableUser + "(" + idUser + "))"
+        );
+        preparedStatement.executeUpdate();
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+    }
+
+    @Override
     public void insert(User modelData) throws SQLException {
-        Connection connection;
-        PreparedStatement preparedStatement = null;
-        connection = DbConnection.openConnection();
-        preparedStatement = connection.prepareStatement(
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
                 "INSERT INTO " + tableUser +
                         "(" +
                         usernameUser + "," +
@@ -149,8 +126,7 @@ public class UserDaoImpl implements UserDao {
                         ")" + " VALUES (?,?,?,?,?,?,?,?,?)"
         );
         preparedStatement.setString(1, modelData.getUsername());
-        hashedPassword = passwordEncoder.encode(modelData.getPassword());
-        preparedStatement.setString(2, hashedPassword);
+        preparedStatement.setString(2, modelData.getPassword());
         preparedStatement.setBoolean(3, true);
         preparedStatement.setString(4, modelData.getNamaLengkap());
         preparedStatement.setString(5, modelData.getJenisKelamin());
@@ -164,50 +140,154 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> readAll(HashMap<Integer, String> condition) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public User readOne(HashMap<Integer, String> condition) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public int readId(HashMap<Integer, String> condition) throws SQLException {
-        int id=0;
-        Connection connection;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
-        connection = DbConnection.openConnection();
-        preparedStatement = connection.prepareStatement(
-                "SELECT " + idUser + " FROM " + tableUser + " WHERE " + usernameUser + "=?"
+    public void insertTableUsersRole(User modelData) throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "INSERT INTO " + tableUserRoles +
+                        "(" +
+                        idUser + "," +
+                        usernameUser + "," +
+                        roleUser +
+                        ")" + " VALUES (?,?,?::" + roleType + ")"
         );
-        for (Map.Entry<Integer, String> entry : condition.entrySet()){
-            preparedStatement.setString(1, entry.getValue());
-        }
-        resultSet = preparedStatement.executeQuery();
-        while(resultSet.next()){
-            id = resultSet.getInt(idUser);
+        preparedStatement.setInt(1, getId(modelData.getUsername()));
+        preparedStatement.setString(2, modelData.getUsername());
+        preparedStatement.setString(3, modelData.getRole());
+        preparedStatement.executeUpdate();
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+    }
+
+    @Override
+    public List<User> getAll(String condition) throws SQLException {
+        List<User> userList = new ArrayList<>();
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT *,users_roles.role FROM " +
+                        tableUser + "," + tableUserRoles +
+                        " WHERE " + condition
+        );
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            userList.add(userMapping(resultSet));
         }
         DbConnection.closeResultSet(resultSet);
         DbConnection.closePreparedStatement(preparedStatement);
         DbConnection.closeConnection(connection);
-        return id;
+        return userList;
     }
 
     @Override
-    public int count(HashMap<Integer, String> condition) throws SQLException {
-        return 0;
+    public User getOne(String condition) throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT *, users_roles.role FROM " + tableUser + "," + tableUserRoles +
+                        " WHERE " + condition
+        );
+        ResultSet resultSet = preparedStatement.executeQuery();
+        User user = new User();
+        while(resultSet.next()){
+            user = userMapping(resultSet);
+        }
+        DbConnection.closeResultSet(resultSet);
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+        return user;
     }
 
     @Override
-    public void deactivate(HashMap<Integer, String> condition) throws SQLException {
-
+    public int getId(String condition) throws SQLException {
+        int idUser=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT " + this.idUser + " FROM " + tableUser + " WHERE " + condition
+        );
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while(resultSet.next()){
+            idUser = resultSet.getInt(1);
+        }
+        DbConnection.closeResultSet(resultSet);
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+        return idUser;
     }
 
     @Override
-    public void activate(HashMap<Integer, String> condition) throws SQLException {
+    public int count(String condition) throws SQLException {
+        int count=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT COUNT(*) FROM " + tableUser + " WHERE " + condition
+        );
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while(resultSet.next()){
+            count = resultSet.getInt(1);
+        }
+        DbConnection.closeResultSet(resultSet);
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+        return count;
+    }
 
+    @Override
+    public void update(User modelData, String condition) throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE " + tableUser + " SET " + namaLengkap + "=?" +
+                        "," + usernameUser + "=?" +
+                        "," + passwordUser + "=?" +
+                        "," + nomorTelepon + "=?" +
+                        "," + nomorKtp + "=?" +
+                        "," + alamatUser + "=?" +
+                        "," + jenisKelamin + "=?" +
+                        " WHERE " + condition
+        );
+        preparedStatement.setString(1, modelData.getNamaLengkap());
+        preparedStatement.setString(2, modelData.getUsername());
+        preparedStatement.setString(3, modelData.getPassword());
+        preparedStatement.setString(4, modelData.getNomorTelepon());
+        preparedStatement.setString(5, modelData.getNomorKtp());
+        preparedStatement.setString(6, modelData.getAlamat());
+        preparedStatement.setString(7, modelData.getJenisKelamin());
+        preparedStatement.executeUpdate();
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+    }
+
+    @Override
+    public void updateTableUsersRole(User modelData, String condition) throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE " + tableUserRoles + " SET " + usernameUser + "=?, " + roleUser + "=?::" + roleType + " WHERE " + condition
+        );
+        preparedStatement.setString(1, modelData.getUsername());
+        preparedStatement.setString(2, modelData.getRole());
+        preparedStatement.executeUpdate();
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+    }
+
+    @Override
+    public void deactivate(String condition) throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE " + tableUser + " SET " + enabled + "=? WHERE " + condition
+        );
+        preparedStatement.setBoolean(1, false);
+        preparedStatement.executeUpdate();
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+    }
+
+    @Override
+    public void activate(String condition) throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE " + tableUser + " SET " + enabled + "=? WHERE " + condition
+        );
+        preparedStatement.setBoolean(1, true);
+        preparedStatement.executeUpdate();
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
     }
 }

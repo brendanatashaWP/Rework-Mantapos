@@ -135,6 +135,8 @@ public class CashierService {
             for (int i=0; i<arrayIdMenu.length; i++){
                 Menu menuObject = menuDao.readOne(Integer.parseInt(arrayIdMenu[i])); //Mengambil detail dari masing-masing menu. Cara mengambil detailnya adalah berdasarkan id menu yang ada di Array array_id_order
                 ordered_menu_list.add(new OrderedMenu(
+                        1,
+                        1,
                         menuObject.getNama_menu(),
                         (menuObject.getHarga_menu() * Integer.parseInt(arrayQtyMenu[i])),
                         Integer.parseInt(arrayQtyMenu[i])));
