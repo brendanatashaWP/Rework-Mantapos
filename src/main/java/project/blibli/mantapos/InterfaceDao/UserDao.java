@@ -1,7 +1,6 @@
 package project.blibli.mantapos.InterfaceDao;
 
 import project.blibli.mantapos.Model.User;
-import project.blibli.mantapos.ImplementationDao.BasicDao;
 
 import java.util.List;
 

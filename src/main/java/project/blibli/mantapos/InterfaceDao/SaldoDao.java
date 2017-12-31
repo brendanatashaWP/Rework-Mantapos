@@ -1,7 +1,6 @@
 package project.blibli.mantapos.InterfaceDao;
 
 import project.blibli.mantapos.Model.Saldo;
-import project.blibli.mantapos.ImplementationDao.BasicDao;
 
 public interface SaldoDao extends BasicDao<Saldo, Integer, Integer, Integer, Integer> {
     int getSaldoAwal(int idResto);

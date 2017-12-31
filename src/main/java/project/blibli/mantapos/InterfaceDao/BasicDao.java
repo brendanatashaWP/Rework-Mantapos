@@ -1,4 +1,4 @@
-package project.blibli.mantapos.ImplementationDao;
+package project.blibli.mantapos.InterfaceDao;
 
 import java.sql.SQLException;
 import java.util.List;
