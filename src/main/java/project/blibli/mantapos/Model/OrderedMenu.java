@@ -5,11 +5,15 @@ public class OrderedMenu {
     String nama;
     int qty, price;
 
-    public OrderedMenu(int idOrder, int idMenu, String nama, int price, int qty) {
-        this.idOrder = idOrder;
-        this.idMenu = idMenu;
+    public OrderedMenu(String nama, int price, int qty) {
         this.nama = nama;
         this.price = price;
+        this.qty = qty;
+    }
+
+    public OrderedMenu(int idOrder, int idMenu, int qty) {
+        this.idOrder = idOrder;
+        this.idMenu = idMenu;
         this.qty = qty;
     }
 

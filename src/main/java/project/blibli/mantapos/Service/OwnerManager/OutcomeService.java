@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Helper.GetIdResto;
 import project.blibli.mantapos.ImplementationDao.LedgerDaoImpl;
-import project.blibli.mantapos.ImplementationDao.SaldoDaoImpl;
 import project.blibli.mantapos.Model.Ledger;
 import project.blibli.mantapos.Model.Saldo;
 import project.blibli.mantapos.Helper.WeekGenerator;
+import project.blibli.mantapos.NewImplementationDao.SaldoAkhirDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.SaldoAwalDaoImpl;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +20,15 @@ import java.util.List;
 public class OutcomeService {
 
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
-    SaldoDaoImpl saldoDao = new SaldoDaoImpl();
+    SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
+    SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
     int itemPerPage=5;
     int tanggal = LocalDate.now().getDayOfMonth();
     int bulan = LocalDate.now().getMonthValue();
     int tahun = LocalDate.now().getYear();
 
     public ModelAndView getMappingOutcome(Authentication authentication,
-                                          Integer page){
+                                          Integer page) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/outcome");
         if(page == null){
@@ -46,7 +49,7 @@ public class OutcomeService {
 
     public ModelAndView postMappingOutcome(Authentication authentication,
                                            Ledger ledger,
-                                           String qty){
+                                           String qty) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/outcome");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
@@ -72,15 +75,20 @@ public class OutcomeService {
         ledgerDao.insert(ledger, idResto);
     }
 
-    private void updateSaldoAkhir(int idResto){
+    private void updateSaldoAkhir(int idResto) throws SQLException {
         Saldo saldo = new Saldo();
         saldo.setId_resto(idResto);
         saldo.setTipe_saldo("akhir");
         saldo.setTanggal(tanggal);
         saldo.setMonth(bulan);
         saldo.setYear(tahun);
-        saldo.setSaldo(saldoDao.getSaldoAwal(idResto) + ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "debit") - ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "kredit")); //saldo akhir = saldo awal + debit - kredit
-        saldoDao.insert(saldo, idResto);
+        int saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
+        saldo.setSaldo(saldoAwal + ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "debit") - ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "kredit")); //saldo akhir = saldo awal + debit - kredit
+        if(saldoAkhirDao.count("id_resto=" + idResto)==0){
+            saldoAkhirDao.insert(saldo);
+        } else{
+            saldoAkhirDao.update(saldo, "id_resto=" + idResto);
+        }
     }
 
     private List<Ledger> getPengeluaranHarian(int idResto,

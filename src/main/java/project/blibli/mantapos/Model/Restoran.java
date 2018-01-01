@@ -8,6 +8,14 @@ public class Restoran {
     private int idUser;
     private boolean enabled;
 
+    public Restoran() {
+    }
+
+    public Restoran(String namaResto, String lokasiResto) {
+        this.namaResto = namaResto;
+        this.lokasiResto = lokasiResto;
+    }
+
     public String getJenisKelamin() {
         return jenisKelamin;
     }

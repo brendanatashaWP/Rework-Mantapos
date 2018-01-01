@@ -28,7 +28,7 @@ public class MenuYangDipesanDaoImpl implements MenuYangDipesanDao {
                         idMenu + " INT NOT NULL, " +
                         qty + " INT NOT NULL, " +
                         "CONSTRAINT id_order_fk FOREIGN KEY (" + idOrder + ") REFERENCES " + refTableOrder + "(id)," +
-                        "CONSTRAINT id_menu_fk FOREIGN KEY (" + idMenu + ") REFERENCES " + refTableMenu + "(id))"
+                        "CONSTRAINT id_menu_fk FOREIGN KEY (" + idMenu + ") REFERENCES " + refTableMenu + "(id_menu))"
         );
         preparedStatement.executeUpdate();
         DbConnection.closePreparedStatement(preparedStatement);

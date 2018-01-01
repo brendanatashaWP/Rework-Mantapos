@@ -1,9 +1,29 @@
 package project.blibli.mantapos.Model;
 
+import java.sql.Timestamp;
+
 public class Saldo {
     private int id_resto, tanggal, month, year;
     private int saldo;
     private String tipe_saldo;
+    private Timestamp date_created;
+
+    public Saldo() {
+    }
+
+    public Saldo(int id_resto, int saldo, String tipe_saldo) {
+        this.id_resto = id_resto;
+        this.saldo = saldo;
+        this.tipe_saldo = tipe_saldo;
+    }
+
+    public Timestamp getDate_created() {
+        return date_created;
+    }
+
+    public void setDate_created(Timestamp date_created) {
+        this.date_created = date_created;
+    }
 
     public String getTipe_saldo() {
         return tipe_saldo;

@@ -1,9 +1,20 @@
 package project.blibli.mantapos.Model;
 
+import java.sql.Timestamp;
+
 public class Ledger {
     private int id, tanggal, week, month, year, id_resto;
     private int biaya;
     private String waktu, keperluan, tipe;
+    private Timestamp dateCreated;
+
+    public Timestamp getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Timestamp dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 
     public int getId() {
         return id;

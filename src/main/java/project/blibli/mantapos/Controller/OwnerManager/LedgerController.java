@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Service.OwnerManager.LedgerService;
 
+import java.sql.SQLException;
+
 @RestController
 public class LedgerController {
 
@@ -22,7 +24,7 @@ public class LedgerController {
 
     //Jika user mengakses link /range, yaitu link untuk memilih jangka waktu melihat ledger (buku besar)
     @GetMapping(value = "/range", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView ledgerChooseRangeHtml(Authentication authentication){
+    public ModelAndView ledgerChooseRangeHtml(Authentication authentication) throws SQLException {
         return ledgerService.getMappingChooseRangeLedger(authentication);
     }
 
@@ -33,7 +35,7 @@ public class LedgerController {
                                @RequestParam(value = "year", required = false) Integer year,
                                @RequestParam(value = "ledger_custom_awal", required = false)  String ledger_custom_awal,
                                @RequestParam(value = "ledger_custom_akhir", required = false)  String ledger_custom_akhir,
-                               Authentication authentication){
+                               Authentication authentication) throws SQLException {
         return ledgerService.postMappingLihatLedger(authentication, skala, month, year, ledger_custom_awal, ledger_custom_akhir);
     }
 

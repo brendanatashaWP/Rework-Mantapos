@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Service.OwnerManager.DashboardService;
 
+import java.sql.SQLException;
+
 @RestController
 public class DashboardController {
 
@@ -20,7 +22,7 @@ public class DashboardController {
 
     //Jika user mengakses /dashboard
     @GetMapping(value = "/dashboard", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView managerDashboardHtml(Authentication authentication){
+    public ModelAndView managerDashboardHtml(Authentication authentication) throws SQLException {
         return dashboardService.getMappingDashboard(authentication);
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
 
     private static final String tableUser = "users";
-    private static final String idUser = "id";
+    private static final String idUser = "id_user";
     private static final String roleUser = "role";
     private static final String usernameUser = "username";
     private static final String passwordUser = "password";

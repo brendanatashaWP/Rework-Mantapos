@@ -8,6 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.Ledger;
 import project.blibli.mantapos.Service.OwnerManager.OutcomeService;
 
+import java.sql.SQLException;
+
 @RestController
 public class OutcomeController {
 
@@ -21,7 +23,7 @@ public class OutcomeController {
     //Jika user mengakses laman outcome. Kurang lebih sama dengan menu/{page} di atas.
     @GetMapping(value = "/outcome", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView outcomeHtml(@RequestParam(value = "page", required = false) Integer page,
-                                    Authentication authentication){
+                                    Authentication authentication) throws SQLException {
         return outcomeService.getMappingOutcome(authentication, page);
     }
 
@@ -29,7 +31,7 @@ public class OutcomeController {
     @PostMapping(value = "/outcome-post", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView outcomeHtmlPost(@ModelAttribute("ledger") Ledger ledger,
                                         @RequestParam("quantity") String qty,
-                                        Authentication authentication){
+                                        Authentication authentication) throws SQLException {
         return outcomeService.postMappingOutcome(authentication, ledger, qty);
     }
 

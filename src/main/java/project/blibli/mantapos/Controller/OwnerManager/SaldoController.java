@@ -8,6 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.Saldo;
 import project.blibli.mantapos.Service.OwnerManager.SaldoService;
 
+import java.sql.SQLException;
+
 @RestController
 public class SaldoController {
 
@@ -21,14 +23,14 @@ public class SaldoController {
     //Jika user akses /saldo/page, sama dengan menu, outcome, dan employee untuk paging-nya
     @GetMapping(value = "/saldo")
     public ModelAndView addSaldoAwalHtml(@RequestParam(value = "page", required = false) Integer page,
-                                         Authentication authentication){
+                                         Authentication authentication) throws SQLException {
         return saldoService.getMappingSaldoAwal(authentication, page);
     }
 
     //Jika user menambahkan saldo baru
     @PostMapping(value = "/saldo-post", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addSaldoAwalHtml(Authentication authentication,
-                                         @ModelAttribute("saldoAwal") Saldo saldo){
+                                         @ModelAttribute("saldoAwal") Saldo saldo) throws SQLException {
         return saldoService.postMappingAddSaldoAwal(authentication, saldo);
     }
 

@@ -1,12 +1,15 @@
 package project.blibli.mantapos.Service.OwnerManager;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Helper.GetIdResto;
-import project.blibli.mantapos.ImplementationDao.UserDaoImpl;
 import project.blibli.mantapos.Model.User;
+import project.blibli.mantapos.NewImplementationDao.UserDaoImpl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +19,11 @@ public class EmployeeService {
     UserDaoImpl userDao = new UserDaoImpl();
     int itemPerPage=5;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public ModelAndView getMappingEmployee(Authentication authentication,
-                                           Integer page){
+                                           Integer page) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/employee");
         String role = getLoggedInUserRole(authentication);
@@ -40,7 +46,7 @@ public class EmployeeService {
     }
 
     public ModelAndView postMappingAddNewEmployee(Authentication authentication,
-                                                  User user){
+                                                  User user) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/employee");
         if (getLoggedInUserRole(authentication).equals("[manager]")){
@@ -48,12 +54,12 @@ public class EmployeeService {
         }
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         user.setIdResto(idResto);
-        insertNewUser(idResto, user);
+        insertNewUser(user);
         return mav;
     }
 
     public ModelAndView getMappingEditEmployee(Authentication authentication,
-                                               Integer idUser){
+                                               Integer idUser) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/edit-user");
         mav.addObject("role", getLoggedInUserRole(authentication));
@@ -62,16 +68,16 @@ public class EmployeeService {
     }
 
     public ModelAndView postMappingEditEmployee(Authentication authentication,
-                                                User user){
+                                                User user) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/employee");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
-        updateUser(user, idResto);
+        updateUser(user);
         return mav;
     }
 
     public ModelAndView postMappingDeleteEmployee(Authentication authentication,
-                                                  Integer idUser){
+                                                  Integer idUser) throws SQLException {
         ModelAndView mav = new ModelAndView();
         if(idUser==null){
             mav.setViewName("redirect:/employee");
@@ -87,7 +93,7 @@ public class EmployeeService {
     }
 
     public ModelAndView postMappingActivateEmployee(Authentication authentication,
-                                                    Integer idUser){
+                                                    Integer idUser) throws SQLException {
         ModelAndView mav = new ModelAndView();
         if(idUser==null){
             mav.setViewName("redirect:/employee");
@@ -102,45 +108,54 @@ public class EmployeeService {
         return mav;
     }
 
-    private void insertNewUser(int idResto,
-                              User user){
-        userDao.insert(user, idResto);
+    private void insertNewUser(User user) throws SQLException {
+        String hashedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+        userDao.insert(user);
+        userDao.insertTableUsersRole(user);
     }
 
     private List<User> getAllUser(Authentication authentication,
                                   int idResto,
-                                  int page){
+                                  int page) throws SQLException {
         List<User> userList;
         if (getLoggedInUserRole(authentication).equals("[manager]")) {
-            userList = userDao.readAllUsers(idResto, "cashier", itemPerPage, page);
+            userList = userDao.getAll("id_resto=" + idResto + " AND users_roles.username=users.username AND users_roles.role IN ('cashier') LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
         } else{
-            userList = userDao.readAllUsers(idResto, "manager&cashier", itemPerPage, page);
+            userList = userDao.getAll("id_resto=" + idResto + " AND users_roles.username=users.username AND users_roles.role IN ('manager','cashier') LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
         }
         return userList;
     }
 
-    private User getDetailUserById(int idUser){
-        User user = userDao.readOne(idUser);
+    private User getDetailUserById(int idUser) throws SQLException {
+        User user = userDao.getOne("users.id_user=" + idUser);
         return user;
     }
 
-    private void updateUser(User user,
-                            int idResto){
-        userDao.update(user, idResto);
-    }
-
-    private void deleteUser(Authentication authentication,
-                            int idUser){
-        if(getLoggedInUserRole(authentication).equals("[owner]")) {
-            int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
-            userDao.deleteUserAndDependencies(idResto);
-        } else {
-            userDao.delete(idUser);
+    private void updateUser(User user) throws SQLException {
+        if(user.getPassword().equals("") || user.getPassword().equals(null)){
+            userDao.update(user, "id_user=" + user.getId());
+            userDao.updateTableUsersRole(user, "id_user=" + user.getId());
+        } else{
+            String hashedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+            user.setPassword(hashedPassword);
+            userDao.update(user, "id_user=" + user.getId());
+            userDao.updateTableUsersRole(user, "id_user=" + user.getId());
         }
     }
 
-    private void activateUser(int idUser){
-        userDao.activateUser(idUser);
+    private void deleteUser(Authentication authentication,
+                            int idUser) throws SQLException {
+        if(getLoggedInUserRole(authentication).equals("[admin]")) {
+            int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(userDao.getOne("users.id_user=" + idUser).getUsername());
+            userDao.deactivate("id_resto=" + idResto);
+        } else {
+            userDao.deactivate("id_user=" + idUser);
+        }
+    }
+
+    private void activateUser(int idUser) throws SQLException {
+        userDao.activate("id_user=" + idUser);
     }
 
     private String getLoggedInUserRole(Authentication authentication){
@@ -148,8 +163,8 @@ public class EmployeeService {
         return role;
     }
 
-    private int getCountUser(int idResto){
-        int countUser = userDao.count(idResto);
+    private int getCountUser(int idResto) throws SQLException {
+        int countUser = userDao.count("id_resto=" + idResto);
         return countUser;
     }
 }

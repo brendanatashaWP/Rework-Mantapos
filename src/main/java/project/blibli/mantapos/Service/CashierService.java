@@ -8,12 +8,14 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import project.blibli.mantapos.Config.Mail;
 import project.blibli.mantapos.Helper.GetIdResto;
-import project.blibli.mantapos.ImplementationDao.*;
+import project.blibli.mantapos.ImplementationDao.LedgerDaoImpl;
 import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.Helper.WeekGenerator;
+import project.blibli.mantapos.NewImplementationDao.*;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +25,9 @@ import java.util.List;
 public class CashierService {
 
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
-    SaldoDaoImpl saldoDao = new SaldoDaoImpl();
+//    SaldoDaoImpl saldoDao = new SaldoDaoImpl();
+    SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
+    SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
     RestoranDaoImpl restoranDao = new RestoranDaoImpl();
     MenuDaoImpl menuDao = new MenuDaoImpl();
     MenuYangDipesanDaoImpl menuYangDipesanDao = new MenuYangDipesanDaoImpl();
@@ -32,7 +36,7 @@ public class CashierService {
     int bulan = LocalDate.now().getMonthValue();
     int tahun = LocalDate.now().getYear();
 
-    public ModelAndView getMappingCashier(Authentication authentication){
+    public ModelAndView getMappingCashier(Authentication authentication) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("cashier");
         String loggedInUsername = getLoggedInUsername(authentication);
@@ -52,7 +56,7 @@ public class CashierService {
                                            String namaCustomer,
                                            Authentication authentication,
                                            TemplateEngine templateEngine,
-                                           Mail mail){
+                                           Mail mail) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/cashier");
         String loggedInUsername = authentication.getName();
@@ -66,33 +70,33 @@ public class CashierService {
         return mav;
     }
 
-    public List<Menu> getAllMenu(int idResto){
-        List<Menu> menuList = menuDao.readAll(idResto, 0, 0);
+    private List<Menu> getAllMenu(int idResto) throws SQLException {
+        List<Menu> menuList = menuDao.getAll("id_resto=" + idResto + " AND enabled=true AND ORDER BY kategori_menu DESC");
         return menuList;
     }
 
-    public Restoran getInfoRestoran(int idResto){
-        Restoran restoran = restoranDao.readOne(idResto);
+    private Restoran getInfoRestoran(int idResto) throws SQLException {
+        Restoran restoran = restoranDao.getOne("id_resto=" + idResto);
         return restoran;
     }
 
-    public String getLoggedInUsername(Authentication authentication){
+    private String getLoggedInUsername(Authentication authentication){
         String username = authentication.getName();
         return username;
     }
 
-    public int getLastIdOrder(int idResto){
-        int lastIdOrder = ledgerDao.getLastId(idResto);
+    private int getLastIdOrder(int idResto) throws SQLException {
+        int lastIdOrder = menuDao.getLastId("id_resto=" + idResto);
         return lastIdOrder;
     }
 
-    public void insertDetailMenuYangDipesan(int idOrder, String[] arrayIdMenu, String[] arrayQtyMenu){
+    private void insertDetailMenuYangDipesan(int idOrder, String[] arrayIdMenu, String[] arrayQtyMenu) throws SQLException {
         for (int i=0; i<arrayIdMenu.length; i++){
-            menuYangDipesanDao.insertMenuYangDipesan(idOrder, Integer.parseInt(arrayIdMenu[i]), Integer.parseInt(arrayQtyMenu[i]));
+            menuYangDipesanDao.insert(new OrderedMenu(idOrder, Integer.parseInt(arrayIdMenu[i]), Integer.parseInt(arrayQtyMenu[i])));
         }
     }
 
-    public void insertPemasukkan(Ledger ledger, int idResto){
+    private void insertPemasukkan(Ledger ledger, int idResto){
         ledger.setTipe("debit");
         ledger.setKeperluan("penjualan menu"); //Karena disini adalah pemasukkan, makannya tipe ledger adalah debit dan keperluannya adalah penjualan menu
         ledger.setWaktu(LocalDate.now().toString()); //setWaktu untuk di-insert ke database adalah waktu sekarang (yyyy-mm-dd)
@@ -103,23 +107,29 @@ public class CashierService {
         ledgerDao.insert(ledger, idResto);
     }
 
-    public void updateSaldoAkhir(int idResto){
+    private void updateSaldoAkhir(int idResto) throws SQLException {
         Saldo saldo = new Saldo();
         saldo.setId_resto(idResto);
         saldo.setTipe_saldo("akhir");
         saldo.setMonth(bulan);
         saldo.setYear(tahun);
-        saldo.setSaldo(saldoDao.getSaldoAwal(idResto) + ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "debit") - ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "kredit")); //saldo akhir = saldo awal + debit - kredit
+        int saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
+        saldo.setSaldo(saldoAwal + ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "debit") - ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "kredit")); //saldo akhir = saldo awal + debit - kredit
+        if(saldoAkhirDao.count("id_resto=" + idResto)==0){
+            saldoAkhirDao.insert(saldo);
+        } else{
+            saldoAkhirDao.update(saldo, "id_resto=" + idResto);
+        }
     }
 
-    public void kirimReceiptMelaluiEmail(String alamatEmailTujuan,
+    private void kirimReceiptMelaluiEmail(String alamatEmailTujuan,
                                          String namaResto,
                                          String namaCustomer,
                                          TemplateEngine templateEngine,
                                          Mail mail,
                                          int totalBiaya,
                                          String[] arrayIdMenu,
-                                         String[] arrayQtyMenu){
+                                         String[] arrayQtyMenu) throws SQLException {
         MimeMessage maill = mail.send().createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(maill, true);
@@ -133,10 +143,8 @@ public class CashierService {
             context.setVariable("total_harga", totalBiaya); //Melempar total biaya ke HTML receipt (email.html). Total biaya didapat dari object ledger yang dilempar dari kasir kesini.
             List<OrderedMenu> ordered_menu_list = new ArrayList<>(); //List yang berisi detail menu (nama menu, harga menu, qty, dan total harga menu)
             for (int i=0; i<arrayIdMenu.length; i++){
-                Menu menuObject = menuDao.readOne(Integer.parseInt(arrayIdMenu[i])); //Mengambil detail dari masing-masing menu. Cara mengambil detailnya adalah berdasarkan id menu yang ada di Array array_id_order
+                Menu menuObject = menuDao.getOne("id_menu=" + Integer.parseInt(arrayIdMenu[i])); //Mengambil detail dari masing-masing menu. Cara mengambil detailnya adalah berdasarkan id menu yang ada di Array array_id_order
                 ordered_menu_list.add(new OrderedMenu(
-                        1,
-                        1,
                         menuObject.getNama_menu(),
                         (menuObject.getHarga_menu() * Integer.parseInt(arrayQtyMenu[i])),
                         Integer.parseInt(arrayQtyMenu[i])));

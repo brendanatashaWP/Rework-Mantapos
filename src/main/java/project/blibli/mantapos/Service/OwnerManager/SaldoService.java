@@ -4,10 +4,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Helper.GetIdResto;
-import project.blibli.mantapos.ImplementationDao.SaldoDaoImpl;
 import project.blibli.mantapos.Model.Saldo;
 import project.blibli.mantapos.Helper.MonthNameGenerator;
+import project.blibli.mantapos.NewImplementationDao.SaldoAkhirDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.SaldoAwalDaoImpl;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,8 @@ import java.util.List;
 @Service
 public class SaldoService {
 
-    SaldoDaoImpl saldoDao = new SaldoDaoImpl();
+    SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
+    SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
     int itemPerPage=5;
 
     int tanggal = LocalDate.now().getDayOfMonth();
@@ -24,7 +27,7 @@ public class SaldoService {
     String bulan = MonthNameGenerator.MonthNameGenerator(intBulan); //Mengambil nama bulan berdasarkan nilai integer bulan-nya
 
     public ModelAndView getMappingSaldoAwal(Authentication authentication,
-                                            Integer page){
+                                            Integer page) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/saldo-awal");
         if (page == null){
@@ -32,13 +35,6 @@ public class SaldoService {
         }
         mav.addObject("pageNo", page);
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
-        double jumlahBanyakSaldo = getCountSaldoAwal(idResto);
-        double jumlahPage = Math.ceil(jumlahBanyakSaldo/itemPerPage);
-        List<Integer> pageList = new ArrayList<>();
-        for (int i=1; i<=jumlahPage; i++){
-            pageList.add(i);
-        }
-        mav.addObject("pageList", pageList);
         mav.addObject("saldoAwalList", getSaldoAwalWithBulanTahunAndPagination(idResto, page));
         mav.addObject("bulan", bulan);
         mav.setViewName("owner-manager/saldo-awal");
@@ -46,7 +42,7 @@ public class SaldoService {
     }
 
     public ModelAndView postMappingAddSaldoAwal(Authentication authentication,
-                                                Saldo saldo){
+                                                Saldo saldo) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/saldo");
         saldo.setTipe_saldo("awal");
@@ -56,30 +52,23 @@ public class SaldoService {
     }
 
     private void insertSaldoAwal(int idResto,
-                                Saldo saldo){
+                                 Saldo saldo) throws SQLException {
+        saldo.setId_resto(idResto);
         saldo.setTanggal(tanggal);
         saldo.setMonth(intBulan);
         saldo.setYear(tahun);
-        saldoDao.insert(saldo, idResto);
+        saldoAwalDao.insert(saldo);
     }
 
-    private int getSaldoAwalRestoran(int idResto){
-        int saldoAwal = saldoDao.getSaldoAwal(idResto);
+    private int getSaldoAwalRestoran(int idResto) throws SQLException {
+        int saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
         return saldoAwal;
     }
 
     private List<Saldo> getSaldoAwalWithBulanTahunAndPagination(int idResto,
-                                                               int page){
-        List<Saldo> saldoList = saldoDao.readAll(idResto, 5, page);
-        for (Saldo saldo : saldoList){
-            System.out.println("Saldo awal : " + saldo.getSaldo());
-        }
+                                                               int page) throws SQLException {
+        List<Saldo> saldoList = saldoAwalDao.getAll("id_resto=" + idResto + " LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
         return saldoList;
-    }
-
-    private int getCountSaldoAwal(int idResto){
-        int countSaldoAwalResto = saldoDao.count(idResto);
-        return countSaldoAwalResto;
     }
 
 }

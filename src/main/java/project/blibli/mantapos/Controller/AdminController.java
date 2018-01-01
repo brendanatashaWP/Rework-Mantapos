@@ -10,6 +10,8 @@ import project.blibli.mantapos.ImplementationDao.RestoranDaoImpl;
 import project.blibli.mantapos.ImplementationDao.UserDaoImpl;
 import project.blibli.mantapos.Service.AdminService;
 
+import java.sql.SQLException;
+
 @RestController
 public class AdminController {
     RestoranDaoImpl restoranDao = new RestoranDaoImpl();
@@ -24,13 +26,13 @@ public class AdminController {
     }
 
     @GetMapping(value = "/restaurant", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView restaurantListHtml(@RequestParam(value = "page", required = false) Integer page){
+    public ModelAndView restaurantListHtml(@RequestParam(value = "page", required = false) Integer page) throws SQLException {
         return adminService.getMappingRestoran(page);
     }
 
     @PostMapping(value = "/add-restaurant", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addRestaurantPost(@ModelAttribute("restoran") Restoran restoran,
-                                          @ModelAttribute("user") User user){
+                                          @ModelAttribute("user") User user) throws SQLException {
         return adminService.postMappingRestoran(restoran, user);
     }
 

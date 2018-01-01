@@ -16,7 +16,7 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
 
     private static final String tableUser = "users";
-    private static final String idUser = "id";
+    private static final String idUser = "id_user";
     private static final String roleUser = "role";
     private static final String usernameUser = "username";
     private static final String passwordUser = "password";
@@ -40,6 +40,7 @@ public class UserDaoImpl implements UserDao {
     private User userMapping(ResultSet resultSet) throws SQLException{
         User user = new User();
         user.setId(resultSet.getInt(idUser));
+        user.setIdResto(resultSet.getInt(idResto));
         user.setNamaLengkap(resultSet.getString(namaLengkap));
         user.setJenisKelamin(resultSet.getString(jenisKelamin));
         user.setUsername(resultSet.getString(usernameUser));
@@ -150,7 +151,7 @@ public class UserDaoImpl implements UserDao {
                         roleUser +
                         ")" + " VALUES (?,?,?::" + roleType + ")"
         );
-        preparedStatement.setInt(1, getId(modelData.getUsername()));
+        preparedStatement.setInt(1, getId("username='" + modelData.getUsername() + "'"));
         preparedStatement.setString(2, modelData.getUsername());
         preparedStatement.setString(3, modelData.getRole());
         preparedStatement.executeUpdate();
@@ -182,7 +183,7 @@ public class UserDaoImpl implements UserDao {
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "SELECT *, users_roles.role FROM " + tableUser + "," + tableUserRoles +
-                        " WHERE " + condition
+                        " WHERE " + condition + " AND users_roles.id_user=users.id_user"
         );
         ResultSet resultSet = preparedStatement.executeQuery();
         User user = new User();

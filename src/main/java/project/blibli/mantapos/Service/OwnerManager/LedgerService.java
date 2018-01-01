@@ -8,6 +8,7 @@ import project.blibli.mantapos.ImplementationDao.LedgerDaoImpl;
 import project.blibli.mantapos.ImplementationDao.SaldoDaoImpl;
 import project.blibli.mantapos.Model.Ledger;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class LedgerService {
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
     SaldoDaoImpl saldoDao = new SaldoDaoImpl();
 
-    public ModelAndView getMappingChooseRangeLedger(Authentication authentication){
+    public ModelAndView getMappingChooseRangeLedger(Authentication authentication) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/pilih-range-ledger");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
@@ -30,7 +31,7 @@ public class LedgerService {
                                                int bulanTerpilih,
                                                int tahunTerpilih,
                                                String ledgerCustomWaktuAwal,
-                                               String ledgerCustomWaktuAkhir){
+                                               String ledgerCustomWaktuAkhir) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/ledger");
         List<Ledger> ledgerList = new ArrayList<>();

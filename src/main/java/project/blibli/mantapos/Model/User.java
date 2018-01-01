@@ -7,6 +7,22 @@ public class User {
     private int idResto;
     private boolean enabled;
 
+    public User() {
+    }
+
+    public User(String username, String password, String role, String namaLengkap, String nomorKtp, String nomorTelepon, String alamat, String jenisKelamin, int idResto, boolean enabled) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.namaLengkap = namaLengkap;
+        this.nomorKtp = nomorKtp;
+        this.nomorTelepon = nomorTelepon;
+        this.alamat = alamat;
+        this.jenisKelamin = jenisKelamin;
+        this.idResto = idResto;
+        this.enabled = enabled;
+    }
+
     public String getJenisKelamin() {
         return jenisKelamin;
     }

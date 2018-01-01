@@ -5,11 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Helper.GetIdResto;
-import project.blibli.mantapos.ImplementationDao.MenuDaoImpl;
 import project.blibli.mantapos.Model.Menu;
+import project.blibli.mantapos.NewImplementationDao.MenuDaoImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class MenuService {
     private static String UPLOAD_LOCATION=System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
     public ModelAndView getMappingMenu(Authentication authentication,
-                                       Integer page){
+                                       Integer page) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/menu");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
@@ -41,7 +42,7 @@ public class MenuService {
     }
 
     public ModelAndView postMappingAddNewMenu(Authentication authentication,
-                                              Menu menu){
+                                              Menu menu) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/menu");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
@@ -49,7 +50,7 @@ public class MenuService {
         return mav;
     }
 
-    public ModelAndView getMappingEditMenu(int idMenu){
+    public ModelAndView getMappingEditMenu(int idMenu) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/edit-menu");
         mav.addObject("menuObject", getDetailMenuByIdMenu(idMenu));
@@ -57,14 +58,14 @@ public class MenuService {
     }
 
     public ModelAndView postMappingEditMenu(Authentication authentication,
-                                            Menu menu){
+                                            Menu menu) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/menu");
-        updateMenu(GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName()), menu);
+        updateMenu(menu);
         return mav;
     }
 
-    public ModelAndView getMappingDeleteMenu(int idMenu){
+    public ModelAndView getMappingDeleteMenu(int idMenu) throws SQLException {
         ModelAndView mav = new ModelAndView();
         deleteMenu(idMenu);
         mav.setViewName("redirect:/menu");
@@ -72,35 +73,36 @@ public class MenuService {
     }
 
     private List<Menu> getAllMenu(int idResto,
-                                 int page){
-        List<Menu> menuList = menuDao.readAll(idResto, itemPerPage, page);
+                                 int page) throws SQLException {
+        List<Menu> menuList = menuDao.getAll("id_resto=" + idResto + " AND enabled=true" + " ORDER BY kategori_menu DESC LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
+
         return menuList;
     }
 
-    private int getCountMenu(int idResto){
-        int countMenu = menuDao.count(idResto);
+    private int getCountMenu(int idResto) throws SQLException {
+        int countMenu = menuDao.count("id_resto=" + idResto);
         return countMenu;
     }
 
     private void insertNewMenu(int idResto,
-                              Menu menu){
-        String filename = String.valueOf(menuDao.getLastId(idResto) + 1) + ".jpg"; //generate filename berdasarkan dari nilai id menu yang ditambahkan. Misal id menu yang barusan ditambahkan adalah 1, berarti nama gambarnya adalah 1.jpg
+                              Menu menu) throws SQLException {
+        menu.setIdResto(idResto);
+        String filename = String.valueOf(menuDao.getLastId("id_resto=" + idResto) + 1) + ".jpg"; //generate filename berdasarkan dari nilai id menu yang ditambahkan. Misal id menu yang barusan ditambahkan adalah 1, berarti nama gambarnya adalah 1.jpg
         try {
             FileCopyUtils.copy(menu.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename)); //Melakukan upload gambar
         } catch (IOException e) {
             System.out.println("Gagal upload foto : " + e.toString());
         }
         menu.setLokasi_gambar_menu("/images/" + filename); //set lokasi gambarnya
-        menuDao.insert(menu, idResto);
+        menuDao.insert(menu);
     }
 
-    private Menu getDetailMenuByIdMenu(int idMenu){
-        Menu menu = menuDao.readOne(idMenu);
+    private Menu getDetailMenuByIdMenu(int idMenu) throws SQLException {
+        Menu menu = menuDao.getOne("id_menu=" + idMenu);
         return menu;
     }
 
-    private void updateMenu(int idResto,
-                            Menu menu){
+    private void updateMenu(Menu menu) throws SQLException {
         try {
             if(!menu.getMultipartFile().isEmpty()){
                 //jika multipartFile (tempat upload foto) itu tidak kosong, berarti user upload foto baru
@@ -110,14 +112,14 @@ public class MenuService {
             } else{
                 menu.setLokasi_gambar_menu(menu.getLokasi_gambar_menu());
             }
-            menuDao.update(menu, idResto); //update menu di table menu di database
+            menuDao.update(menu, "id_menu=" + menu.getId()); //update menu di table menu di database
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void deleteMenu(int idMenu){
-        menuDao.delete(idMenu);
+    private void deleteMenu(int idMenu) throws SQLException {
+        menuDao.deactivate("id_menu=" + idMenu);
     }
 
 }

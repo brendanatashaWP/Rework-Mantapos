@@ -14,7 +14,7 @@ import java.util.List;
 public class MenuDaoImpl implements MenuDao {
 
     private static final String tableMenu = "menu";
-    private static final String idMenu = "id";
+    private static final String idMenu = "id_menu";
     private static final String namaMenu = "nama_menu";
     private static final String hargaMenu = "harga_menu";
     private static final String lokasiGambarMenu = "lokasi_gambar_menu";
@@ -168,5 +168,19 @@ public class MenuDaoImpl implements MenuDao {
         preparedStatement.executeUpdate();
         DbConnection.closePreparedStatement(preparedStatement);
         DbConnection.closeConnection(connection);
+    }
+
+    @Override
+    public int getLastId(String condition) throws SQLException {
+        int lastId=0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT MAX(" + idMenu + ") FROM " + tableMenu + " WHERE " + condition
+        );
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while(resultSet.next()){
+            lastId = resultSet.getInt(1);
+        }
+        return lastId;
     }
 }

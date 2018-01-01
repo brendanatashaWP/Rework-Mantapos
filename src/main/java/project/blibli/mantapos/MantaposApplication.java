@@ -2,16 +2,16 @@ package project.blibli.mantapos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import project.blibli.mantapos.Model.Ledger;
-import project.blibli.mantapos.Model.Menu;
-import project.blibli.mantapos.Model.Saldo;
-import project.blibli.mantapos.ImplementationDao.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import project.blibli.mantapos.Helper.GetIdResto;
+import project.blibli.mantapos.Model.*;
+import project.blibli.mantapos.NewImplementationDao.*;
+import java.util.List;
 
 @SpringBootApplication
 public class MantaposApplication {
+
+	static BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(MantaposApplication.class, args);
@@ -20,33 +20,79 @@ public class MantaposApplication {
 		restoranDao.createTable();
 
 		UserDaoImpl userDao = new UserDaoImpl();
-		userDao.createRoleUser();
+//		userDao.createRoleUsers();
 		userDao.createTable();
+		userDao.createTableUsersRole();
+
+		Restoran restoran = new Restoran("ADMIN", "ADMIN");
+//		restoranDao.insert(restoran);
+		restoran = new Restoran(
+				"Warung Biru", "Yogyakarta"
+		);
+//		restoranDao.insert(restoran);
+
+		User user = new User(
+				"axell", bCryptPasswordEncoder.encode("axell123"), "admin", "Axellageraldinc",
+				"123", "456", "jogja", "L", GetIdResto.getIdRestoBasedOnNamaResto("ADMIN"), true
+		);
+//		userDao.insert(user);
+//		userDao.insertTableUsersRole(user);
+
+		user = new User(
+				"damas", bCryptPasswordEncoder.encode("damas123"), "owner", "Sulistyo Damas",
+				"123", "456", "jogja", "L", GetIdResto.getIdRestoBasedOnNamaResto("Warung Biru"), true
+		);
+//		userDao.insert(user);
+//		userDao.insertTableUsersRole(user);
+		List<User> userList = userDao.getAll("id_resto=" + GetIdResto.getIdRestoBasedOnUsernameTerkait("damas"));
+		System.out.println("*** LIST USERS ***");
+		for (User item:userList
+			 ) {
+			System.out.println(item.getId() + ", " + item.getIdResto() + ", " + item.getNamaLengkap());
+		}
+		List<Restoran> restoranList = restoranDao.getAll("users_roles.role='owner'");
+		System.out.println("*** LIST RESTORAN ***");
+		for (Restoran item:restoranList
+				) {
+			System.out.println(item.getId() + ", " + item.getNamaResto());
+		}
 
 		MenuDaoImpl menuDao = new MenuDaoImpl();
 		menuDao.createTable();
-		Menu menu = new Menu();
+//		Random random = new Random();
+//		String kategori;
 //		for (int i=0; i<12; i++){
-//			menu.setNama_menu("Menu " + String.valueOf(i+1));
-//			menu.setHarga_menu((i+1)*1000);
-//			menu.setKategori_menu("food");
-//			menu.setLokasi_gambar_menu("test.jpg");
-//			menuDao.insert(menu, 16);
+//			int rand = random.nextInt();
+//			if(rand%2==0){
+//				kategori="food";
+//			} else{
+//				kategori="drink";
+//			}
+//			Menu menu = new Menu(7, "Menu " + String.valueOf(i+1), "test.jpg", kategori, (i+1)*1000);
+//			menuDao.insert(menu);
 //		}
+		List<Menu> menuList = menuDao.getAll("id_resto=7");
+		System.out.println("*** List Menu ***");
+		for (Menu item:menuList
+			 ) {
+			System.out.println(item.getId() + ", " + item.getIdResto() + ", " + item.getNama_menu());
+		}
 
-		SaldoDaoImpl saldoDao = new SaldoDaoImpl();
-		saldoDao.createTable();
-//		Saldo saldo = new Saldo();
-//		saldo.setTipe_saldo("awal");
-//		saldo.setId_resto(16);
-//		saldo.setSaldo(5000);
-//		saldo.setTanggal(1);
-//		saldo.setMonth(1);
-//		saldo.setYear(2017);
-//		saldoDao.insert(saldo, 16);
+		SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
+		saldoAwalDao.createTable();
+		SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
+		saldoAkhirDao.createTable();
+		Saldo saldo = new Saldo(7, 50000, "awal");
+//		saldoAwalDao.insert(saldo);
+		List<Saldo> saldoAwalList = saldoAwalDao.getAll("id_resto=7");
+		System.out.println("*** LIST SALDO AWAL ***");
+		for (Saldo item:saldoAwalList
+			 ) {
+			System.out.println(item.getId_resto() + ", " + item.getSaldo());
+		}
 
 		LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
-		ledgerDao.createTipeLedger();
+//		ledgerDao.createTipeLedger();
 		ledgerDao.createTable();
 //		Ledger ledger = new Ledger();
 //		for (int i=0; i<12; i++) {

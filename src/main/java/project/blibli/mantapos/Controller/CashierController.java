@@ -10,6 +10,8 @@ import project.blibli.mantapos.Config.Mail;
 import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.Service.CashierService;
 
+import java.sql.SQLException;
+
 @RestController
 //Controller untuk cashier (akses URL /cashier, penerimaan order baru, dan pengiriman receipt melalui email)
 public class CashierController {
@@ -26,7 +28,7 @@ public class CashierController {
     }
 
     @GetMapping(value = "/cashier", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView cashierHtml(Authentication authentication){
+    public ModelAndView cashierHtml(Authentication authentication) throws SQLException {
         return cashierService.getMappingCashier(authentication);
     }
 
@@ -39,7 +41,7 @@ public class CashierController {
                                      @RequestParam(value = "email_kirim_receipt", required = false) String email_kirim_receipt,
                                      @RequestParam("namaResto") String nama_resto,
                                      @RequestParam("customer_name") String nama_customer,
-                                     Authentication authentication){
+                                     Authentication authentication) throws SQLException {
         return cashierService.postMappingCashier(ledger, array_id_order, array_qty, is_kirim_email_receipt, email_kirim_receipt, nama_resto, nama_customer, authentication, templateEngine, mail);
     }
 }

@@ -32,9 +32,8 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <td>Bulan ke-</td>
-                            <td>Tahun</td>
-                            <td>Jumlah saldo awal</td>
+                            <th>Waktu Ditambahkan</th>
+                            <th>Jumlah saldo awal</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -43,8 +42,7 @@
                         <!--<td th:text="${saldoAwal}"></td>-->
                         <th:block th:each="saldo : ${saldoAwalList}">
                             <tr>
-                                <td th:text="${saldo.month}"/>
-                                <td th:text="${saldo.year}"/>
+                                <td th:text="${saldo.date_created}"/>
                                 <td th:text="'Rp ' + ${saldo.saldo}"></td>
                             </tr>
                         </th:block>

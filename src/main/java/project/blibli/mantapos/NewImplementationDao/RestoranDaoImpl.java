@@ -18,7 +18,7 @@ public class RestoranDaoImpl implements RestoranDao {
     private static final String namaResto = "nama_restoran";
     private static final String alamatResto = "alamat_resto";
 
-    private static final String idUser = "id";
+    private static final String idUser = "id_user";
     private static final String usernameUser = "username";
     private static final String passwordUser = "password";
     private static final String enabled = "enabled";
@@ -28,7 +28,7 @@ public class RestoranDaoImpl implements RestoranDao {
     private static final String nomorTelepon = "nomor_telepon";
     private static final String alamatUser = "alamat";
 
-    private Restoran restoranMapping(ResultSet resultSet) throws SQLException{
+    private Restoran restoranMapping(ResultSet resultSet) throws SQLException   {
         Restoran restoran = new Restoran();
         restoran.setId(resultSet.getInt(idResto));
         restoran.setNamaResto(resultSet.getString(namaResto));
@@ -89,7 +89,7 @@ public class RestoranDaoImpl implements RestoranDao {
                         " *" + //semua field user dari table users
                         " FROM restoran, users, users_roles" +
                         " WHERE users.id_resto=restoran.id " +
-                        "AND users_roles.id=users.id " +
+                        "AND users_roles.id_user=users.id_user " +
                         "AND " + condition
         );
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -127,7 +127,6 @@ public class RestoranDaoImpl implements RestoranDao {
                 "SELECT " + this.idResto +
                         " FROM " + tableRestoran + " WHERE " + condition
         );
-        preparedStatement.setString(1, namaResto);
         ResultSet resultSet = preparedStatement.executeQuery();
         while(resultSet.next()){
             idRestoran = resultSet.getInt(1);
@@ -146,7 +145,6 @@ public class RestoranDaoImpl implements RestoranDao {
                 "SELECT users.id_resto" +
                         " FROM users, restoran WHERE users.id_resto=restoran.id AND " + condition
         );
-        preparedStatement.setString(1, usernameUser);
         ResultSet resultSet = preparedStatement.executeQuery();
         while(resultSet.next()){
             idRestoran = resultSet.getInt(1);
