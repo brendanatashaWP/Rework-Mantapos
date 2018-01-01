@@ -6,6 +6,4 @@ import java.sql.SQLException;
 
 public interface LedgerDao extends DaoInterface<Ledger, String> {
 
-    void createTipeLedger() throws SQLException;
-
 }

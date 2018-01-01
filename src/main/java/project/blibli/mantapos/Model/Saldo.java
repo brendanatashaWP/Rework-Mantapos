@@ -6,7 +6,7 @@ public class Saldo {
     private int id_resto, tanggal, month, year;
     private int saldo;
     private String tipe_saldo;
-    private Timestamp date_created;
+    private Timestamp dateCreated;
 
     public Saldo() {
     }
@@ -17,12 +17,12 @@ public class Saldo {
         this.tipe_saldo = tipe_saldo;
     }
 
-    public Timestamp getDate_created() {
-        return date_created;
+    public Timestamp getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDate_created(Timestamp date_created) {
-        this.date_created = date_created;
+    public void setDateCreated(Timestamp dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public String getTipe_saldo() {

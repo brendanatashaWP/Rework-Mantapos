@@ -28,7 +28,7 @@ public class RestoranDaoImpl implements RestoranDao {
     private static final String nomorTelepon = "nomor_telepon";
     private static final String alamatUser = "alamat";
 
-    private Restoran restoranMapping(ResultSet resultSet) throws SQLException   {
+    private Restoran restoranAndUsersMapping(ResultSet resultSet) throws SQLException   {
         Restoran restoran = new Restoran();
         restoran.setId(resultSet.getInt(idResto));
         restoran.setNamaResto(resultSet.getString(namaResto));
@@ -42,6 +42,14 @@ public class RestoranDaoImpl implements RestoranDao {
         restoran.setNomorKtp(resultSet.getString(nomorKtp));
         restoran.setNomorTelepon(resultSet.getString(nomorTelepon));
         restoran.setAlamat(resultSet.getString(alamatUser));
+        return restoran;
+    }
+
+    private Restoran restoranOnlyMapping(ResultSet resultSet) throws SQLException{
+        Restoran restoran = new Restoran();
+        restoran.setId(resultSet.getInt(idResto));
+        restoran.setNamaResto(resultSet.getString(namaResto));
+        restoran.setAlamat(resultSet.getString(alamatResto));
         return restoran;
     }
 
@@ -94,7 +102,7 @@ public class RestoranDaoImpl implements RestoranDao {
         );
         ResultSet resultSet = preparedStatement.executeQuery();
         while(resultSet.next()){
-            restoranList.add(restoranMapping(resultSet));
+            restoranList.add(restoranAndUsersMapping(resultSet));
         }
         DbConnection.closeResultSet(resultSet);
         DbConnection.closePreparedStatement(preparedStatement);
@@ -111,7 +119,7 @@ public class RestoranDaoImpl implements RestoranDao {
         );
         ResultSet resultSet = preparedStatement.executeQuery();
         while(resultSet.next()){
-            restoran = restoranMapping(resultSet);
+            restoran = restoranOnlyMapping(resultSet);
         }
         DbConnection.closeResultSet(resultSet);
         DbConnection.closePreparedStatement(preparedStatement);

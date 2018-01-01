@@ -31,7 +31,7 @@
                 <div class="box-body">
                     <table class="table table-hover">
                         <thead>
-                        <tr>
+                        <tr>w
                             <th>Waktu Ditambahkan</th>
                             <th>Jumlah saldo awal</th>
                         </tr>
@@ -42,7 +42,7 @@
                         <!--<td th:text="${saldoAwal}"></td>-->
                         <th:block th:each="saldo : ${saldoAwalList}">
                             <tr>
-                                <td th:text="${saldo.date_created}"/>
+                                <td th:text="${saldo.dateCreated}"/>
                                 <td th:text="'Rp ' + ${saldo.saldo}"></td>
                             </tr>
                         </th:block>

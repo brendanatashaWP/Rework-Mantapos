@@ -91,9 +91,12 @@ public class MantaposApplication {
 			System.out.println(item.getId_resto() + ", " + item.getSaldo());
 		}
 
-		LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
+		PemasukkanDaoImpl pemasukkanDao = new PemasukkanDaoImpl();
+		pemasukkanDao.createTable();
+
+//		LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
 //		ledgerDao.createTipeLedger();
-		ledgerDao.createTable();
+//		ledgerDao.createTable();
 //		Ledger ledger = new Ledger();
 //		for (int i=0; i<12; i++) {
 //			for (int j=0; j<5; j++){

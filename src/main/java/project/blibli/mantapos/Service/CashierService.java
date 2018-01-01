@@ -25,6 +25,8 @@ import java.util.List;
 public class CashierService {
 
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
+    PemasukkanDaoImpl pemasukkanDao = new PemasukkanDaoImpl();
+    PengeluaranDaoImpl pengeluaranDao = new PengeluaranDaoImpl();
 //    SaldoDaoImpl saldoDao = new SaldoDaoImpl();
     SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
     SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
@@ -32,7 +34,6 @@ public class CashierService {
     MenuDaoImpl menuDao = new MenuDaoImpl();
     MenuYangDipesanDaoImpl menuYangDipesanDao = new MenuYangDipesanDaoImpl();
 
-    int tanggal = LocalDate.now().getDayOfMonth();
     int bulan = LocalDate.now().getMonthValue();
     int tahun = LocalDate.now().getYear();
 
@@ -47,7 +48,7 @@ public class CashierService {
         return mav;
     }
 
-    public ModelAndView postMappingCashier(Ledger ledger,
+    public ModelAndView postMappingCashier(Pemasukkan pemasukkan,
                                            String[] arrayIdMenu,
                                            String[] arrayQtyMenu,
                                            String apakahMauKirimReceiptMelaluiEmail,
@@ -61,22 +62,23 @@ public class CashierService {
         mav.setViewName("redirect:/cashier");
         String loggedInUsername = authentication.getName();
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(loggedInUsername);
-        insertPemasukkan(ledger, idResto);
+        pemasukkan.setIdResto(idResto);
+        insertPemasukkan(pemasukkan);
         updateSaldoAkhir(idResto);
         insertDetailMenuYangDipesan(getLastIdOrder(idResto), arrayIdMenu, arrayQtyMenu);
         if(apakahMauKirimReceiptMelaluiEmail.equals("yes")){
-            kirimReceiptMelaluiEmail(emailTujuan, namaResto, namaCustomer, templateEngine, mail, ledger.getBiaya(), arrayIdMenu, arrayQtyMenu);
+            kirimReceiptMelaluiEmail(emailTujuan, namaResto, namaCustomer, templateEngine, mail, pemasukkan.getBiaya(), arrayIdMenu, arrayQtyMenu);
         }
         return mav;
     }
 
     private List<Menu> getAllMenu(int idResto) throws SQLException {
-        List<Menu> menuList = menuDao.getAll("id_resto=" + idResto + " AND enabled=true AND ORDER BY kategori_menu DESC");
+        List<Menu> menuList = menuDao.getAll("id_resto=" + idResto + " AND enabled=true ORDER BY kategori_menu DESC");
         return menuList;
     }
 
     private Restoran getInfoRestoran(int idResto) throws SQLException {
-        Restoran restoran = restoranDao.getOne("id_resto=" + idResto);
+        Restoran restoran = restoranDao.getOne("id=" + idResto);
         return restoran;
     }
 
@@ -86,7 +88,7 @@ public class CashierService {
     }
 
     private int getLastIdOrder(int idResto) throws SQLException {
-        int lastIdOrder = menuDao.getLastId("id_resto=" + idResto);
+        int lastIdOrder = pemasukkanDao.getId("id_resto=" + idResto);
         return lastIdOrder;
     }
 
@@ -96,25 +98,28 @@ public class CashierService {
         }
     }
 
-    private void insertPemasukkan(Ledger ledger, int idResto){
-        ledger.setTipe("debit");
-        ledger.setKeperluan("penjualan menu"); //Karena disini adalah pemasukkan, makannya tipe ledger adalah debit dan keperluannya adalah penjualan menu
-        ledger.setWaktu(LocalDate.now().toString()); //setWaktu untuk di-insert ke database adalah waktu sekarang (yyyy-mm-dd)
-        ledger.setTanggal(tanggal); //setTanggal
-        ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth())); //setWeek, value week diambil dari tanggalnya. Detailnya ada di class WeekGenerator
-        ledger.setMonth(bulan); //setMonth
-        ledger.setYear(tahun); //setYear
-        ledgerDao.insert(ledger, idResto);
+    private void insertPemasukkan(Pemasukkan pemasukkan) throws SQLException {
+        pemasukkanDao.insert(pemasukkan);
+//        ledger.setTipe("debit");
+//        ledger.setKeperluan("penjualan menu"); //Karena disini adalah pemasukkan, makannya tipe ledger adalah debit dan keperluannya adalah penjualan menu
+//        ledger.setWaktu(LocalDate.now().toString()); //setWaktu untuk di-insert ke database adalah waktu sekarang (yyyy-mm-dd)
+//        ledger.setTanggal(tanggal); //setTanggal
+//        ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth())); //setWeek, value week diambil dari tanggalnya. Detailnya ada di class WeekGenerator
+//        ledger.setMonth(bulan); //setMonth
+//        ledger.setYear(tahun); //setYear
+//        ledgerDao.insert(ledger, idResto);
     }
 
     private void updateSaldoAkhir(int idResto) throws SQLException {
         Saldo saldo = new Saldo();
         saldo.setId_resto(idResto);
         saldo.setTipe_saldo("akhir");
-        saldo.setMonth(bulan);
-        saldo.setYear(tahun);
         int saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
-        saldo.setSaldo(saldoAwal + ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "debit") - ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "kredit")); //saldo akhir = saldo awal + debit - kredit
+        String condition = "id_resto=" + idResto + " AND date_created BETWEEN " + tahun + "-" + bulan + "-01 00:00:00 AND " + tahun + "-" + bulan + "-31 23:59:59"; //between 2018-01-01 00:00:00 AND 2018-01-31 23:59:59
+        int totalPemasukkanBulanIni = pemasukkanDao.getTotalPemasukkan(condition);
+        int totalPengeluaranBulanIni = pengeluaranDao.getTotalPengeluaran(condition);
+        saldo.setSaldo(saldoAwal + totalPemasukkanBulanIni - totalPengeluaranBulanIni);
+//        saldo.setSaldo(saldoAwal + ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "debit") - ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "kredit")); //saldo akhir = saldo awal + debit - kredit
         if(saldoAkhirDao.count("id_resto=" + idResto)==0){
             saldoAkhirDao.insert(saldo);
         } else{

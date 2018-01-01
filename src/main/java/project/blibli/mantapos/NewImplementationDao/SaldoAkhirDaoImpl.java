@@ -21,7 +21,7 @@ public class SaldoAkhirDaoImpl implements SaldoDao {
     private Saldo saldoMapping(ResultSet resultSet) throws SQLException{
         Saldo saldo = new Saldo();
         saldo.setId_resto(resultSet.getInt(this.idResto));
-        saldo.setDate_created(resultSet.getTimestamp(dateCreated));
+        saldo.setDateCreated(resultSet.getTimestamp(dateCreated));
         saldo.setSaldo(resultSet.getInt(this.saldoAkhir));
         return saldo;
     }

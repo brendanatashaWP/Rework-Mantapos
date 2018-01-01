@@ -25,20 +25,6 @@ public class LedgerDaoImpl implements LedgerDao {
     private static final String tipeKredit = "kredit";
 
     @Override
-    public void createTipeLedger() throws SQLException {
-        Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "CREATE TYPE " + tipeLedger + " AS ENUM " + "(" +
-                        "'" + tipeDebit + "'," +
-                        "'" + tipeKredit + "'" +
-                        ")"
-        );
-        preparedStatement.executeUpdate();
-        DbConnection.closePreparedStatement(preparedStatement);
-        DbConnection.closeConnection(connection);
-    }
-
-    @Override
     public void createTable() throws SQLException {
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
