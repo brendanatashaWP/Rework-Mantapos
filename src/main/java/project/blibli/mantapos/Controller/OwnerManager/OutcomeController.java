@@ -6,7 +6,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.Ledger;
-import project.blibli.mantapos.Model.Pengeluaran;
 import project.blibli.mantapos.Service.OwnerManager.OutcomeService;
 
 import java.sql.SQLException;

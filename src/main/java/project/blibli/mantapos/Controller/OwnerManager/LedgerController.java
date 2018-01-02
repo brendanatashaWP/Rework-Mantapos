@@ -36,7 +36,6 @@ public class LedgerController {
                                @RequestParam(value = "ledger_custom_awal", required = false)  String ledger_custom_awal,
                                @RequestParam(value = "ledger_custom_akhir", required = false)  String ledger_custom_akhir,
                                Authentication authentication) throws SQLException {
-        System.out.println(skala + ", " + month + ", " + year);
         return ledgerService.postMappingLihatLedger(authentication, skala, month, year, ledger_custom_awal, ledger_custom_akhir);
     }
 

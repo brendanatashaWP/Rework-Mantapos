@@ -74,8 +74,8 @@ public class MenuService {
 
     private List<Menu> getAllMenu(int idResto,
                                  int page) throws SQLException {
-        List<Menu> menuList = menuDao.getAll("id_resto=" + idResto + " AND enabled=true" + " ORDER BY kategori_menu DESC LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
-
+        List<Menu> menuList = menuDao.getAll("id_resto=" + idResto +
+                " AND enabled=true" + " ORDER BY kategori_menu DESC LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
         return menuList;
     }
 
@@ -106,7 +106,7 @@ public class MenuService {
         try {
             if(!menu.getMultipartFile().isEmpty()){
                 //jika multipartFile (tempat upload foto) itu tidak kosong, berarti user upload foto baru
-                String filename = String.valueOf(menu.getId() + 1) + ".jpg";
+                String filename = String.valueOf(menu.getId()) + ".jpg";
                 FileCopyUtils.copy(menu.getMultipartFile().getBytes(), new File(UPLOAD_LOCATION + filename)); //upload foto yang baru
                 menu.setLokasi_gambar_menu("/images/" + filename);
             } else{

@@ -6,16 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.Restoran;
 import project.blibli.mantapos.Model.User;
-import project.blibli.mantapos.ImplementationDao.RestoranDaoImpl;
-import project.blibli.mantapos.ImplementationDao.UserDaoImpl;
 import project.blibli.mantapos.Service.AdminService;
 
 import java.sql.SQLException;
 
 @RestController
 public class AdminController {
-    RestoranDaoImpl restoranDao = new RestoranDaoImpl();
-    UserDaoImpl userDao = new UserDaoImpl();
     int itemPerPage=5;
 
     AdminService adminService = new AdminService();

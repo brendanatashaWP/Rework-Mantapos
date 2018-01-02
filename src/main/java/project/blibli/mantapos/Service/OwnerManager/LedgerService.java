@@ -45,19 +45,14 @@ public class LedgerService {
         int saldoAwalBulanTerpilih = 0, saldoAkhirBulanTerpilih=0, mutasi=0, totalDebit=0, totalKredit=0;
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         String skalaLedgerPassToHtml = null;
-        if(skalaLedger.equals("harian") || skalaLedger.equals("mingguan")){
+        if(skalaLedger.equals("harian")){
             saldoAwalBulanTerpilih = getSaldoAkhirBulanLaluSebagaiSaldoAwalBulanTerpilih(idResto, bulanTerpilih, tahunTerpilih);
             totalDebit = getTotalDebitDalamSebulan(idResto, bulanTerpilih, tahunTerpilih);
             totalKredit = getTotalKreditDalamSebulan(idResto, bulanTerpilih, tahunTerpilih);
             saldoAkhirBulanTerpilih = hitungSaldoAkhirSekarang(saldoAwalBulanTerpilih, totalDebit, totalKredit);
             mutasi = hitungMutasi(saldoAkhirBulanTerpilih, saldoAwalBulanTerpilih);
-            if(skalaLedger.equals("harian")){
-                ledgerList = getLedgerHarianDalamSebulan(idResto, bulanTerpilih, tahunTerpilih);
-                skalaLedgerPassToHtml = "HARIAN";
-            } else{
-//                ledgerList = getLedgerMingguanDalamSebulan(idResto, bulanTerpilih, tahunTerpilih);
-//                skalaLedgerPassToHtml = "MINGGUAN";
-            }
+            ledgerList = getLedgerHarianDalamSebulan(idResto, bulanTerpilih, tahunTerpilih);
+            skalaLedgerPassToHtml = "HARIAN";
         } else if(skalaLedger.equals("bulanan")){
             int bulanAwal = getBulanPalingAwalDalamTahun(idResto, tahunTerpilih);
             saldoAwalBulanTerpilih = getSaldoAkhirBulanLaluSebagaiSaldoAwalBulanTerpilih(idResto, bulanAwal, tahunTerpilih);
@@ -215,8 +210,6 @@ public class LedgerService {
     private List<Ledger> getLedgerHarianDalamSebulan(int idResto,
                                          int bulanTerpilih,
                                          int tahunTerpilih) throws SQLException {
-//        String condition="id_resto=" + idResto +
-//                " AND date_created BETWEEN '" + tahunTerpilih + "-" + bulanTerpilih + "-01 00:00:00' AND '" + tahunTerpilih + "-" + bulanTerpilih + "-31 23:59:59'";
         String condition = "id_resto=" + idResto +
                 " AND EXTRACT(MONTH FROM date_created)=" + bulanTerpilih + " AND EXTRACT(YEAR FROM date_created)=" + tahunTerpilih;
         List<Ledger> ledgerList = ledgerDao.getAll(condition);

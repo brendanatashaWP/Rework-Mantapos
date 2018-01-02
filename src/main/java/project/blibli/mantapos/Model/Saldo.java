@@ -3,7 +3,7 @@ package project.blibli.mantapos.Model;
 import java.sql.Timestamp;
 
 public class Saldo {
-    private int id_resto, tanggal, month, year;
+    private int id_resto;
     private int saldo;
     private String tipe_saldo;
     private Timestamp dateCreated;
@@ -47,29 +47,5 @@ public class Saldo {
 
     public void setSaldo(int saldo) {
         this.saldo = saldo;
-    }
-
-    public int getTanggal() {
-        return tanggal;
-    }
-
-    public void setTanggal(int tanggal) {
-        this.tanggal = tanggal;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
     }
 }

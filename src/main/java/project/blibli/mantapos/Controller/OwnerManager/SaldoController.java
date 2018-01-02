@@ -30,7 +30,7 @@ public class SaldoController {
     //Jika user menambahkan saldo baru
     @PostMapping(value = "/saldo-post", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView addSaldoAwalHtml(Authentication authentication,
-                                         @ModelAttribute("saldoAwal") Saldo saldo) throws SQLException {
+                                         @ModelAttribute Saldo saldo) throws SQLException {
         return saldoService.postMappingAddSaldoAwal(authentication, saldo);
     }
 

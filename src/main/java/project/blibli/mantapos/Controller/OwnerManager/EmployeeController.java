@@ -29,7 +29,7 @@ public class EmployeeController {
 
     //Jika user menambahkan user baru
     @PostMapping(value = "/add-user", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView addUserHtml(@ModelAttribute("user")User user,
+    public ModelAndView addUserHtml(@ModelAttribute User user,
                                     Authentication authentication) throws SQLException {
         return employeeService.postMappingAddNewEmployee(authentication, user);
     }
@@ -54,7 +54,7 @@ public class EmployeeController {
     }
     //Memposting data user yang baru
     @PostMapping(value = "/edit-user")
-    public ModelAndView editUserPostHtml(@ModelAttribute("user") User user,
+    public ModelAndView editUserPostHtml(@ModelAttribute User user,
                                          Authentication authentication) throws SQLException {
         return employeeService.postMappingEditEmployee(authentication, user);
     }

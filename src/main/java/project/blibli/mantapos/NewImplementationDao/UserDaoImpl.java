@@ -1,8 +1,5 @@
 package project.blibli.mantapos.NewImplementationDao;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import project.blibli.mantapos.ImplementationDao.DbConnection;
 import project.blibli.mantapos.Model.User;
 import project.blibli.mantapos.NewInterfaceDao.UserDao;
 
@@ -42,6 +39,7 @@ public class UserDaoImpl implements UserDao {
         user.setId(resultSet.getInt(idUser));
         user.setIdResto(resultSet.getInt(idResto));
         user.setNamaLengkap(resultSet.getString(namaLengkap));
+        user.setPassword(resultSet.getString(passwordUser));
         user.setJenisKelamin(resultSet.getString(jenisKelamin));
         user.setUsername(resultSet.getString(usernameUser));
         user.setNomorKtp(resultSet.getString(nomorKtp));
@@ -250,6 +248,29 @@ public class UserDaoImpl implements UserDao {
         preparedStatement.setString(5, modelData.getNomorKtp());
         preparedStatement.setString(6, modelData.getAlamat());
         preparedStatement.setString(7, modelData.getJenisKelamin());
+        preparedStatement.executeUpdate();
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+    }
+
+    @Override
+    public void updateUserWithoutNewPassword(User modelData, String condition) throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE " + tableUser + " SET " + namaLengkap + "=?" +
+                        "," + usernameUser + "=?" +
+                        "," + nomorTelepon + "=?" +
+                        "," + nomorKtp + "=?" +
+                        "," + alamatUser + "=?" +
+                        "," + jenisKelamin + "=?" +
+                        " WHERE " + condition
+        );
+        preparedStatement.setString(1, modelData.getNamaLengkap());
+        preparedStatement.setString(2, modelData.getUsername());
+        preparedStatement.setString(3, modelData.getNomorTelepon());
+        preparedStatement.setString(4, modelData.getNomorKtp());
+        preparedStatement.setString(5, modelData.getAlamat());
+        preparedStatement.setString(6, modelData.getJenisKelamin());
         preparedStatement.executeUpdate();
         DbConnection.closePreparedStatement(preparedStatement);
         DbConnection.closeConnection(connection);

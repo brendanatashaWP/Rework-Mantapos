@@ -58,10 +58,6 @@ public class AdminService {
 
     public List<Restoran> getAllRegisteredRestoran() throws SQLException {
         List<Restoran> restoranList = restoranDao.getAll("users_roles.role='owner'");
-        for (Restoran item:restoranList
-             ) {
-            System.out.println("ID USER : " + item.getIdUser());
-        }
         return restoranList;
     }
 

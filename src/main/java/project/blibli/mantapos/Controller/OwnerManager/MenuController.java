@@ -28,7 +28,7 @@ public class MenuController {
 
     //Jika user menambahkan menu baru
     @PostMapping(value = "/menu", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView addMenuJson(@ModelAttribute("menu") Menu menu,
+    public ModelAndView addMenuJson(@ModelAttribute Menu menu,
                                     Authentication authentication) throws SQLException {
         return menuService.postMappingAddNewMenu(authentication, menu);
     }
@@ -47,7 +47,7 @@ public class MenuController {
 
     //jika user posting menu yang sudah di edit
     @PostMapping(value = "/edit-menu", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView editMenuPostHtml(@ModelAttribute("menu") Menu menu,
+    public ModelAndView editMenuPostHtml(@ModelAttribute Menu menu,
                                          Authentication authentication) throws SQLException {
         return menuService.postMappingEditMenu(authentication, menu);
     }

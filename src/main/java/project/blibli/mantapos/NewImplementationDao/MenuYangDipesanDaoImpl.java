@@ -1,6 +1,5 @@
 package project.blibli.mantapos.NewImplementationDao;
 
-import project.blibli.mantapos.ImplementationDao.DbConnection;
 import project.blibli.mantapos.Model.OrderedMenu;
 import project.blibli.mantapos.NewInterfaceDao.MenuYangDipesanDao;
 

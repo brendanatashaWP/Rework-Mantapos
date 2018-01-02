@@ -134,7 +134,7 @@ public class EmployeeService {
 
     private void updateUser(User user) throws SQLException {
         if(user.getPassword().equals("") || user.getPassword().equals(null)){
-            userDao.update(user, "id_user=" + user.getId());
+            userDao.updateUserWithoutNewPassword(user, "id_user=" + user.getId());
             userDao.updateTableUsersRole(user, "id_user=" + user.getId());
         } else{
             String hashedPassword = bCryptPasswordEncoder.encode(user.getPassword());

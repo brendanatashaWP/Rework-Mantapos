@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Helper.GetIdResto;
 import project.blibli.mantapos.Model.Ledger;
-import project.blibli.mantapos.Model.Pengeluaran;
 import project.blibli.mantapos.Model.Saldo;
-import project.blibli.mantapos.Helper.WeekGenerator;
 import project.blibli.mantapos.NewImplementationDao.*;
 
 import java.sql.SQLException;
@@ -64,26 +62,27 @@ public class OutcomeService {
     private void updateSaldoAkhir(int idResto) throws SQLException {
         Saldo saldo = new Saldo();
         saldo.setId_resto(idResto);
-        int saldoAwal=0;
+        int saldoAwal;
         if(bulan==1){
-            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto + " AND date_created BETWEEN '" + (tahun-1) + "-" + 12 + "-01 00:00:00' AND '" + (tahun-1) + "-" + 12 + "-31 23:59:59'").getSaldo();
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto +
+                    " AND EXTRACT(MONTH FROM date_created)=12 AND EXTRACT(YEAR FROM date_created)=" + (tahun-1)).getSaldo();
         } else {
-            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto + " AND date_created BETWEEN '" + tahun + "-" + (bulan - 1) + "-01 00:00:00' AND '" + tahun + "-" + (bulan - 1) + "-31 23:59:59'").getSaldo();
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto +
+                    " AND EXTRACT(MONTH FROM date_created)=" + (bulan-1) + " AND EXTRACT(YEAR FROM date_created)=" + tahun).getSaldo();
         }
         if(saldoAwal==0){
             saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
         }
-        String condition = "id_resto=" + idResto + " AND date_created BETWEEN '" + tahun + "-" + bulan + "-01 00:00:00' AND '" + tahun + "-" + bulan + "-31 23:59:59'"; //between 2018-01-01 00:00:00 AND 2018-01-31 23:59:59
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(MONTH FROM date_created)=" + bulan + " AND EXTRACT(YEAR FROM date_created)=" + tahun; //between 2018-01-01 00:00:00 AND 2018-01-31 23:59:59
         int totalPemasukkanBulanIni = ledgerDao.getTotal(condition + " AND tipe='debit'");
         int totalPengeluaranBulanIni = ledgerDao.getTotal(condition + " AND tipe='kredit'");
-        System.out.println("saldo Awal : " + saldoAwal);
-        System.out.println("total Pemasukkan : " + totalPemasukkanBulanIni);
-        System.out.println("total pengeluaran : " + totalPengeluaranBulanIni);
         saldo.setSaldo(saldoAwal + totalPemasukkanBulanIni - totalPengeluaranBulanIni);
         if(saldoAkhirDao.count("id_resto=" + idResto)==0){
             saldoAkhirDao.insert(saldo);
         } else{
-            saldoAkhirDao.update(saldo, "id_resto=" + idResto + "AND date_created BETWEEN '" + tahun + "-" + bulan + "-01 00:00:00' AND '" + tahun + "-" + bulan + "-31 23:59:59'");
+            saldoAkhirDao.update(saldo, "id_resto=" + idResto +
+                    " AND EXTRACT(MONTH FROM date_created)=" + bulan + " AND EXTRACT(YEAR FROM date_created)=" + tahun);
         }
     }
 
