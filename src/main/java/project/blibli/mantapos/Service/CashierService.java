@@ -8,7 +8,6 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import project.blibli.mantapos.Config.Mail;
 import project.blibli.mantapos.Helper.GetIdResto;
-import project.blibli.mantapos.ImplementationDao.LedgerDaoImpl;
 import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.Helper.WeekGenerator;
 import project.blibli.mantapos.NewImplementationDao.*;
@@ -25,9 +24,6 @@ import java.util.List;
 public class CashierService {
 
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
-    PemasukkanDaoImpl pemasukkanDao = new PemasukkanDaoImpl();
-    PengeluaranDaoImpl pengeluaranDao = new PengeluaranDaoImpl();
-//    SaldoDaoImpl saldoDao = new SaldoDaoImpl();
     SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
     SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
     RestoranDaoImpl restoranDao = new RestoranDaoImpl();
@@ -48,7 +44,7 @@ public class CashierService {
         return mav;
     }
 
-    public ModelAndView postMappingCashier(Pemasukkan pemasukkan,
+    public ModelAndView postMappingCashier(Ledger ledger,
                                            String[] arrayIdMenu,
                                            String[] arrayQtyMenu,
                                            String apakahMauKirimReceiptMelaluiEmail,
@@ -62,12 +58,14 @@ public class CashierService {
         mav.setViewName("redirect:/cashier");
         String loggedInUsername = authentication.getName();
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(loggedInUsername);
-        pemasukkan.setIdResto(idResto);
-        insertPemasukkan(pemasukkan);
+        ledger.setId_resto(idResto);
+        ledger.setTipe("debit");
+        ledger.setKeperluan("penjualan menu");
+        insertPemasukkan(ledger);
         updateSaldoAkhir(idResto);
         insertDetailMenuYangDipesan(getLastIdOrder(idResto), arrayIdMenu, arrayQtyMenu);
         if(apakahMauKirimReceiptMelaluiEmail.equals("yes")){
-            kirimReceiptMelaluiEmail(emailTujuan, namaResto, namaCustomer, templateEngine, mail, pemasukkan.getBiaya(), arrayIdMenu, arrayQtyMenu);
+            kirimReceiptMelaluiEmail(emailTujuan, namaResto, namaCustomer, templateEngine, mail, ledger.getBiaya(), arrayIdMenu, arrayQtyMenu);
         }
         return mav;
     }
@@ -88,7 +86,7 @@ public class CashierService {
     }
 
     private int getLastIdOrder(int idResto) throws SQLException {
-        int lastIdOrder = pemasukkanDao.getId("id_resto=" + idResto);
+        int lastIdOrder = ledgerDao.getId("id_resto=" + idResto);
         return lastIdOrder;
     }
 
@@ -98,32 +96,30 @@ public class CashierService {
         }
     }
 
-    private void insertPemasukkan(Pemasukkan pemasukkan) throws SQLException {
-        pemasukkanDao.insert(pemasukkan);
-//        ledger.setTipe("debit");
-//        ledger.setKeperluan("penjualan menu"); //Karena disini adalah pemasukkan, makannya tipe ledger adalah debit dan keperluannya adalah penjualan menu
-//        ledger.setWaktu(LocalDate.now().toString()); //setWaktu untuk di-insert ke database adalah waktu sekarang (yyyy-mm-dd)
-//        ledger.setTanggal(tanggal); //setTanggal
-//        ledger.setWeek(WeekGenerator.GetWeek(LocalDateTime.now().getDayOfMonth())); //setWeek, value week diambil dari tanggalnya. Detailnya ada di class WeekGenerator
-//        ledger.setMonth(bulan); //setMonth
-//        ledger.setYear(tahun); //setYear
-//        ledgerDao.insert(ledger, idResto);
+    private void insertPemasukkan(Ledger ledger) throws SQLException {
+        ledgerDao.insert(ledger);
     }
 
     private void updateSaldoAkhir(int idResto) throws SQLException {
         Saldo saldo = new Saldo();
         saldo.setId_resto(idResto);
-        saldo.setTipe_saldo("akhir");
-        int saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
-        String condition = "id_resto=" + idResto + " AND date_created BETWEEN " + tahun + "-" + bulan + "-01 00:00:00 AND " + tahun + "-" + bulan + "-31 23:59:59"; //between 2018-01-01 00:00:00 AND 2018-01-31 23:59:59
-        int totalPemasukkanBulanIni = pemasukkanDao.getTotalPemasukkan(condition);
-        int totalPengeluaranBulanIni = pengeluaranDao.getTotalPengeluaran(condition);
+        int saldoAwal=0;
+        if(bulan==1){
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto + " AND date_created BETWEEN '" + (tahun-1) + "-" + 12 + "-01 00:00:00' AND '" + (tahun-1) + "-" + 12 + "-31 23:59:59'").getSaldo();
+        } else {
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto + " AND date_created BETWEEN '" + tahun + "-" + (bulan - 1) + "-01 00:00:00' AND '" + tahun + "-" + (bulan - 1) + "-31 23:59:59'").getSaldo();
+        }
+        if(saldoAwal==0){
+            saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
+        }
+        String condition = "id_resto=" + idResto + " AND date_created BETWEEN '" + tahun + "-" + bulan + "-01 00:00:00' AND '" + tahun + "-" + bulan + "-31 23:59:59'"; //between 2018-01-01 00:00:00 AND 2018-01-31 23:59:59
+        int totalPemasukkanBulanIni = ledgerDao.getTotal(condition + " AND tipe='debit'");
+        int totalPengeluaranBulanIni = ledgerDao.getTotal(condition + " AND tipe='kredit'");
         saldo.setSaldo(saldoAwal + totalPemasukkanBulanIni - totalPengeluaranBulanIni);
-//        saldo.setSaldo(saldoAwal + ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "debit") - ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "kredit")); //saldo akhir = saldo awal + debit - kredit
         if(saldoAkhirDao.count("id_resto=" + idResto)==0){
             saldoAkhirDao.insert(saldo);
         } else{
-            saldoAkhirDao.update(saldo, "id_resto=" + idResto);
+            saldoAkhirDao.update(saldo, "id_resto=" + idResto + "AND date_created BETWEEN '" + tahun + "-" + bulan + "-01 00:00:00' AND '" + tahun + "-" + bulan + "-31 23:59:59'");
         }
     }
 

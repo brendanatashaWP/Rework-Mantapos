@@ -4,10 +4,7 @@ import project.blibli.mantapos.ImplementationDao.DbConnection;
 import project.blibli.mantapos.Model.Saldo;
 import project.blibli.mantapos.NewInterfaceDao.SaldoDao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class SaldoAkhirDaoImpl implements SaldoDao {
@@ -105,10 +102,9 @@ public class SaldoAkhirDaoImpl implements SaldoDao {
     public void update(Saldo modelData, String condition) throws SQLException {
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "UPDATE " + tableSaldoAkhir + " SET " + saldoAkhir + "=? WHERE " + this.idResto + "=?"
+                "UPDATE " + tableSaldoAkhir + " SET " + saldoAkhir + "=? WHERE " + condition
         );
         preparedStatement.setInt(1, modelData.getSaldo());
-        preparedStatement.setInt(2, modelData.getId_resto());
         preparedStatement.executeUpdate();
         DbConnection.closePreparedStatement(preparedStatement);
         DbConnection.closeConnection(connection);
@@ -123,4 +119,18 @@ public class SaldoAkhirDaoImpl implements SaldoDao {
     public void activate(String condition) throws SQLException {
 
     }
+
+    public int getBulanAwal(String condition) throws SQLException {
+        int bulanAwal = 0;
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT MIN(EXTRACT(MONTH FROM " + dateCreated + ")) FROM " + tableSaldoAkhir + " WHERE " + condition
+        );
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            bulanAwal = resultSet.getInt(1);
+        }
+        return bulanAwal;
+    }
+
 }

@@ -34,7 +34,7 @@ public class CashierController {
 
     //Mapping untuk menambah order dari cashier ke database
     @PostMapping(value = "/add-order", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView addOrderHtml(@ModelAttribute Pemasukkan pemasukkan,
+    public ModelAndView addOrderHtml(@ModelAttribute Ledger ledger,
                                      @RequestParam(value = "array_id_order", required = false) String[] array_id_order,
                                      @RequestParam(value = "array_qty", required = false) String[] array_qty,
                                      @RequestParam(value = "is_kirim_email_receipt", required = false) String is_kirim_email_receipt,
@@ -42,6 +42,6 @@ public class CashierController {
                                      @RequestParam("namaResto") String nama_resto,
                                      @RequestParam("customer_name") String nama_customer,
                                      Authentication authentication) throws SQLException {
-        return cashierService.postMappingCashier(pemasukkan, array_id_order, array_qty, is_kirim_email_receipt, email_kirim_receipt, nama_resto, nama_customer, authentication, templateEngine, mail);
+        return cashierService.postMappingCashier(ledger, array_id_order, array_qty, is_kirim_email_receipt, email_kirim_receipt, nama_resto, nama_customer, authentication, templateEngine, mail);
     }
 }

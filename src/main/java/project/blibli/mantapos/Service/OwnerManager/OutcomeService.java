@@ -4,12 +4,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Helper.GetIdResto;
-import project.blibli.mantapos.ImplementationDao.LedgerDaoImpl;
 import project.blibli.mantapos.Model.Ledger;
+import project.blibli.mantapos.Model.Pengeluaran;
 import project.blibli.mantapos.Model.Saldo;
 import project.blibli.mantapos.Helper.WeekGenerator;
-import project.blibli.mantapos.NewImplementationDao.SaldoAkhirDaoImpl;
-import project.blibli.mantapos.NewImplementationDao.SaldoAwalDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -19,11 +18,10 @@ import java.util.List;
 @Service
 public class OutcomeService {
 
-    LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
     SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
     SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
+    LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
     int itemPerPage=5;
-    int tanggal = LocalDate.now().getDayOfMonth();
     int bulan = LocalDate.now().getMonthValue();
     int tahun = LocalDate.now().getYear();
 
@@ -48,57 +46,55 @@ public class OutcomeService {
     }
 
     public ModelAndView postMappingOutcome(Authentication authentication,
-                                           Ledger ledger,
-                                           String qty) throws SQLException {
+                                           Ledger ledger) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/outcome");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
-        insertNewPengeluaran(idResto, ledger, qty);
+        ledger.setId_resto(idResto);
+        ledger.setTipe("kredit");
+        insertNewPengeluaran(ledger);
         updateSaldoAkhir(idResto);
         return mav;
     }
 
-    private void insertNewPengeluaran(int idResto,
-                                      Ledger ledger,
-                                      String qty){
-        String[] dateSplit = ledger.getWaktu().split("-"); //split date dengan character "-" dari date yang di-pick dari user melalui outcome.html (formatnya yyyy-mm-dd)
-        int tanggal = Integer.parseInt(dateSplit[2]);
-        ledger.setTanggal(tanggal); //tanggal itu ada di elemen ke-2
-        int week = WeekGenerator.GetWeek(tanggal);
-        ledger.setWeek(week); //week di-generate melalui class WeekGenerator, lalu setWeek di model ledger
-        int month = Integer.parseInt(dateSplit[1]);
-        ledger.setMonth(month); //month itu ada di elemen ke-1, lalu setMonth
-        int year = Integer.parseInt(dateSplit[0]);
-        ledger.setYear(year); //year itu ada di elemen ke-0, lalu setYear
-        ledger.setTipe("kredit"); //karena ini adalah pengeluaran (outcome), berarti tipenya adalah kredit
-        ledger.setKeperluan(ledger.getKeperluan() + "(" + qty + ")"); //Keperluannya adalah diambil dari keperluan yang diinputkan oleh user ditambahkan dengan quantity yang diinputkan oleh user
-        ledgerDao.insert(ledger, idResto);
+    private void insertNewPengeluaran(Ledger ledger) throws SQLException {
+        ledgerDao.insert(ledger);
     }
 
     private void updateSaldoAkhir(int idResto) throws SQLException {
         Saldo saldo = new Saldo();
         saldo.setId_resto(idResto);
-        saldo.setTipe_saldo("akhir");
-        saldo.setTanggal(tanggal);
-        saldo.setMonth(bulan);
-        saldo.setYear(tahun);
-        int saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
-        saldo.setSaldo(saldoAwal + ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "debit") - ledgerDao.getTotalDebitKreditDalamSebulan(idResto, bulan, tahun, "kredit")); //saldo akhir = saldo awal + debit - kredit
+        int saldoAwal=0;
+        if(bulan==1){
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto + " AND date_created BETWEEN '" + (tahun-1) + "-" + 12 + "-01 00:00:00' AND '" + (tahun-1) + "-" + 12 + "-31 23:59:59'").getSaldo();
+        } else {
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto + " AND date_created BETWEEN '" + tahun + "-" + (bulan - 1) + "-01 00:00:00' AND '" + tahun + "-" + (bulan - 1) + "-31 23:59:59'").getSaldo();
+        }
+        if(saldoAwal==0){
+            saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
+        }
+        String condition = "id_resto=" + idResto + " AND date_created BETWEEN '" + tahun + "-" + bulan + "-01 00:00:00' AND '" + tahun + "-" + bulan + "-31 23:59:59'"; //between 2018-01-01 00:00:00 AND 2018-01-31 23:59:59
+        int totalPemasukkanBulanIni = ledgerDao.getTotal(condition + " AND tipe='debit'");
+        int totalPengeluaranBulanIni = ledgerDao.getTotal(condition + " AND tipe='kredit'");
+        System.out.println("saldo Awal : " + saldoAwal);
+        System.out.println("total Pemasukkan : " + totalPemasukkanBulanIni);
+        System.out.println("total pengeluaran : " + totalPengeluaranBulanIni);
+        saldo.setSaldo(saldoAwal + totalPemasukkanBulanIni - totalPengeluaranBulanIni);
         if(saldoAkhirDao.count("id_resto=" + idResto)==0){
             saldoAkhirDao.insert(saldo);
         } else{
-            saldoAkhirDao.update(saldo, "id_resto=" + idResto);
+            saldoAkhirDao.update(saldo, "id_resto=" + idResto + "AND date_created BETWEEN '" + tahun + "-" + bulan + "-01 00:00:00' AND '" + tahun + "-" + bulan + "-31 23:59:59'");
         }
     }
 
     private List<Ledger> getPengeluaranHarian(int idResto,
-                                              int page){
-        List<Ledger> pengeluaranHarianList = ledgerDao.getKreditHarian(idResto, itemPerPage, page);
+                                              int page) throws SQLException {
+        List<Ledger> pengeluaranHarianList = ledgerDao.getAll("id_resto=" + idResto + " AND tipe='kredit'" + " LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
         return pengeluaranHarianList;
     }
 
-    private int getCountOutcome(int idResto){
-        int countOutcome = ledgerDao.countDebitAtaukredit(idResto, "kredit");
+    private int getCountOutcome(int idResto) throws SQLException {
+        int countOutcome = ledgerDao.count("id_resto=" + idResto);
         return countOutcome;
     }
 

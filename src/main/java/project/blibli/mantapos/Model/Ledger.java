@@ -8,6 +8,16 @@ public class Ledger {
     private String waktu, keperluan, tipe;
     private Timestamp dateCreated;
 
+    public Ledger() {
+    }
+
+    public Ledger(int id_resto, int biaya, String keperluan, String tipe) {
+        this.id_resto = id_resto;
+        this.biaya = biaya;
+        this.keperluan = keperluan;
+        this.tipe = tipe;
+    }
+
     public Timestamp getDateCreated() {
         return dateCreated;
     }

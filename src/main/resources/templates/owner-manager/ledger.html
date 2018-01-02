@@ -69,7 +69,7 @@
                         </tr>
                         <tr>
                             <div th:if="${skala_ledger == 'HARIAN'}">
-                                <th>Tanggal,Jam</th>
+                                <th>Waktu</th>
                             </div>
                             <div th:if="${skala_ledger == 'MINGGUAN'}">
                                 <th>Minggu ke-</th>
@@ -93,7 +93,7 @@
                         <th:block th:each="ledger : ${ledgerList}">
                             <div th:if="${skala_ledger == 'HARIAN'}">
                                 <tr>
-                                    <td th:text="${ledger.waktu}"/>
+                                    <td th:text="${ledger.dateCreated}"/>
                                     <div th:if="${ledger.tipe == 'debit'}">
                                         <td>Penjualan menu</td>
                                     </div>
@@ -173,7 +173,7 @@
                             </div>
                             <div th:if="${skala_ledger == 'CUSTOM'}">
                                 <tr>
-                                    <td th:text="${ledger.waktu}"/>
+                                    <td th:text="${ledger.dateCreated}"/>
                                     <div th:if="${ledger.tipe == 'debit'}">
                                         <td>Penjualan menu</td>
                                     </div>

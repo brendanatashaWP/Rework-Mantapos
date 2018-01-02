@@ -15,7 +15,7 @@ public class MenuYangDipesanDaoImpl implements MenuYangDipesanDao {
     private static final String idOrder = "id_order";
     private static final String idMenu = "id_menu";
     private static final String qty = "quantity";
-    private static final String refTableOrder = "pemasukkan";
+    private static final String refTableOrder = "ledger_harian";
     private static final String refTableMenu = "menu";
 
     @Override

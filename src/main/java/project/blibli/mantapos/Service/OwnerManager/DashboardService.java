@@ -4,9 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Helper.GetIdResto;
-import project.blibli.mantapos.ImplementationDao.LedgerDaoImpl;
-import project.blibli.mantapos.Model.Ledger;
-import project.blibli.mantapos.NewImplementationDao.RestoranDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.LedgerDaoImpl;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -17,7 +15,6 @@ import java.util.List;
 public class DashboardService {
 
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
-    RestoranDaoImpl restoranDao = new RestoranDaoImpl();
 
     public ModelAndView getMappingDashboard(Authentication authentication) throws SQLException {
         ModelAndView mav = new ModelAndView();
@@ -30,19 +27,27 @@ public class DashboardService {
         return mav;
     }
 
-    private int getTotalPengeluaranAllTime(int idResto){
-        int totalPengeluaranAllTime = ledgerDao.getTotalDebitKreditAllTime(idResto, "kredit");
+    private int getTotalPengeluaranAllTime(int idResto) throws SQLException {
+        String condition = "id_resto=" + idResto +
+                " AND tipe='kredit'";
+        int totalPengeluaranAllTime = ledgerDao.getTotal(condition);
         return totalPengeluaranAllTime;
     }
 
-    private int getTotalPemasukkanAllTime(int idResto){
-        int totalPemasukkanAllTime = ledgerDao.getTotalDebitKreditAllTime(idResto, "debit");
+    private int getTotalPemasukkanAllTime(int idResto) throws SQLException {
+        String condition = "id_resto=" + idResto +
+                " AND tipe='debit'";
+        int totalPemasukkanAllTime = ledgerDao.getTotal(condition);
         return totalPemasukkanAllTime;
     }
 
     private List<String> getPemasukkanBulanan(int idResto,
-                                             int year){
-        List<String> ledgerList = ledgerDao.getPenjualanBulananBerdasarkanTahun(idResto, year);
+                                             int year) throws SQLException {
+        String condition="id_resto=" + idResto +
+                " AND EXTRACT(YEAR FROM date_created)=" + year +
+                " AND tipe='debit'" +
+                " GROUP BY EXTRACT(MONTH FROM date_created), tipe ORDER BY EXTRACT(MONTH FROM date_created), tipe ASC";
+        List<String> ledgerList = ledgerDao.getAllBulananUntukDashboard(condition);
         return ledgerList;
     }
 }

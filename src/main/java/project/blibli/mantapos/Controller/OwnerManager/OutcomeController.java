@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Model.Ledger;
+import project.blibli.mantapos.Model.Pengeluaran;
 import project.blibli.mantapos.Service.OwnerManager.OutcomeService;
 
 import java.sql.SQLException;
@@ -29,10 +30,9 @@ public class OutcomeController {
 
     //Jika user menambahkan outcome (pengeluaran baru)
     @PostMapping(value = "/outcome-post", produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView outcomeHtmlPost(@ModelAttribute("ledger") Ledger ledger,
-                                        @RequestParam("quantity") String qty,
+    public ModelAndView outcomeHtmlPost(@ModelAttribute Ledger ledger,
                                         Authentication authentication) throws SQLException {
-        return outcomeService.postMappingOutcome(authentication, ledger, qty);
+        return outcomeService.postMappingOutcome(authentication, ledger);
     }
 
 }

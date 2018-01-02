@@ -4,9 +4,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import project.blibli.mantapos.Helper.GetIdResto;
-import project.blibli.mantapos.ImplementationDao.LedgerDaoImpl;
-import project.blibli.mantapos.ImplementationDao.SaldoDaoImpl;
 import project.blibli.mantapos.Model.Ledger;
+import project.blibli.mantapos.NewImplementationDao.LedgerDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.SaldoAkhirDaoImpl;
+import project.blibli.mantapos.NewImplementationDao.SaldoAwalDaoImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,13 +17,19 @@ import java.util.List;
 public class LedgerService {
 
     LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
-    SaldoDaoImpl saldoDao = new SaldoDaoImpl();
+    SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
+    SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
 
     public ModelAndView getMappingChooseRangeLedger(Authentication authentication) throws SQLException {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("owner-manager/pilih-range-ledger");
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
-        mav.addObject("monthAndYearList", getListBulanDanTahun(idResto));
+        List<Integer> bulanList = new ArrayList<>();
+        for (int i=0; i<12; i++){
+            bulanList.add(i+1);
+        }
+        mav.addObject("bulanList", bulanList);
+//        mav.addObject("monthAndYearList", getListBulanDanTahun(idResto));
         return mav;
     }
 
@@ -48,12 +55,12 @@ public class LedgerService {
                 ledgerList = getLedgerHarianDalamSebulan(idResto, bulanTerpilih, tahunTerpilih);
                 skalaLedgerPassToHtml = "HARIAN";
             } else{
-                ledgerList = getLedgerMingguanDalamSebulan(idResto, bulanTerpilih, tahunTerpilih);
-                skalaLedgerPassToHtml = "MINGGUAN";
+//                ledgerList = getLedgerMingguanDalamSebulan(idResto, bulanTerpilih, tahunTerpilih);
+//                skalaLedgerPassToHtml = "MINGGUAN";
             }
         } else if(skalaLedger.equals("bulanan")){
-            int bulanPalingAwal = getBulanPalingAwalDalamTahunTerpilih(idResto, tahunTerpilih);
-            saldoAwalBulanTerpilih = getSaldoAkhirBulanLaluSebagaiSaldoAwalBulanTerpilih(idResto, bulanPalingAwal, tahunTerpilih);
+            int bulanAwal = getBulanPalingAwalDalamTahun(idResto, tahunTerpilih);
+            saldoAwalBulanTerpilih = getSaldoAkhirBulanLaluSebagaiSaldoAwalBulanTerpilih(idResto, bulanAwal, tahunTerpilih);
             totalDebit = getTotalDebitDalamSetahun(idResto, tahunTerpilih);
             totalKredit = getTotalKreditDalamSetahun(idResto, tahunTerpilih);
             saldoAkhirBulanTerpilih = hitungSaldoAkhirSekarang(saldoAwalBulanTerpilih, totalDebit, totalKredit);
@@ -96,44 +103,55 @@ public class LedgerService {
         return mav;
     }
 
-    private List<Ledger> getListBulanDanTahun(int idResto){
-        List<Ledger> bulanDanTahunList = ledgerDao.getListBulanDanTahun(idResto);
-        return bulanDanTahunList;
-    }
-
     private int getTotalDebitDalamSebulan(int idResto,
                                      int month,
-                                     int year){
-        int totalDebitDalamSebulan = ledgerDao.getTotalDebitKreditDalamSebulan(idResto, month, year, "debit");
+                                     int year) throws SQLException {
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(MONTH FROM date_created)=" + month + " AND EXTRACT(YEAR FROM date_created)=" + year +
+                " AND tipe='debit'";
+        int totalDebitDalamSebulan = ledgerDao.getTotal(condition);
         return totalDebitDalamSebulan;
     }
 
     private int getTotalKreditDalamSebulan(int idResto,
                                       int month,
-                                      int year){
-        int totalKreditDalamSebulan = ledgerDao.getTotalDebitKreditDalamSebulan(idResto, month, year, "kredit");
+                                      int year) throws SQLException {
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(MONTH FROM date_created)=" + month + " AND EXTRACT(YEAR FROM date_created)=" + year +
+                " AND tipe='kredit'";
+        int totalKreditDalamSebulan = ledgerDao.getTotal(condition);
         return totalKreditDalamSebulan;
     }
 
     private int getTotalDebitDalamSetahun(int idResto,
-                                          int year){
-        int totalDebitDalamSetahun = ledgerDao.getTotalDebitKreditDalamSetahun(idResto, year, "debit");
+                                          int year) throws SQLException {
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(YEAR FROM date_created)=" + year +
+                " AND tipe='debit'";
+        int totalDebitDalamSetahun = ledgerDao.getTotal(condition);
         return totalDebitDalamSetahun;
     }
 
     private int getTotalKreditDalamSetahun(int idResto,
-                                           int year){
-        int totalKreditDalamSetahun = ledgerDao.getTotalDebitKreditDalamSetahun(idResto, year, "kredit");
+                                           int year) throws SQLException {
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(YEAR FROM date_created)=" + year +
+                " AND tipe='kredit'";
+        int totalKreditDalamSetahun = ledgerDao.getTotal(condition);
         return totalKreditDalamSetahun;
     }
 
-    private int getTotalDebitDariAwalBanget(int idResto){
-        int totalDebit = ledgerDao.getTotalDebitKreditAllTime(idResto, "debit");
+    private int getTotalDebitDariAwalBanget(int idResto) throws SQLException {
+        String condition="id_resto=" + idResto +
+                " AND tipe='debit'";
+        int totalDebit = ledgerDao.getTotal(condition);
         return totalDebit;
     }
 
-    private int getTotalKreditDariAwalBanget(int idResto){
-        int totalKredit = ledgerDao.getTotalDebitKreditAllTime(idResto, "kredit");
+    private int getTotalKreditDariAwalBanget(int idResto) throws SQLException {
+        String condition="id_resto=" + idResto +
+                " AND tipe='kredit'";
+        int totalKredit = ledgerDao.getTotal(condition);
         return totalKredit;
     }
 
@@ -143,8 +161,13 @@ public class LedgerService {
                                     int tahunAwal,
                                     int tanggalAkhir,
                                     int bulanAkhir,
-                                    int tahunAkhir){
-        int totalDebitCustom = ledgerDao.getTotalDebitKreditCustom(idResto, tanggalAwal, bulanAwal, tahunAwal, tanggalAkhir, bulanAkhir, tahunAkhir, "debit");
+                                    int tahunAkhir) throws SQLException {
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(DAY FROM date_created) BETWEEN " + tanggalAwal + " AND " + tanggalAkhir +
+                " AND EXTRACT(MONTH FROM date_created) BETWEEN " + bulanAwal + " AND " + bulanAkhir +
+                " AND EXTRACT(YEAR FROM date_created) BETWEEN " + tahunAwal + " AND " + tahunAkhir +
+                " AND tipe='debit'";
+        int totalDebitCustom = ledgerDao.getTotal(condition);
         return totalDebitCustom;
     }
 
@@ -154,57 +177,72 @@ public class LedgerService {
                                      int tahunAwal,
                                      int tanggalAkhir,
                                      int bulanAkhir,
-                                     int tahunAkhir){
-        int totalKreditCustom = ledgerDao.getTotalDebitKreditCustom(idResto, tanggalAwal, bulanAwal, tahunAwal, tanggalAkhir, bulanAkhir, tahunAkhir, "kredit");
+                                     int tahunAkhir) throws SQLException {
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(DAY FROM date_created) BETWEEN " + tanggalAwal + " AND " + tanggalAkhir +
+                " AND EXTRACT(MONTH FROM date_created) BETWEEN " + bulanAwal + " AND " + bulanAkhir +
+                " AND EXTRACT(YEAR FROM date_created) BETWEEN " + tahunAwal + " AND " + tahunAkhir +
+                " AND tipe='kredit'";
+        int totalKreditCustom = ledgerDao.getTotal(condition);
         return totalKreditCustom;
     }
 
-    private int getSaldoAwalBanget(int idResto){
-        int saldoAwalBanget = saldoDao.getSaldoAwal(idResto);
+    private int getSaldoAwalBanget(int idResto) throws SQLException {
+        int saldoAwalBanget = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
         return saldoAwalBanget;
     }
 
     private int getSaldoAkhirBulanLaluSebagaiSaldoAwalBulanTerpilih(int idResto,
                                                                     int bulanTerpilih,
-                                                                    int tahunTerpilih){
-        int bulanLalu=0, saldoAkhirBulanLalu;
+                                                                    int tahunTerpilih) throws SQLException {
+        int saldoAwal;
         if(bulanTerpilih==1){
-            //jika bulan yg dipilih adalah januari, berarti bulan lalu adalah bulan desember tahun sebelumnya
-            bulanLalu=12;
-            tahunTerpilih=tahunTerpilih-1;
-        } else{
-            bulanLalu=bulanTerpilih-1;
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto +
+                        " AND EXTRACT(MONTH FROM date_created)=12" +
+                        " AND EXTRACT(YEAR FROM date_created)=" + (tahunTerpilih-1)).getSaldo();
+        } else {
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto +
+                    " AND EXTRACT(MONTH FROM date_created)=" + (bulanTerpilih-1) +
+                    " AND EXTRACT(YEAR FROM date_created)=" + tahunTerpilih).getSaldo();
         }
-        saldoAkhirBulanLalu = saldoDao.getSaldoAkhir(idResto, bulanLalu, tahunTerpilih);
-        if(saldoAkhirBulanLalu==0){
-            //jika saldo akhir bulan lalu gak ada nilainya, artinya bulan yang terpilih sekarang adalah satu2nya bulan di database
-            saldoAkhirBulanLalu = getSaldoAwalBanget(idResto);
+        //TODO : Lha kalau memang saldo bulan lalunya 0 piye? masa trus diputuskan harus pakai saldo awal?
+        if(saldoAwal==0){
+            saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
         }
-        return saldoAkhirBulanLalu;
+        return saldoAwal;
     }
 
     private List<Ledger> getLedgerHarianDalamSebulan(int idResto,
                                          int bulanTerpilih,
-                                         int tahunTerpilih){
-        List<Ledger> ledgerList = ledgerDao.getLedgerHarian(idResto, bulanTerpilih, tahunTerpilih);
+                                         int tahunTerpilih) throws SQLException {
+//        String condition="id_resto=" + idResto +
+//                " AND date_created BETWEEN '" + tahunTerpilih + "-" + bulanTerpilih + "-01 00:00:00' AND '" + tahunTerpilih + "-" + bulanTerpilih + "-31 23:59:59'";
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(MONTH FROM date_created)=" + bulanTerpilih + " AND EXTRACT(YEAR FROM date_created)=" + tahunTerpilih;
+        List<Ledger> ledgerList = ledgerDao.getAll(condition);
         return ledgerList;
     }
 
     private List<Ledger> getLedgerMingguanDalamSebulan(int idResto,
                                                        int bulanTerpilih,
                                                        int tahunTerpilih){
-        List<Ledger> ledgerList = ledgerDao.getLedgerMingguan(idResto, bulanTerpilih, tahunTerpilih);
-        return ledgerList;
+//        List<Ledger> ledgerList = ledgerDao.getLedgerMingguan(idResto, bulanTerpilih, tahunTerpilih);
+        return null;
     }
 
     private List<Ledger> getLedgerBulananDalamSetahun(int idResto,
-                                          int tahunTerpilih){
-        List<Ledger> ledgerList = ledgerDao.getLedgerBulanan(idResto, tahunTerpilih);
+                                          int tahunTerpilih) throws SQLException {
+        String condition="id_resto=" + idResto +
+                " AND EXTRACT(YEAR FROM date_created)=" + tahunTerpilih +
+                " GROUP BY EXTRACT(MONTH FROM date_created), tipe ORDER BY EXTRACT(MONTH FROM date_created), tipe ASC";
+        List<Ledger> ledgerList = ledgerDao.getAllBulanan(condition);
         return ledgerList;
     }
 
-    private List<Ledger> getLedgerTahunan(int idResto){
-        List<Ledger> ledgerList = ledgerDao.getLedgerTahunan(idResto);
+    private List<Ledger> getLedgerTahunan(int idResto) throws SQLException {
+        String condition="id_resto=" + idResto +
+                " GROUP BY EXTRACT(YEAR FROM date_created), tipe ORDER BY EXTRACT(YEAR FROM date_created), tipe ASC";
+        List<Ledger> ledgerList = ledgerDao.getAllTahunan(condition);
         return ledgerList;
     }
 
@@ -214,8 +252,12 @@ public class LedgerService {
                                               int tahunAwal,
                                               int tanggalAkhir,
                                               int bulanAkhir,
-                                              int tahunAkhir){
-        List<Ledger> ledgerList = ledgerDao.getLedgerCustom(idResto, tanggalAwal, bulanAwal, tahunAwal, tanggalAkhir, bulanAkhir, tahunAkhir);
+                                              int tahunAkhir) throws SQLException {
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(DAY FROM date_created) BETWEEN " + tanggalAwal + " AND " + tanggalAkhir +
+                " AND EXTRACT(MONTH FROM date_created) BETWEEN " + bulanAwal + " AND " + bulanAkhir +
+                " AND EXTRACT(YEAR FROM date_created) BETWEEN " + tahunAwal + " AND " + tahunAkhir;
+        List<Ledger> ledgerList = ledgerDao.getAll(condition);
         return ledgerList;
     }
 
@@ -232,10 +274,13 @@ public class LedgerService {
         return mutasi;
     }
 
-    private int getBulanPalingAwalDalamTahunTerpilih(int idResto,
-                                                   int yearTerpilih){
-        int bulanTerkecil = saldoDao.getMinMonthInYear(idResto, yearTerpilih);
-        return bulanTerkecil;
+    private int getBulanPalingAwalDalamTahun(int idResto,
+                                             int yearTerpilih) throws SQLException {
+        String condition="id_resto=" + idResto +
+                " AND EXTRACT(YEAR FROM date_created)=" + yearTerpilih;
+        int bulanAwal = saldoAkhirDao.getBulanAwal(condition);
+        System.out.println("Bulan awal : " + bulanAwal);
+        return bulanAwal;
     }
 
 }

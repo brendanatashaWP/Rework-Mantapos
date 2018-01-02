@@ -34,12 +34,12 @@
                                 Harian
                             </label>
                         </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="Skala" value="mingguan" th:onclick="'javascript:chooseLedgerRange(\'0\');'"/>
-                                Mingguan
-                            </label>
-                        </div>
+                        <!--<div class="radio">-->
+                            <!--<label>-->
+                                <!--<input type="radio" name="Skala" value="mingguan" th:onclick="'javascript:chooseLedgerRange(\'0\');'"/>-->
+                                <!--Mingguan-->
+                            <!--</label>-->
+                        <!--</div>-->
                         <div class="radio">
                             <label>
                                 <input type="radio" name="Skala" value="bulanan" th:onclick="'javascript:chooseLedgerRange(\'1\');'"/>
@@ -66,16 +66,24 @@
                             Akhir:<br/>
                             <input class="form-control" type="date" name="ledger_custom_akhir"/><br/>
                         </div>
+                        <!--<select name="month" id="monthselector" class="form-control">-->
+                            <!--<th:block th:each="item : ${monthAndYearList}">-->
+                                <!--<option th:value="${item.month}" th:text="${item.keperluan}"/>-->
+                            <!--</th:block>-->
+                        <!--</select>-->
                         <select name="month" id="monthselector" class="form-control">
-                            <th:block th:each="item : ${monthAndYearList}">
-                                <option th:value="${item.month}" th:text="${item.keperluan}"/>
+                            <th:block th:each="item : ${bulanList}">
+                                <option th:value="${item}" th:text="'Bulan ke-' + ${item}"/>
                             </th:block>
                         </select>
                         <select name="year" id="yearselector" class="form-control">
-                            <th:block th:each="item : ${monthAndYearList}">
-                                <option th:value="${item.year}" th:text="${item.year}"/>
-                            </th:block>
+                            <option th:value="2018" th:text="'Tahun 2018'"/>
                         </select>
+                        <!--<select name="year" id="yearselector" class="form-control">-->
+                            <!--<th:block th:each="item : ${monthAndYearList}">-->
+                                <!--<option th:value="${item.year}" th:text="${item.year}"/>-->
+                            <!--</th:block>-->
+                        <!--</select>-->
                             <button class="form-control btn btn-primary" type="submit">OK</button>
                     </form>
                 </div>
