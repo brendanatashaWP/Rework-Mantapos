@@ -178,8 +178,8 @@ div.scroll.menu{
 }
 
 #btnLogOut{
-    color: whitesmoke;
-    float: right !important;
+    /*color: whitesmoke;
+    float: right !important;*/
     font-family: Helvetica, serif;
     /*position: right !important;*/
 }

@@ -38,6 +38,7 @@ public class MenuService {
             pageList.add(i);
         }
         mav.addObject("pageList", pageList);
+        mav.addObject("username", authentication.getName());
         return mav;
     }
 

@@ -9,8 +9,11 @@
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rouge+Script"/>
 </head>
-<body>
+<body th:onload="'javascript:rename()'">
 <div th:replace="fragments/navbar-top-manager :: header"/>
+
+<span id="usernamee" style="display:none" th:text="${username}"></span>
+
 <div class="container" style="margin-top: 50px;">
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -99,5 +102,6 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/header.js/"></script>
 </body>
 </html>

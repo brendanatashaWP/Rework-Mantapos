@@ -24,6 +24,7 @@ public class DashboardService {
         mav.addObject("dummyList", dummyLedgerList);
         mav.addObject("total_pengeluaran", getTotalPengeluaranAllTime(idResto));
         mav.addObject("total_pemasukkan", getTotalPemasukkanAllTime(idResto));
+        mav.addObject("username", authentication.getName());
         return mav;
     }
 

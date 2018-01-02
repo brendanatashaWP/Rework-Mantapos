@@ -30,6 +30,7 @@ public class SaldoService {
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
         mav.addObject("saldoAwalList", getSaldoAwalWithBulanTahunAndPagination(idResto, page));
         mav.setViewName("owner-manager/saldo-awal");
+        mav.addObject("username", authentication.getName());
         return mav;
     }
 

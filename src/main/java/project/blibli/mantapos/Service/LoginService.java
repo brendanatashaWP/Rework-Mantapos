@@ -3,10 +3,14 @@ package project.blibli.mantapos.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
+import project.blibli.mantapos.Model.User;
+import project.blibli.mantapos.NewImplementationDao.UserDaoImpl;
+
+import java.sql.SQLException;
 
 @Service
 public class LoginService {
-
+    UserDaoImpl userDao = new UserDaoImpl();
     public ModelAndView getMappingLogin(String error,
                                         String logout){
         ModelAndView mav = new ModelAndView();
@@ -24,8 +28,9 @@ public class LoginService {
         ModelAndView mav = new ModelAndView();
         if(authentication.getAuthorities().toString().equals("[cashier]"))
             mav.setViewName("redirect:/cashier");
-        else if(authentication.getAuthorities().toString().equals("[manager]") || authentication.getAuthorities().toString().equals("[owner]"))
+        else if(authentication.getAuthorities().toString().equals("[manager]") || authentication.getAuthorities().toString().equals("[owner]")){
             mav.setViewName("redirect:/dashboard");
+        }
         else
             mav.setViewName("redirect:/restaurant");
         return mav;

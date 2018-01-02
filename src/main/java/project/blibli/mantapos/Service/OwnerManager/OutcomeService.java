@@ -40,6 +40,7 @@ public class OutcomeService {
         mav.addObject("outcomeList", getPengeluaranHarian(idResto, page));
         mav.addObject("pageNo", page);
         mav.addObject("pageList", pageList);
+        mav.addObject("username", authentication.getName());
         return mav;
     }
 
