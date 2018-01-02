@@ -52,18 +52,18 @@
                                 </td>
                                 <td th:text="${menu.kategori_menu}"/>
                                 <td><i class="fa fa-pencil text-primary"></i><a
-                                        th:href="@{/edit/menu/{id}(id=${menu.id})}">Edit</a></td>
+                                        th:href="@{/edit/menu/(id=${menu.id})}">Edit</a></td>
                                 <td><i class="fa fa-trash text-primary"></i><a
-                                        th:href="@{/delete/menu/{id}(id=${menu.id})}">Delete</a></td>
+                                        th:href="@{/delete/menu/(id=${menu.id})}">Delete</a></td>
                             </tr>
                         </th:block>
                         </tbody>
                     </table>
                     <ul class="pagination">
                         <th:block th:each="page : ${pageList}">
-                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/menu/{page}(page=${page})}"
+                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/menu/(page=${page})}"
                                                                                th:text="${page}"></a></li>
-                            <li th:if="${page} != ${pageNo}"><a th:href="@{/menu/{page}(page=${page})}"
+                            <li th:if="${page} != ${pageNo}"><a th:href="@{/menu/(page=${page})}"
                                                                 th:text="${page}"></a></li>
                             <!--<li th:unless="${page} != ${pageNo}"><a th:href="@{/menu/{page}(page=${page})}" th:text="${page}"></a></li>-->
                         </th:block>

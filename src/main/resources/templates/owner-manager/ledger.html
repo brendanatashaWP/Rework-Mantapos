@@ -9,35 +9,6 @@
 </head>
 <body>
 <div th:replace="fragments/navbar-top-manager :: header"/>
-<!--<nav class="navbar navbar-fixed-top">-->
-    <!--<div class="container-fluid">-->
-        <!--<div class="navbar-header">-->
-            <!--<a class="navbar-brand" href="#">mantapos</a>-->
-        <!--</div>-->
-        <!--<ul class="nav navbar-nav">-->
-            <!--<li><a href="/dashboard">Dashboard</a></li>-->
-            <!--<li><a href="/menu">Menu</a></li>-->
-            <!--<li><a href="#">Discount</a></li>-->
-            <!--<li><a href="/employee">Employee</a></li>-->
-            <!--<li><a href="/saldo">Saldo</a></li>-->
-            <!--<li class="dropdown">-->
-                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">Keuangan-->
-                    <!--<span class="caret"></span></a>-->
-                <!--<ul class="dropdown-menu">-->
-                    <!--<li><a href="/outcome">Outcome</a></li>-->
-                    <!--<li><a href="/range">General Ledger</a></li>-->
-                <!--</ul>-->
-            <!--</li>-->
-        <!--</ul>-->
-        <!--<div class="navbar-header navbar-right">-->
-            <!--<form action="/logout" method="post" id="logoutForm">-->
-                <!--<input type="hidden" name="${_csrf.parameterName}"-->
-                       <!--value="${_csrf.token}" />-->
-                <!--<a onclick="document.getElementById('logoutForm').submit()" href="#" id="#btnLogOut" class="navbar-brand"><span class="glyphicon glyphicon-log-out"></span> Logout</a>-->
-            <!--</form>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</nav>-->
 <div class="container" style="margin-top: 50px;">
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -69,16 +40,16 @@
                         </tr>
                         <tr>
                             <div th:if="${skala_ledger == 'HARIAN'}">
-                                <th>Tanggal,Jam</th>
-                            </div>
-                            <div th:if="${skala_ledger == 'MINGGUAN'}">
-                                <th>Minggu ke-</th>
+                                <th>Waktu</th>
                             </div>
                             <div th:if="${skala_ledger == 'BULANAN'}">
                                 <th>Bulan ke-</th>
                             </div>
+                            <div th:if="${skala_ledger == 'TAHUNAN'}">
+                                <th>Tahun</th>
+                            </div>
                             <div th:if="${skala_ledger == 'CUSTOM'}">
-                                <th>Tanggal</th>
+                                <th>Waktu</th>
                             </div>
                             <th>Keperluan</th>
                             <th></th>
@@ -90,32 +61,12 @@
                         <th:block th:each="ledger : ${ledgerList}">
                             <div th:if="${skala_ledger == 'HARIAN'}">
                                 <tr>
-                                    <td th:text="${ledger.waktu}"/>
+                                    <td th:text="${ledger.dateCreated}"/>
                                     <div th:if="${ledger.tipe == 'debit'}">
                                         <td>Penjualan menu</td>
                                     </div>
                                     <div th:if="${ledger.tipe == 'kredit'}">
                                         <td th:text="${ledger.keperluan}"/>
-                                    </div>
-                                    <td></td>
-                                    <div th:if="${ledger.tipe == 'debit'}">
-                                        <td th:text="${ledger.biaya}"/>
-                                        <td></td>
-                                    </div>
-                                    <div th:if="${ledger.tipe == 'kredit'}">
-                                        <td></td>
-                                        <td th:text="${ledger.biaya}"/>
-                                    </div>
-                                </tr>
-                            </div>
-                            <div th:if="${skala_ledger == 'MINGGUAN'}">
-                                <tr>
-                                    <td th:text="${ledger.week}"/>
-                                    <div th:if="${ledger.tipe == 'debit'}">
-                                        <td>Pemasukkan</td>
-                                    </div>
-                                    <div th:if="${ledger.tipe == 'kredit'}">
-                                        <td>Pengeluaran</td>
                                     </div>
                                     <td></td>
                                     <div th:if="${ledger.tipe == 'debit'}">
@@ -148,9 +99,29 @@
                                     </div>
                                 </tr>
                             </div>
+                            <div th:if="${skala_ledger == 'TAHUNAN'}">
+                                <tr>
+                                    <td th:text="${ledger.year}"/>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td>Pemasukkan</td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td>Pengeluaran</td>
+                                    </div>
+                                    <td></td>
+                                    <div th:if="${ledger.tipe == 'debit'}">
+                                        <td th:text="${ledger.biaya}"/>
+                                        <td></td>
+                                    </div>
+                                    <div th:if="${ledger.tipe == 'kredit'}">
+                                        <td></td>
+                                        <td th:text="${ledger.biaya}"/>
+                                    </div>
+                                </tr>
+                            </div>
                             <div th:if="${skala_ledger == 'CUSTOM'}">
                                 <tr>
-                                    <td th:text="${ledger.waktu}"/>
+                                    <td th:text="${ledger.dateCreated}"/>
                                     <div th:if="${ledger.tipe == 'debit'}">
                                         <td>Penjualan menu</td>
                                     </div>

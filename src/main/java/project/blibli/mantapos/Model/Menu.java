@@ -7,12 +7,23 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class Menu {
-    private int id;
+    private int id, idResto;
     private String nama_menu;
     private String lokasi_gambar_menu;
     private String kategori_menu;
     private int harga_menu;
     private MultipartFile multipartFile;
+
+    public Menu() {
+    }
+
+    public Menu(int idResto, String nama_menu, String lokasi_gambar_menu, String kategori_menu, int harga_menu) {
+        this.idResto = idResto;
+        this.nama_menu = nama_menu;
+        this.lokasi_gambar_menu = lokasi_gambar_menu;
+        this.kategori_menu = kategori_menu;
+        this.harga_menu = harga_menu;
+    }
 
     public MultipartFile getMultipartFile() {
         return multipartFile;
@@ -28,6 +39,14 @@ public class Menu {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdResto() {
+        return idResto;
+    }
+
+    public void setIdResto(int idResto) {
+        this.idResto = idResto;
     }
 
     public String getNama_menu() {

@@ -40,7 +40,7 @@
                         <tbody>
                         <th:block th:each="outcome:${outcomeList}">
                             <tr>
-                                <td th:text="${outcome.waktu}"/>
+                                <td th:text="${outcome.dateCreated}"/>
                                 <td th:text="${outcome.keperluan}"/>
                                 <td th:text="${outcome.biaya}"/>
                             </tr>
@@ -49,8 +49,8 @@
                     </table>
                     <ul class="pagination">
                         <th:block th:each="page : ${pageList}">
-                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/outcome/{page}(page=${page})}" th:text="${page}"></a></li>
-                            <li th:if="${page} != ${pageNo}"><a th:href="@{/outcome/{page}(page=${page})}" th:text="${page}"></a></li>
+                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/outcome/(page=${page})}" th:text="${page}"></a></li>
+                            <li th:if="${page} != ${pageNo}"><a th:href="@{/outcome/(page=${page})}" th:text="${page}"></a></li>
                         </th:block>
                     </ul>
                 </div>
@@ -70,11 +70,6 @@
                 </div>
                 <div class="box-body">
                     <form action="/outcome-post" method="post" class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-calendar" /></span>
-                            <input class="form-control" type="date" name="waktu" placeholder="Waktu Pengeluaran Dilakukan"/><br/>
-                        </div>
-                        <br/>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-shopping-basket" /></span>
                             <input class="form-control" type="text" name="keperluan" placeholder="Keperluan pengeluaran"/><br/>

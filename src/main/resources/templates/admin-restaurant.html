@@ -53,10 +53,10 @@
                                 <td th:text="${item.nomorTelepon}"/>
                                 <td th:text="${item.alamat}"/>
                                 <div th:if="${item.enabled == true}">
-                                    <td><a th:href="@{/delete/user/{id}(id=${item.id})}">Nonaktifkan</a></td>
+                                    <td><a th:href="@{/delete/user/(id=${item.idUser})}">Nonaktifkan</a></td>
                                 </div>
                                 <div th:if="${item.enabled == false}">
-                                    <td><a th:href="@{/active/user/{id}(id=${item.id})}">Aktifkan</a></td>
+                                    <td><a th:href="@{/active/user/(id=${item.idUser})}">Aktifkan</a></td>
                                 </div>
                             </tr>
                         </th:block>
@@ -64,8 +64,8 @@
                     </table>
                     <ul class="pagination">
                         <th:block th:each="page : ${pageList}">
-                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/restaurant/{page}(page=${page})}" th:text="${page}"></a></li>
-                            <li th:if="${page} != ${pageNo}"><a th:href="@{/restaurant/{page}(page=${page})}" th:text="${page}"></a></li>
+                            <li th:if="${page} == ${pageNo}" class="active"><a th:href="@{/restaurant/(page=${page})}" th:text="${page}"></a></li>
+                            <li th:if="${page} != ${pageNo}"><a th:href="@{/restaurant/(page=${page})}" th:text="${page}"></a></li>
                             <!--<li th:unless="${page} != ${pageNo}"><a th:href="@{/menu/{page}(page=${page})}" th:text="${page}"></a></li>-->
                         </th:block>
                     </ul>
