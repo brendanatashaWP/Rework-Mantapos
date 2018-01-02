@@ -42,6 +42,7 @@ public class EmployeeService {
         mav.addObject("pageList", pageList);
         mav.addObject("userList", userList);
         mav.addObject("role", role);
+        mav.addObject("username", authentication.getName());
         return mav;
     }
 

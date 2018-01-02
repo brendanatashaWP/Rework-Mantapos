@@ -30,6 +30,7 @@ public class LedgerService {
         }
         mav.addObject("bulanList", bulanList);
 //        mav.addObject("monthAndYearList", getListBulanDanTahun(idResto));
+        mav.addObject("username", authentication.getName());
         return mav;
     }
 

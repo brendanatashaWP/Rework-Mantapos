@@ -32,13 +32,20 @@
                     </ul>
                 </li>
             </ul>
-            <div class="navbar-header navbar-right">
-                <form action="/logout" method="post" id="logoutForm">
-                    <input type="hidden" name="${_csrf.parameterName}"
-                           value="${_csrf.token}" />
-                    <a onclick="document.getElementById('logoutForm').submit()" href="#" id="#btnLogOut" class="navbar-brand"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
-                </form>
+            <div class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a id="usernamee2" class="dropdown-toggle" data-toggle="dropdown" href="#" th:text="${username}"/>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a onclick="document.getElementById('logoutForm').submit()" href="#" id="#btnLogOut"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                        </li>
+                    </ul>
+                </li>
             </div>
+            <form action="/logout" method="post" id="logoutForm" >
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}" />
+            </form>
         </div>
     </nav>
 </div>
