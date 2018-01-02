@@ -1,7 +1,10 @@
 package project.blibli.mantapos.NewImplementationDao;
 
+import org.springframework.stereotype.Component;
+
 import java.sql.*;
 
+@Component
 public class DbConnection {
     private static Connection connection;
 

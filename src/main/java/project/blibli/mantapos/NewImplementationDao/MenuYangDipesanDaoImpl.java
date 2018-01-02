@@ -1,5 +1,6 @@
 package project.blibli.mantapos.NewImplementationDao;
 
+import project.blibli.mantapos.Model.OrderedMenu;
 import project.blibli.mantapos.NewInterfaceDao.MenuYangDipesanDao;
 
 import java.sql.Connection;
@@ -18,87 +19,72 @@ public class MenuYangDipesanDaoImpl implements MenuYangDipesanDao {
 
     @Override
     public void createTable() throws SQLException {
-        Connection connection;
-        PreparedStatement preparedStatement = null;
-        connection = DbConnection.openConnection();
-        try{
-            preparedStatement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS " + tableMenuYangDipesan +
-                            "(" +
-                            idOrder + " INT NOT NULL, " +
-                            idMenu + " INT NOT NULL, " +
-                            qty + " INT NOT NULL, " +
-                            "CONSTRAINT id_order_fk FOREIGN KEY (" + idOrder + ") REFERENCES " + refTableOrder + "(id)," +
-                            "CONSTRAINT id_menu_fk FOREIGN KEY (" + idMenu + ") REFERENCES " + refTableMenu + "(id))"
-            );
-            preparedStatement.executeUpdate();
-        } catch (Exception ex){
-            System.out.println("Gagal create table " + tableMenuYangDipesan + " : " + ex.toString());
-        } finally {
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
-    }
-
-    //Di-replace dengan insertMenuYangDipesan karena parameter yang dibutuhkan adalah idOrder, idMenu, dan qty
-    @Override
-    public void insert(Void modelData, Integer idResto) {
-
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS " + tableMenuYangDipesan +
+                        "(" +
+                        idOrder + " INT NOT NULL, " +
+                        idMenu + " INT NOT NULL, " +
+                        qty + " INT NOT NULL, " +
+                        "CONSTRAINT id_order_fk FOREIGN KEY (" + idOrder + ") REFERENCES " + refTableOrder + "(id)," +
+                        "CONSTRAINT id_menu_fk FOREIGN KEY (" + idMenu + ") REFERENCES " + refTableMenu + "(id_menu))"
+        );
+        preparedStatement.executeUpdate();
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
     }
 
     @Override
-    public List<Void> readAll(Integer idResto, Integer itemPerPage, Integer page) {
+    public void insert(OrderedMenu modelData) throws SQLException {
+        Connection connection = DbConnection.openConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "INSERT INTO " + tableMenuYangDipesan +
+                        "(" +
+                        this.idOrder + "," +
+                        this.idMenu + "," +
+                        this.qty + ")" +
+                        " VALUES (?,?,?)"
+        );
+        preparedStatement.setInt(1, modelData.getIdOrder());
+        preparedStatement.setInt(2, modelData.getIdMenu());
+        preparedStatement.setInt(3, modelData.getQty());
+        preparedStatement.executeUpdate();
+        DbConnection.closePreparedStatement(preparedStatement);
+        DbConnection.closeConnection(connection);
+    }
+
+    @Override
+    public List<OrderedMenu> getAll(String condition) throws SQLException {
         return null;
     }
 
     @Override
-    public Void readOne(Integer idData) {
+    public OrderedMenu getOne(String condition) throws SQLException {
         return null;
     }
 
     @Override
-    public int getLastId(Integer idResto) {
+    public int getId(String condition) throws SQLException {
         return 0;
     }
 
     @Override
-    public void update(Void modelData, Integer idResto) {
-
-    }
-
-    @Override
-    public void delete(Integer idData) {
-
-    }
-
-    @Override
-    public int count(Integer idResto) {
+    public int count(String condition) throws SQLException {
         return 0;
     }
 
     @Override
-    public void insertMenuYangDipesan(int idOrder, int idMenu, int qty) {
-        Connection connection;
-        PreparedStatement preparedStatement = null;
-        connection = DbConnection.openConnection();
-        try{
-            preparedStatement = connection.prepareStatement(
-                    "INSERT INTO " + tableMenuYangDipesan +
-                            "(" +
-                            this.idOrder + "," +
-                            this.idMenu + "," +
-                            this.qty + ")" +
-                            " VALUES (?,?,?)"
-            );
-            preparedStatement.setInt(1, idOrder);
-            preparedStatement.setInt(2, idMenu);
-            preparedStatement.setInt(3, qty);
-            preparedStatement.executeUpdate();
-        } catch (Exception ex){
-            System.out.println("Gagal insert menu yang dipesan : " +  ex.toString());
-        } finally {
-            DbConnection.closePreparedStatement(preparedStatement);
-            DbConnection.closeConnection(connection);
-        }
+    public void update(OrderedMenu modelData, String condition) throws SQLException {
+
+    }
+
+    @Override
+    public void deactivate(String condition) throws SQLException {
+
+    }
+
+    @Override
+    public void activate(String condition) throws SQLException {
+
     }
 }

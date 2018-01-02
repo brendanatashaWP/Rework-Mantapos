@@ -1,14 +1,15 @@
 package project.blibli.mantapos.NewInterfaceDao;
 
 import project.blibli.mantapos.Model.User;
-import project.blibli.mantapos.NewImplementationDao.BasicDao;
 
-import java.util.List;
+import java.sql.SQLException;
 
-public interface UserDao extends BasicDao<User, Integer, Integer, Integer, Integer> {
-    void createRoleUser();
-    void deleteUserAndDependencies(int idResto);
-    void activateUser(int id);
-    List<User> readAllUsers(int idResto, String role, int itemPerPage, int page);
-    int getId(String username);
+public interface UserDao extends DaoInterface<User, String> {
+
+    void createRoleUsers() throws SQLException;
+    void createTableUsersRole() throws SQLException;
+    void insertTableUsersRole(User modelData) throws SQLException;
+    void updateUserWithoutNewPassword(User modelData, String condition) throws SQLException;
+    void updateTableUsersRole(User modelData, String condition) throws SQLException;
+
 }

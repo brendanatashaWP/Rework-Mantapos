@@ -1,12 +1,9 @@
 package project.blibli.mantapos.NewInterfaceDao;
 
 import project.blibli.mantapos.Model.Restoran;
-import project.blibli.mantapos.NewImplementationDao.BasicDao;
 
-import java.util.List;
+import java.sql.SQLException;
 
-public interface RestoranDao extends BasicDao<Restoran, Integer, Integer, Integer, Integer> {
-    int readIdResto(String usernameUser);
-    List<Restoran> readAllRestoran(String role);
-    int countRestoran();
+public interface RestoranDao extends DaoInterface<Restoran, String> {
+    int getIdBerdasarkanUsernameUser(String condition) throws SQLException;
 }
