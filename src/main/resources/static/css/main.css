@@ -285,3 +285,8 @@ nav .navbar-nav li a:focus{
     float: right;
     width: 100%;
 }
+
+.new-hover:hover{
+    color:blue !important;
+
+}
