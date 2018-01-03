@@ -11,9 +11,9 @@ public class DbConnection {
     public static Connection openConnection(){
         try{
             connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:1414/MantaposDatabase",
+                    "jdbc:postgresql://localhost:5432/Mantapos_2",
                     "postgres",
-                    "postgres"
+                    "abcdefghijk"
             );
             System.out.println("DB Connection opened successfully!");
         } catch (Exception ex){
