@@ -99,7 +99,7 @@ public class LedgerDaoImpl implements LedgerDao {
         preparedStatement.setInt(1, modelData.getId_resto());
         preparedStatement.setString(2, modelData.getTipe());
         preparedStatement.setInt(3, modelData.getBiaya());
-        preparedStatement.setString(4, modelData.getKeperluan());
+        preparedStatement.setString(4, modelData.getKeperluan() + "(" + modelData.getQuantity() + ")");
         preparedStatement.executeUpdate();
         DbConnection.closePreparedStatement(preparedStatement);
         DbConnection.closeConnection(connection);

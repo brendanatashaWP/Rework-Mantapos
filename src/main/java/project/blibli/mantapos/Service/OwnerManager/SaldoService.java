@@ -9,8 +9,6 @@ import project.blibli.mantapos.NewImplementationDao.SaldoAkhirDaoImpl;
 import project.blibli.mantapos.NewImplementationDao.SaldoAwalDaoImpl;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,15 +18,10 @@ public class SaldoService {
     SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
     int itemPerPage=5;
 
-    public ModelAndView getMappingSaldoAwal(Authentication authentication,
-                                            Integer page) throws SQLException {
+    public ModelAndView getMappingSaldoAwal(Authentication authentication) throws SQLException {
         ModelAndView mav = new ModelAndView();
-        if (page == null){
-            page = 1;
-        }
-        mav.addObject("pageNo", page);
         int idResto = GetIdResto.getIdRestoBasedOnUsernameTerkait(authentication.getName());
-        mav.addObject("saldoAwalList", getSaldoAwalWithBulanTahunAndPagination(idResto, page));
+        mav.addObject("saldoAwal", getSaldoAwal(idResto));
         mav.setViewName("owner-manager/saldo-awal");
         mav.addObject("username", authentication.getName());
         return mav;
@@ -55,10 +48,9 @@ public class SaldoService {
         return saldoAwal;
     }
 
-    private List<Saldo> getSaldoAwalWithBulanTahunAndPagination(int idResto,
-                                                               int page) throws SQLException {
-        List<Saldo> saldoList = saldoAwalDao.getAll("id_resto=" + idResto + " LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
-        return saldoList;
+    private Saldo getSaldoAwal(int idResto) throws SQLException {
+        Saldo saldo = saldoAwalDao.getOne("id_resto=" + idResto);
+        return saldo;
     }
 
 }

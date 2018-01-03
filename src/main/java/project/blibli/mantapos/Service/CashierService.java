@@ -50,6 +50,7 @@ public class CashierService {
                                            String namaResto,
                                            String namaCustomer,
                                            Authentication authentication,
+                                           String notes,
                                            TemplateEngine templateEngine,
                                            Mail mail) throws SQLException {
         ModelAndView mav = new ModelAndView();
@@ -63,7 +64,7 @@ public class CashierService {
         updateSaldoAkhir(idResto);
         insertDetailMenuYangDipesan(getLastIdOrder(idResto), arrayIdMenu, arrayQtyMenu);
         if(apakahMauKirimReceiptMelaluiEmail.equals("yes")){
-            kirimReceiptMelaluiEmail(emailTujuan, namaResto, namaCustomer, templateEngine, mail, ledger.getBiaya(), arrayIdMenu, arrayQtyMenu);
+            kirimReceiptMelaluiEmail(emailTujuan, namaResto, namaCustomer, notes, templateEngine, mail, ledger.getBiaya(), arrayIdMenu, arrayQtyMenu);
         }
         return mav;
     }
@@ -103,27 +104,32 @@ public class CashierService {
         saldo.setId_resto(idResto);
         int saldoAwal=0;
         if(bulan==1){
-            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto + " AND date_created BETWEEN '" + (tahun-1) + "-" + 12 + "-01 00:00:00' AND '" + (tahun-1) + "-" + 12 + "-31 23:59:59'").getSaldo();
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto +
+                    " AND EXTRACT(MONTH FROM date_created)=12 AND EXTRACT(YEAR from date_created)=" + (tahun-1)).getSaldo();
         } else {
-            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto + " AND date_created BETWEEN '" + tahun + "-" + (bulan - 1) + "-01 00:00:00' AND '" + tahun + "-" + (bulan - 1) + "-31 23:59:59'").getSaldo();
+            saldoAwal = saldoAkhirDao.getOne("id_resto=" + idResto +
+                    " AND EXTRACT(MONTH FROM date_created)=" + (bulan-1) + " AND EXTRACT(YEAR FROM date_created)=" + tahun).getSaldo();
         }
         if(saldoAwal==0){
             saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
         }
-        String condition = "id_resto=" + idResto + " AND date_created BETWEEN '" + tahun + "-" + bulan + "-01 00:00:00' AND '" + tahun + "-" + bulan + "-31 23:59:59'"; //between 2018-01-01 00:00:00 AND 2018-01-31 23:59:59
+        String condition = "id_resto=" + idResto +
+                " AND EXTRACT(MONTH FROM date_created)=" + bulan + " AND EXTRACT(YEAR FROM date_created)=" + tahun; //between 2018-01-01 00:00:00 AND 2018-01-31 23:59:59
         int totalPemasukkanBulanIni = ledgerDao.getTotal(condition + " AND tipe='debit'");
         int totalPengeluaranBulanIni = ledgerDao.getTotal(condition + " AND tipe='kredit'");
         saldo.setSaldo(saldoAwal + totalPemasukkanBulanIni - totalPengeluaranBulanIni);
         if(saldoAkhirDao.count("id_resto=" + idResto)==0){
             saldoAkhirDao.insert(saldo);
         } else{
-            saldoAkhirDao.update(saldo, "id_resto=" + idResto + "AND date_created BETWEEN '" + tahun + "-" + bulan + "-01 00:00:00' AND '" + tahun + "-" + bulan + "-31 23:59:59'");
+            saldoAkhirDao.update(saldo, "id_resto=" + idResto +
+                    " AND EXTRACT(MONTH FROM date_created)=" + bulan + " AND EXTRACT(YEAR FROM date_created)=" + tahun);
         }
     }
 
     private void kirimReceiptMelaluiEmail(String alamatEmailTujuan,
                                          String namaResto,
                                          String namaCustomer,
+                                         String notes,
                                          TemplateEngine templateEngine,
                                          Mail mail,
                                          int totalBiaya,
@@ -140,6 +146,7 @@ public class CashierService {
             context.setVariable("namaResto", namaResto); //Melempar nama restoran ke HTML receipt (email.html)
             context.setVariable("tanggal", LocalDate.now().toString()); //Melempar tanggal sekarang ke HTML receipt (email.html)
             context.setVariable("total_harga", totalBiaya); //Melempar total biaya ke HTML receipt (email.html). Total biaya didapat dari object ledger yang dilempar dari kasir kesini.
+            context.setVariable("notes", notes);
             List<OrderedMenu> ordered_menu_list = new ArrayList<>(); //List yang berisi detail menu (nama menu, harga menu, qty, dan total harga menu)
             for (int i=0; i<arrayIdMenu.length; i++){
                 Menu menuObject = menuDao.getOne("id_menu=" + Integer.parseInt(arrayIdMenu[i])); //Mengambil detail dari masing-masing menu. Cara mengambil detailnya adalah berdasarkan id menu yang ada di Array array_id_order
