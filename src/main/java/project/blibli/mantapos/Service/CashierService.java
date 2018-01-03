@@ -1,5 +1,7 @@
 package project.blibli.mantapos.Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import project.blibli.mantapos.Config.Mail;
 import project.blibli.mantapos.Helper.GetIdResto;
 import project.blibli.mantapos.Model.*;
 import project.blibli.mantapos.NewImplementationDao.*;
+import project.blibli.mantapos.NewInterfaceDao.*;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -21,12 +24,26 @@ import java.util.List;
 @Service
 public class CashierService {
 
-    LedgerDaoImpl ledgerDao = new LedgerDaoImpl();
-    SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
-    SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
-    RestoranDaoImpl restoranDao = new RestoranDaoImpl();
-    MenuDaoImpl menuDao = new MenuDaoImpl();
-    MenuYangDipesanDaoImpl menuYangDipesanDao = new MenuYangDipesanDaoImpl();
+    LedgerDao ledgerDao;
+    SaldoDao saldoAkhirDao, saldoAwalDao;
+    RestoranDao restoranDao;
+    MenuDao menuDao;
+    MenuYangDipesanDao menuYangDipesanDao;
+
+    @Autowired
+    public CashierService(LedgerDao ledgerDao,
+                          @Qualifier("saldoAkhirDaoImpl") SaldoDao saldoAkhirDao,
+                          @Qualifier("saldoAwalDaoImpl") SaldoDao saldoAwalDao,
+                          RestoranDao restoranDao,
+                          MenuDao menuDao,
+                          MenuYangDipesanDao menuYangDipesanDao){
+        this.ledgerDao = ledgerDao;
+        this.saldoAkhirDao = saldoAkhirDao;
+        this.saldoAwalDao = saldoAwalDao;
+        this.restoranDao = restoranDao;
+        this.menuDao = menuDao;
+        this.menuYangDipesanDao = menuYangDipesanDao;
+    }
 
     int bulan = LocalDate.now().getMonthValue();
     int tahun = LocalDate.now().getYear();

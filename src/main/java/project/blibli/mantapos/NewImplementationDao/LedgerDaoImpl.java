@@ -1,5 +1,6 @@
 package project.blibli.mantapos.NewImplementationDao;
 
+import org.springframework.stereotype.Repository;
 import project.blibli.mantapos.Model.Ledger;
 import project.blibli.mantapos.NewInterfaceDao.LedgerDao;
 
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class LedgerDaoImpl implements LedgerDao {
 
     private static final String tableLedger = "ledger_harian";
