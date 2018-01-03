@@ -121,9 +121,9 @@ public class EmployeeService {
                                   int page) throws SQLException {
         List<User> userList;
         if (getLoggedInUserRole(authentication).equals("[manager]")) {
-            userList = userDao.getAll("id_resto=" + idResto + " AND users_roles.username=users.username AND users_roles.role IN ('cashier') LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
+            userList = userDao.getAll("id_resto=" + idResto + " AND users_roles.username=users.username AND users_roles.role IN ('cashier') ORDER BY users.id_user ASC LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
         } else{
-            userList = userDao.getAll("id_resto=" + idResto + " AND users_roles.username=users.username AND users_roles.role IN ('manager','cashier') LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
+            userList = userDao.getAll("id_resto=" + idResto + " AND users_roles.username=users.username AND users_roles.role IN ('manager','cashier') ORDER BY users.id_user ASC LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
         }
         return userList;
     }

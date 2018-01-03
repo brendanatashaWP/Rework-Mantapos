@@ -76,7 +76,7 @@ public class MenuService {
     private List<Menu> getAllMenu(int idResto,
                                  int page) throws SQLException {
         List<Menu> menuList = menuDao.getAll("id_resto=" + idResto +
-                " AND enabled=true" + " ORDER BY kategori_menu DESC LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
+                " AND enabled=true" + " ORDER BY kategori_menu DESC, id_menu ASC LIMIT " + itemPerPage + " OFFSET " + (page-1)*itemPerPage);
         return menuList;
     }
 
