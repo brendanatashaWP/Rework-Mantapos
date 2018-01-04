@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests()
                 //pada access disini pakai hasAuthority (instead of hasRole) karena
                 //kalau pake hasRole, di database harus ada prefix ROLE_ pada record-nya, contoh ROLE_CASHIER
-                .antMatchers("/cashier/**").access("hasAnyAuthority('cashier', 'manager', 'owner')")
+                .antMatchers("/cashier/**").access("hasAnyAuthority('cashier')")
                 .antMatchers("/dashboard/**", "/menu/**", "/outcome/**", "/employee/**", "/range/**", "/add-menu/**", "/edit/menu/**", "/add-cashier/**", "/outcome-post/**", "/daily/**", "/saldo/**").access("hasAnyAuthority('manager', 'owner')")
                 .antMatchers("/restaurant/**").access("hasAuthority('admin')")
                 .antMatchers("/delete/user/**", "/active/user/**").access("hasAnyAuthority('admin', 'manager', 'owner')")

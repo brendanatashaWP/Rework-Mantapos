@@ -152,6 +152,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void insertTableUsersRole(User modelData) throws SQLException {
+
         Connection connection = DbConnection.openConnection();
         PreparedStatement preparedStatement = null;
         try {
@@ -167,7 +168,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(2, modelData.getUsername());
             preparedStatement.setString(3, modelData.getRole());
             preparedStatement.executeUpdate();
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("user role sudah ada");
         }
         DbConnection.closePreparedStatement(preparedStatement);

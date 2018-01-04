@@ -48,7 +48,7 @@ public class EmployeeController {
     }
     //Jika user mengakses laman edit user (show form) beserta value value yang bersesuaian di input2 yang ada
     @GetMapping(value = "/edit/user")
-    public ModelAndView editUserHtml(@RequestParam(value = "id", required = false) Integer id,
+    public ModelAndView editUserHtml(@RequestParam(value = "id") Integer id,
                                      Authentication authentication) throws SQLException {
         return employeeService.getMappingEditEmployee(authentication, id);
     }
