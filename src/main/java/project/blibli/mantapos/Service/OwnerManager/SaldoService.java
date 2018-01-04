@@ -1,5 +1,7 @@
 package project.blibli.mantapos.Service.OwnerManager;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -7,6 +9,7 @@ import project.blibli.mantapos.Helper.GetIdResto;
 import project.blibli.mantapos.Model.Saldo;
 import project.blibli.mantapos.NewImplementationDao.SaldoAkhirDaoImpl;
 import project.blibli.mantapos.NewImplementationDao.SaldoAwalDaoImpl;
+import project.blibli.mantapos.NewInterfaceDao.SaldoDao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -14,9 +17,12 @@ import java.util.List;
 @Service
 public class SaldoService {
 
-    SaldoAwalDaoImpl saldoAwalDao = new SaldoAwalDaoImpl();
-    SaldoAkhirDaoImpl saldoAkhirDao = new SaldoAkhirDaoImpl();
-    int itemPerPage=5;
+    SaldoDao saldoAwalDao;
+
+    @Autowired
+    public SaldoService(@Qualifier("saldoAwalDaoImpl") SaldoDao saldoAwalDao){
+        this.saldoAwalDao = saldoAwalDao;
+    }
 
     public ModelAndView getMappingSaldoAwal(Authentication authentication) throws SQLException {
         ModelAndView mav = new ModelAndView();
@@ -41,11 +47,6 @@ public class SaldoService {
                                  Saldo saldo) throws SQLException {
         saldo.setId_resto(idResto);
         saldoAwalDao.insert(saldo);
-    }
-
-    private int getSaldoAwalRestoran(int idResto) throws SQLException {
-        int saldoAwal = saldoAwalDao.getOne("id_resto=" + idResto).getSaldo();
-        return saldoAwal;
     }
 
     private Saldo getSaldoAwal(int idResto) throws SQLException {
