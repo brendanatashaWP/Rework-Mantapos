@@ -1,5 +1,6 @@
 package project.blibli.mantapos.NewImplementationDao;
 
+import org.springframework.stereotype.Repository;
 import project.blibli.mantapos.Model.User;
 import project.blibli.mantapos.NewInterfaceDao.UserDao;
 
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserDaoImpl implements UserDao {
 
     private static final String tableUser = "users";
@@ -53,15 +55,20 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void createRoleUsers() throws SQLException {
         Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "CREATE TYPE " + roleType + " AS ENUM " + "(" +
-                        "'" + roleAdmin + "'," +
-                        "'" + roleOwner + "'," +
-                        "'" + roleManager + "'," +
-                        "'" + roleCashier + "'" +
-                        ")"
-        );
-        preparedStatement.executeUpdate();
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "CREATE TYPE " + roleType + " AS ENUM " + "(" +
+                            "'" + roleAdmin + "'," +
+                            "'" + roleOwner + "'," +
+                            "'" + roleManager + "'," +
+                            "'" + roleCashier + "'" +
+                            ")"
+            );
+            preparedStatement.executeUpdate();
+        } catch (Exception ex){
+            System.out.println("role user tipe sudah dibuat");
+        }
         DbConnection.closePreparedStatement(preparedStatement);
         DbConnection.closeConnection(connection);
     }
@@ -110,30 +117,35 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void insert(User modelData) throws SQLException {
         Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "INSERT INTO " + tableUser +
-                        "(" +
-                        usernameUser + "," +
-                        passwordUser + "," +
-                        enabled + "," +
-                        namaLengkap + "," +
-                        jenisKelamin + "," +
-                        nomorKtp + "," +
-                        nomorTelepon + "," +
-                        alamatUser + "," +
-                        this.idResto +
-                        ")" + " VALUES (?,?,?,?,?,?,?,?,?)"
-        );
-        preparedStatement.setString(1, modelData.getUsername());
-        preparedStatement.setString(2, modelData.getPassword());
-        preparedStatement.setBoolean(3, true);
-        preparedStatement.setString(4, modelData.getNamaLengkap());
-        preparedStatement.setString(5, modelData.getJenisKelamin());
-        preparedStatement.setString(6, modelData.getNomorKtp());
-        preparedStatement.setString(7, modelData.getNomorTelepon());
-        preparedStatement.setString(8, modelData.getAlamat());
-        preparedStatement.setInt(9, modelData.getIdResto());
-        preparedStatement.executeUpdate();
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO " + tableUser +
+                            "(" +
+                            usernameUser + "," +
+                            passwordUser + "," +
+                            enabled + "," +
+                            namaLengkap + "," +
+                            jenisKelamin + "," +
+                            nomorKtp + "," +
+                            nomorTelepon + "," +
+                            alamatUser + "," +
+                            this.idResto +
+                            ")" + " VALUES (?,?,?,?,?,?,?,?,?)"
+            );
+            preparedStatement.setString(1, modelData.getUsername());
+            preparedStatement.setString(2, modelData.getPassword());
+            preparedStatement.setBoolean(3, true);
+            preparedStatement.setString(4, modelData.getNamaLengkap());
+            preparedStatement.setString(5, modelData.getJenisKelamin());
+            preparedStatement.setString(6, modelData.getNomorKtp());
+            preparedStatement.setString(7, modelData.getNomorTelepon());
+            preparedStatement.setString(8, modelData.getAlamat());
+            preparedStatement.setInt(9, modelData.getIdResto());
+            preparedStatement.executeUpdate();
+        } catch (Exception ex){
+            System.out.println("user sudah ada");
+        }
         DbConnection.closePreparedStatement(preparedStatement);
         DbConnection.closeConnection(connection);
     }
@@ -141,18 +153,23 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void insertTableUsersRole(User modelData) throws SQLException {
         Connection connection = DbConnection.openConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "INSERT INTO " + tableUserRoles +
-                        "(" +
-                        idUser + "," +
-                        usernameUser + "," +
-                        roleUser +
-                        ")" + " VALUES (?,?,?::" + roleType + ")"
-        );
-        preparedStatement.setInt(1, getId("username='" + modelData.getUsername() + "'"));
-        preparedStatement.setString(2, modelData.getUsername());
-        preparedStatement.setString(3, modelData.getRole());
-        preparedStatement.executeUpdate();
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO " + tableUserRoles +
+                            "(" +
+                            idUser + "," +
+                            usernameUser + "," +
+                            roleUser +
+                            ")" + " VALUES (?,?,?::" + roleType + ")"
+            );
+            preparedStatement.setInt(1, getId("username='" + modelData.getUsername() + "'"));
+            preparedStatement.setString(2, modelData.getUsername());
+            preparedStatement.setString(3, modelData.getRole());
+            preparedStatement.executeUpdate();
+        } catch (Exception ex){
+            System.out.println("user role sudah ada");
+        }
         DbConnection.closePreparedStatement(preparedStatement);
         DbConnection.closeConnection(connection);
     }
