@@ -33,7 +33,6 @@ public class SaldoAkhirDaoImpl implements SaldoDao {
                         idResto + " INT NOT NULL, " +
                         saldoAkhir + " REAL NOT NULL, " +
                         dateCreated + " TIMESTAMP NOT NULL DEFAULT NOW(), " +
-                        "UNIQUE (" + idResto + "), " +
                         "CONSTRAINT id_resto_fk FOREIGN KEY (" + idResto + ")" + "REFERENCES " + refTableResto + "(id))"
         );
         preparedStatement.executeUpdate();
